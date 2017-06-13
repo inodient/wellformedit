@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>database</key>
+			<string>wellformedit</string>
+			<key>host</key>
+			<string>104.199.217.31</string>
+			<key>kcid</key>
+			<string>-8310979027654364789</string>
+			<key>name</key>
+			<string>wellformedit</string>
+			<key>port</key>
+			<integer>3306</integer>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>root</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>latin1</string>
+			<key>contentFilter</key>
+			<dict/>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGJyhYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYdJFUkbnVsbNMJCgsMDxJX
+			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
+			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
+			ZXhTZXTUFwsYGRobHBxaTlNMb2NhdGlvblxOU1JhbmdlQ291bnRY
+			TlNMZW5ndGgQIoAGEAHSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2Vz
+			Wk5TSW5kZXhTZXSiIiNaTlNJbmRleFNldFhOU09iamVjdNIeHyUm
+			XE5TRGljdGlvbmFyeaIlI18QD05TS2V5ZWRBcmNoaXZlctEpKlRk
+			YXRhgAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBx
+			AHMAdQB3AHwAgQChAKoAtQDCAMsAzQDPANEA1gDhAOoA9QD4AQMB
+			DAERAR4BIQEzATYBOwAAAAAAAAIBAAAAAAAAACsAAAAAAAAAAAAA
+			AAAAAAE9
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {1477, 866}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>select id, name, displayName, redirectPath, description from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.redirectPath = '/cheatsheet';
+
+select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet') group by groupid, level, parent, sequence;
+
+
+select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent in (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)
+group by level, parent, sequence;
+
+
+
+
+
+/* insert into wellformedit.TB_ATTACHMENT
+        ( saveDate, originalFileName, saveFileName, savePath, encoding, mimeType, saveUser )
+
+        values (
+        	1
+          'asdf',
+          '111',
+          '/asdf',
+          '123',
+          '22',
+          '33'
+        )
+
+
+
+select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet') group by groupid, level, parent, sequence; */
+
+
+
+
+/* select A.createUser, A.createDate, B.title, B.subtitle, B.summarise, C.originalFileName, C.saveFileName, C.savePath, C.encoding, C.mimetype from TB_ITEM A, TB_CONTENT B, TB_ATTACHMENT C
+where A.contentId = B.id and A.pictureId = C.id
+order by createDate;
+
+
+select A.createDate, A.createUser, B.title, B.subtitle, B.summarise, C.originalFileName, C.saveFileName, C.savePath, C.encoding, C.mimetype from wellformedit.TB_ITEM A, wellformedit.TB_CONTENT B, wellformedit.TB_ATTACHMENT C where A.contentId = B.id and A.pictureId = C.id order by createDate;
+
+select * from TB_ATTACHMENT;
+
+Update TB_CONTENT
+set summarise = 'Computer Science and basic network architecture overview.
+Provide whole view of internet world with some IT concepts.
+This is used as basic material of IT beginers exercise item.
+' */
+
+
+/* create table TB_ITEM (
+	id int PRIMARY KEY AUTO_INCREMENT,
+	pictureId int,
+	contentId int,
+	createDate dateTime,
+	updateDate dateTime,
+	deleteDate dateTime,
+	createUser nvarchar(128),
+	modifyUser nvarchar(128)
+);
+
+create table TB_CONTENT (
+	id int PRIMARY KEY AUTO_INCREMENT,
+	title nvarchar(256),
+	description nvarchar(256),
+	conclusion nvarchar(256)
+);
+
+create table TB_SPECIFICATION (
+	id int PRIMARY KEY  AUTO_INCREMENT,
+	contentId int,
+	sequence int,
+	title nvarchar(256),
+	pictureId int,
+	description nvarchar(256)
+);
+
+create table TB_ATTACHMENT (
+	id int PRIMARY KEY AUTO_INCREMENT,
+	saveDate dateTime,
+	originalFileName nvarchar(256),
+	saveFileName nvarchar(256),
+	savePath nvarchar(256),
+	encoding nvarchar(64),
+	mimetype nvarchar(64),
+	saveUser nvarchar(128)
+); */
+
+
+
+
+/* select * from TB_MENU;
+select * from TB_MENU group by groupid, level, parent, sequence; */
+
+
+
+
+/* insert into TB_MENU values ('id_menu_001',	0,	'root',       	0, 'm_cheatsheet','Cheat Sheet','/index' );
+insert into TB_MENU values ('id_menu_002',	0,	'root',	        1, 'm_discussion','Discussion','/index' );
+insert into TB_MENU values ('id_menu_003',	1,	'id_menu_002',	0	 ,'m_network','Network','/index' );
+insert into TB_MENU values ('id_menu_004',	1,	'id_menu_002',	1	 ,'m_webapplicationarchitecture','Web Application Architecture','/index' );
+insert into TB_MENU values ('id_menu_005',	1,	'id_menu_002',	2	 ,'m_javascript','Javascript','/index' );
+insert into TB_MENU values ('id_menu_006',	1,	'id_menu_002',	3	 ,'m_algorithm','Algorithm','/index' );
+insert into TB_MENU values ('id_menu_007',	1,	'id_menu_002',	4	 ,'m_bootstrap','Boostrap','/index' );
+insert into TB_MENU values ('id_menu_008',	1,	'id_menu_002',	5	 ,'m_uml','UML','/index' );
+insert into TB_MENU values ('id_menu_009',	1,	'id_menu_002',	6	 ,'m_algorithm','Algorithm','/index' );
+insert into TB_MENU values ('id_menu_010',	1,	'id_menu_002',	7	 ,'m_datastructure','Data Structure','/index' );
+insert into TB_MENU values ('id_menu_011',	0,	'root',	        2, 'm_researching','Researching','/index' );
+insert into TB_MENU values ('id_menu_012',	1,	'id_menu_011',	0	,'m_machinglearning','Machine Learning','/index' );
+insert into TB_MENU values ('id_menu_013',	1,	'id_menu_011',	1	,'m_loadbalancing','Load Balancing','/index' );
+insert into TB_MENU values ('id_menu_014',	1,	'id_menu_011',	2	,'m_security','Security','/index' );
+insert into TB_MENU values ('id_menu_015',	0,	'root',	        3, 'm_opensourceproject','Open Source Project','/index' );
+insert into TB_MENU values ('id_menu_016',	1,	'id_menu_016',	0	,'m_summer_mvc','summer-mvc','/index' );
+insert into TB_MENU values ('id_menu_017',	1,	'id_menu_016',	1	,'m_wellformedit','Well Formed IT','/index' );
+insert into TB_MENU values ('id_menu_018',	1,	'id_menu_016',	2	,'m_dynamicsummermvc','Dynamic summer-mvc','/index' ); */
+
+
+
+
+/* create table TB_MENU (
+	id nvarchar(100),
+	level int,
+	parent nvarchar(100),
+	sequence int,
+	name nvarchar(100),
+	displayName nvarchar(255),
+	redirect nvarchar(255)
+); */</string>
+			<key>table</key>
+			<string>TB_MENU</string>
+			<key>view</key>
+			<string>SP_VIEW_CONTENT</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>202</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.level &lt;= 0 group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent in (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)
+group by level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet')  
+or
+TB_MENU.parent in (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)
+group by parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet')  
+or
+TB_MENU.parent in (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)
+group by level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet')  
+or
+TB_MENU.parent in (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet')  
+or
+TB_MENU.parent = (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and (
+TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet')  
+or
+TB_MENU.parent = (
+	select id from wellformedit.TB_MENU where parent in (  select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet' )
+	)
+)
+
+)</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and TB_MENU.parent in (select id from wellformedit.TB_MENU) and TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet')  group by level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and TB_MENU.parent in (select id from wellformedit.TB_MENU) group by level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and TB_MENU.parent in (select id from wellformedit.TB_MENU) group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId 
+from wellformedit.TB_MENU 
+where TB_MENU.usage = 'Y' 
+and TB_MENU.parent = (select id from wellformedit.TB_MENU) group by groupid, level, parent, sequence</string>
+		<string>select id, name, displayName, redirectPath, description from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.redirectPath = '/cheatsheet'</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.parent = (select id from wellformedit.TB_MENU where redirectPath = '/cheatsheet') group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.parent = (select parent from wellformedit.TB_MENU where redirectPath = '/cheatsheet') group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.parent = (select parent from wellformedit.TB_MENU where redirectPath = '/index') group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.parent = (select parent from wellformedit.TB_MENU where redirectPath = '/index' group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' group by groupid, level, parent, sequence</string>
+		<string>select id, level, parent, sequence, name, displayName, redirectPath, groupId from wellformedit.TB_MENU where TB_MENU.usage = 'Y' group by groupid, level, parent, sequence, usage</string>
+		<string>select * from wellformedit.TB_MENU where TB_MENU.usage = 'Y'</string>
+		<string>usage = 'Y'</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.5.55-0ubuntu0.14.04.1</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Well Formed IT</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="wellformedit.css">
+  <script src="design.js"></script>  <!-- CSS Script -->
+
+  <script>
+    // Logic Script
+    $(document).ready( function(){
+
+      // Top Navbar Event
+      $(".top-nav > li > a").on( "click", function(){
+        alert( $(this).html() + " : Level 1" );
+      } );
+
+      // Side Menu event
+      $(".side-nav > li > a").on( "click", function(){
+        alert( $(this).html() + " : Level 2" );
+      } );
+
+      // Sub Side Menu event
+      $(".sub-side-nav > li > a").on( "click", function(){
+        alert( $(this).html() + " : Level 3" );
+      } );
+
+    } );
+  </script>
+
+</head>
+<body class="base">
+  <header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid nav-container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">Template</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-content">
+          <ul class="nav navbar-nav top-nav">
+            <li class="active"><a href="">Menu 01</a></li>
+            <li><a href="">Menu 02</a></li>
+            <li><a href="">Menu 03</a></li>
+            <li><a href="">Menu 04</a></li>
+            <li><a href="">Menu 05</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right top-nav">
+            <li ><a href="">About</a></li>
+            <li ><a href=""><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Log-in</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-fluid doc">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 doc-nav">
+        <blockquote class="doc-description">
+          <h3>Menu Name</h3>
+          <p class="doc-description-content">Menu Description</p>
+        </blockquote>
+
+        <ul class="side-nav" >
+          <li><a href="" class="active">Sub Menu 01</a>
+            <ul class="sub-side-nav affix">
+              <li class=""><a href="">Sub Sub Menu 01</a></li>
+              <li class=""><a href="">Sub Sub Menu 02</a></li>
+              <li class=""><a href="">Sub Sub Menu 03</a></li>
+              <li class=""><a href="">Sub Sub Menu 04</a></li>
+              <li class=""><a href="">Sub Sub Menu 05</a></li>
+            </ul>
+          </li>
+          <li><a href="">Sub Menu 02</a>
+            <ul class="sub-side-nav affix">
+              <li class=""><a href="">Sub Sub Menu 06</a></li>
+              <li class=""><a href="">Sub Sub Menu 07</a></li>
+              <li class=""><a href="">Sub Sub Menu 08</a></li>
+              <li class=""><a href="">Sub Sub Menu 09</a></li>
+              <li class=""><a href="">Sub Sub Menu 10</a></li>
+            </ul>
+          </li>
+          <li><a href="">Sub Menu 03</a>
+            <ul class="sub-side-nav affix">
+              <li class=""><a href="">Sub Sub Menu 11</a></li>
+              <li class=""><a href="">Sub Sub Menu 12</a></li>
+              <li class=""><a href="">Sub Sub Menu 13</a></li>
+              <li class=""><a href="">Sub Sub Menu 14</a></li>
+              <li class=""><a href="">Sub Sub Menu 15</a></li>
+            </ul>
+          </li>
+          <li><a href="">Sub Menu 04</a>
+            <ul class="sub-side-nav affix">
+              <li class=""><a href="">Sub Sub Menu 16</a></li>
+              <li class=""><a href="">Sub Sub Menu 17</a></li>
+              <li class=""><a href="">Sub Sub Menu 18</a></li>
+              <li class=""><a href="">Sub Sub Menu 19</a></li>
+              <li class=""><a href="">Sub Sub Menu 20</a></li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      <div class="col-lg-9 col-md-9 doc-content">
+
+        <div class="content">
+          <h1>Menu ##</h1>
+            <h2>Sub Menu ##</h2>
+              <p>...</p>
+
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+
+            <h2>Sub Menu ##</h2>
+              <p>...</p>
+
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+
+            <h2>Sub Menu ##</h2>
+              <p>...</p>
+
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+
+            <h2>Sub Menu ##</h2>
+              <p>...</p>
+
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+              <h4>Sub Sub Menu ##</h4>
+                <p>...</p>
+        </div>
+
+        <footer>
+          <div class="container-fluid footer-bottom">
+            <div class="row">
+              <hr>
+              <div class="col-md-1"></div>
+              <div class="col-md-10">
+                <ul style="list-style: none; margin: 0; padding: 0;">
+                  <li style="display: inline; padding-left: 30px;"><span class="glyphicon glyphicon-copyright-mark" ></span>&nbsp;2017 <u>Company Name</u>, All rights reserved</li>
+                  <li style="display: inline; padding-left: 30px;"><a href="https://github.com/inodient/Nodejs_Template"><u>GitHub</u></a></li>
+                  <li style="display: inline; padding-left: 30px;"><a href="https://developer.github.com"><u>Developer</u></a></li>
+                  <li style="display: inline; padding-left: 30px;"><a href="/index"><u>About</u></a></li>
+                </ul>
+              </div>
+              <div class="col-md-1"></div>
+            </div>
+          </div>
+        </footer>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="after"></div>
+</body>
+</html>

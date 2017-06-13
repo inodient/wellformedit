@@ -1,0 +1,53 @@
+<%
+  var menuList = menuList;
+  var innerMenuCodes = "";
+
+  for( var i=0; i<menuList.length; i++ ){
+
+    if( i != menuList.length - 1 && menuList[i+1].parent == menuList[i].id ){
+      innerMenuCodes += `<li class="dropdown" id="` + menuList[i].id + `" class="menu" > \n`;
+      innerMenuCodes += `<a class="dropdown-toggle" data-toggle="dropdown" href="` + menuList[i].redirectPath + `">` + menuList[i].displayName + `<span class="caret"></span></a> \n`
+      innerMenuCodes += `<ul class="dropdown-menu"> \n`;
+
+      var parentId = menuList[i].id;
+      i++;
+
+      while( i < menuList.length && menuList[i].parent == parentId ){
+
+        innerMenuCodes += `<li id="` + menuList[i].id +  `" class="menu" ><a href="` + menuList[i].redirectPath + `">` + menuList[i].displayName + `</a></li>`;
+
+        if( i != menuList.length - 1 && menuList[i+1].parent == parentId ){
+          i++;
+        } else{
+          break;
+        }
+      }
+
+      innerMenuCodes += `</ul>`;
+      innerMenuCodes += `</li>`;
+    } else{
+      innerMenuCodes += `<li id="` + menuList[i].id +` class="menu" ><a href="` + menuList[i].redirectPath + `">` + menuList[i].displayName + `</a></li> \n`;
+    }
+  }
+%>
+
+<nav id="header" class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Well Formed IT</a>
+    </div>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="nav navbar-nav" id="innerNav">
+        <%- innerMenuCodes %>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ><a href="#"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Log-in</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
