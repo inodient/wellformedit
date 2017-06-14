@@ -73,4 +73,26 @@ exports.menuGenerator = function(){
 
     return innerMenuDescriptionCode;
   }
+
+  this.createKeywordList = function( keywordList ){
+    var innerKeywordCode = "";
+
+    var i = parseInt("0");
+
+    console.log( typeof i );
+
+    while( i < keywordList.length ){
+
+      innerKeywordCode += `<thead><tr>`;
+      while( keywordList[i].level == 0 ){
+        innerKeywordCode += `<td>` + keywordList[i].displayName + `</td>`;
+        i++;
+      }
+      innerKeywordCode += `</tr></thead>`;
+
+    }
+
+    return innerKeywordCode;
+  }
+
 }

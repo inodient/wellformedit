@@ -12,6 +12,7 @@ exports.control = function( req, res ){
     promises.push( getSubMenuList( req._parsedUrl.pathname ) );
     promises.push( getSpecificMenuList( req._parsedUrl.pathname ) );
     promises.push( getMenuDescription( req._parsedUrl.pathname ) );
+    promises.push( getKeywordList() );
 
     Promise.all( promises )
     .then( function(){
@@ -24,6 +25,7 @@ exports.control = function( req, res ){
       setModel( model, "rightMenuList", menuList.innerRightMenuCodes );
       setModel( model, "subMenuList", menu.createSubMenuList( argv[1], argv[2], req._parsedUrl.pathname ) );
       setModel( model, "menuDescription", menu.createMenuDescription( argv[3] ), req._parsedUrl.pathname );
+      setModel( model, "keywordList", menu.createKeywordList( argv[4] ) );
       setModel( model, "reqPath", req._parsedUrl.pathname );
 
     }).then( function(){
@@ -81,6 +83,17 @@ function getMenuDescription( path ){
       resolve( results );
       if( err ) reject(err);
     } )
+  } );
+}
+
+function getKeywordList(){
+  return new Promise( function(resolve, reject){
+    pool.query( "select id, level, parent, sequence, name, displayName from wellformedit.TB_KEYWORD where TB_KEYWORD.usage = 'Y' group by level, parent, sequence;", function( err, results, fields ){
+      console.log( results );
+
+      resolve( results );
+      if( err ) reject(err);
+    } );
   } );
 }
 
