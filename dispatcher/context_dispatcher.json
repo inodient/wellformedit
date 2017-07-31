@@ -135,6 +135,14 @@
       "controlFunction": "control",
       "viewPath": "",
       "view": "about.ejs"
+    },
+    {
+      "id": "facebooklogin",
+      "path": "/facebooklogin",
+      "controllerJS": "controller_basic.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "facebooklogin.ejs"
     }
   ],
   "POST" : [

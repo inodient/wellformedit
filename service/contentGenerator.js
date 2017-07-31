@@ -152,7 +152,7 @@ exports.contentGenerator = function(){
                 </u></b></p>
               </div>
               <div class="mobile-show tablet-show thumbnail search-result-image">
-                <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailRectangleFileName + `" />
+                <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailWithRatioFileName + `" />
               </div>
               <div class="mobile-hidden tablet-hidden thumbnail search-result-image">
                 <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailRectangleFileName + `" />

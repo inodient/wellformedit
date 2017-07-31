@@ -1,3 +1,21 @@
+/*@font-face {
+    font-family: 'Helvetica Neue';
+    src: url('http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.eot');
+    src: url('http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.woff') format('woff'),
+         url('http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.ttf') format('truetype'),
+         url('http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.svg#helveticaneuelight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
+@font-face {
+  font-family: myHelveticaLight;
+  src: local("Helvetica Neue Light"),
+       local("HelveticaNeue-Light"),
+       url(HelveticaNeueLight.ttf);
+}
+
 /* page design */
 .base {
   margin-top: 50px;

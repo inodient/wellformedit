@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<!-- Facebook opengraph meta - start -->
+<meta property="og:url"                content="http://104.199.217.31:3000" />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="Well Formed IT" />
+<meta property="og:description"        content="Divide structure specific, Construct structure well-formed" />
+<meta property="og:image"              content="http://104.199.217.31:3000/welcome_background.png" />
+<!-- Facebook opengraph meta - end -->
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -128,6 +137,52 @@
 
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId            : '1910794212495192',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v2.10'
+      });
+      // FB.AppEvents.logPageView();
+
+      FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+      });
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+
+    function checkLoginState() {
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    }
+
+    function statusChangeCallback(response) {
+      if (response.status === 'connected') {
+        // alert( "Connected" );
+
+        // FB.ui({
+        //   app_id: "1910794212495192",
+        //   redirect_uri: "http://104.199.217.31:3000/cheatsheet",
+        //   method: 'share',
+        //   href: 'http://104.199.217.31:3000/',
+        //   quote:"WELL FORMED IT"
+        // }, function(response){});
+      } else {
+        // alert( "Disconnected" );
+      }
+    }
+  </script>
 
   <header>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -158,8 +213,12 @@
     <div class="index_content">
       <h1>Well <br class="mobile-show">Formed <br class="mobile-show">IT</h1>
       <p>Divide structure specific, <br class="mobile-show">Construct structure well-formed</p>
+      <!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div> -->
+      <fb:login-button scope="public_profile,email" size="large" onlogin="javascript:checkLoginState();" auto-logout-link="true" use-continue-as="true">Well Formed IT with Facebook</fb:login-button>
     </div>
   </div>
+
+
 
   <!-- Philosophy section -->
   <div class="container-fluid">
