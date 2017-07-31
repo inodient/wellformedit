@@ -88,9 +88,7 @@ function getMenuDescription( path ){
 
 function getKeywordList(){
   return new Promise( function(resolve, reject){
-    pool.query( "select id, level, parent, sequence, name, displayName from wellformedit.TB_KEYWORD where TB_KEYWORD.usage = 'Y' group by level, parent, sequence;", function( err, results, fields ){
-      console.log( results );
-
+    pool.query( "select id, level, parent, sequence, name, displayName from wellformedit.TB_KEYWORD where TB_KEYWORD.usage = 'Y' group by parent, level, sequence;", function( err, results, fields ){
       resolve( results );
       if( err ) reject(err);
     } );

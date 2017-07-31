@@ -1,20 +1,134 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-  <title>Well Formed IT</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head><title>Well Formed IT</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="wellformedit.css">
-  <script src="design.js"></script>  <!-- CSS Script -->
-  <script src="common.js"></script>  <!-- Logic Script -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="wellformedit.css">
+
+<script src="design.js"></script>  <!-- CSS Script -->
+<script src="common.js"></script>  <!-- Logic Script -->
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+  $(document).ready( function(){
+      $('#mailSend').on('click', function (event) {
+        event.preventDefault();
+
+        var email = 'inodient@gmail.com';
+        var subject = 'Well Formed IT Test';
+        var emailBody = 'Well Formed IT Test Body';
+        window.location = 'mailto:' + email + '?subject=' + subject + '&body=' +   emailBody;
+      });
+  } );
+
+</script>
+
+<style>
+  .index_content  {
+    margin: auto;
+    max-width: 1200px;
+    color : #333333;
+  }
+
+  .index_content h1{
+    color: #333333;
+  }
+
+  .index_content h2{
+    color: #333333;
+  }
+
+  .index_content h3{
+    color: #333333;
+  }
+
+  .index_content h4{
+    color: #333333;
+  }
+
+  .index_content h5{
+    color: #333333;
+  }
+
+  .index_content h6{
+    color: #333333;
+  }
+
+  .index_content p{
+    color: #333333;
+    font-size: 16px;
+  }
+
+  .index_title {
+    margin : auto;
+    padding: 150px 25px;
+    background : url( "/welcome_background.png" ) no-repeat center center;
+
+    -webkit-background-size : cover;
+    -moz-background-size : cover;
+    -o-background-size : cover;
+    background-size: cover;
+
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .index_title h1 {
+    font-size : 63px;
+    color : #333333;
+  }
+
+  .index_title p {
+    margin-bottom : 15px;
+    font-size : 21px;
+    font-weight : 200;
+    color : #333333;
+  }
+
+  .logo {
+      font-size: 200px;
+  }
+
+  .index_content {
+    padding: 60px 50px;
+  }
+
+  .bg-grey {
+      background-color: #f6f6f6;
+  }
+
+  .bg-grey .thumbnail {
+    background-color: #f6f6f6;
+    padding: 0;
+  }
+
+  .thumbnail img {
+    max-height : 300px;
+    height: 300px;
+    margin-top :30px;
+    margin-bottom: 20px;
+  }
+
+  .thumbnail {
+    border: 0px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .index_content {
+      padding: 15px;
+    }
+  }
+
+</style>
 
 </head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
 
-<body class="base">
   <header>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid nav-container">
@@ -26,8 +140,9 @@
           </button>
           <%- systemTitle %>
         </div>
-        <div class="collapse navbar-collapse navbar-content">
+        <div class="collapse navbar-collapse navbar-content" id="menu">
           <ul class="nav navbar-nav top-nav">
+            <p class="navbar-text">[ Well Formed IT ]</p>
             <%- menuList %>
           </ul>
           <ul class="nav navbar-nav navbar-right top-nav">
@@ -38,102 +153,177 @@
     </nav>
   </header>
 
-  <div class="container-fluid doc">
-    <div class="row">
-      <div class="col-lg-3 col-md-3 doc-nav">
-        <blockquote class="doc-description">
-          <%- menuDescription %>
-        </blockquote>
+  <!-- Introduce -->
+  <div class="index_title">
+    <div class="index_content">
+      <h1>Well <br class="mobile-show">Formed <br class="mobile-show">IT</h1>
+      <p>Divide structure specific, <br class="mobile-show">Construct structure well-formed</p>
+    </div>
+  </div>
 
-        <ul class="side-nav" >
-          <%- subMenuList %>
-        </ul>
-
-      </div>
-      <div class="col-lg-9 col-md-9 doc-content">
-
-        <div class="content">
-          <h1>Menu ##</h1>
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-        </div>
-
-        <footer>
-          <div class="container-fluid footer-bottom">
-            <div class="row">
-              <hr>
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-                <ul style="list-style: none; margin: 0; padding: 0;">
-                  <li style="display: inline; padding-left: 30px;"><span class="glyphicon glyphicon-copyright-mark" ></span>&nbsp;2017 <u>Company Name</u>, All rights reserved</li>
-                  <li style="display: inline; padding-left: 30px;"><a href="https://github.com/inodient/Nodejs_Template"><u>GitHub</u></a></li>
-                  <li style="display: inline; padding-left: 30px;"><a href="https://developer.github.com"><u>Developer</u></a></li>
-                  <li style="display: inline; padding-left: 30px;"><a href="/index"><u>About</u></a></li>
-                </ul>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
+  <!-- Philosophy section -->
+  <div class="container-fluid">
+    <div class="index_content">
+      <div class="row">
+        <div class="col-lg-5 col-md-5">
+          <div class="thumbnail logo" style="border : 0;">
+            <img src="philosophy_01.png" style="max-height: 350px" />
           </div>
-        </footer>
-
-
+        </div>
+        <div class="col-lg-7 col-md-7">
+          <h3>Structural and Hierarchical</h3>
+          <p>IT is one of most structural and hierarchical range in these days. <br>
+            IT has lots of layers and consists of connections of each layer. <br>
+            And these are wrapped by abstract levels. <br>
+            <br>
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="after"></div>
-  </body>
-  </html>
+  <div class="container-fluid bg-grey">
+    <div class="index_content">
+      <div class="row">
+        <div class="col-lg-5 col-md-5 mobile-show tablet-show">
+          <div class="thumbnail logo" style="border : 0;">
+            <img src="philosophy_02.png" />
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-7">
+          <h3>Abstraction and Concurrency</h3>
+          <p>Even if we know about this, a structural and hierarchical approach is very difficult. <br>
+            Because of IT's own characteristics, that is the abstraction and concurrency.  <br>
+            So, all of IT elements must be analyzed with upper and lower layers of that, be treatened with concurrency signal transfer. <br>
+          </p>
+        </div>
+        <div class="col-lg-5 col-md-5 mobile-hidden tablet-hidden">
+          <div class="thumbnail logo" style="border : 0;">
+            <img src="philosophy_02.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="index_content">
+      <div class="row">
+        <div class="col-lg-5 col-md-5">
+          <div class="thumbnail logo" style="border : 0;">
+            <img src="philosophy_03.png" />
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-7">
+          <h3>Well Formed IT</h3>
+          <p>Of course, code development and system integration are the most influence jobs to the world.  <br>
+            But if we can understand IT structure and hierarchy, we would get a power to control IT environment and skills more stable, more convenient. <br>
+            We have to divide computer or its components as specific as possible and to combine as strong as possible. <br>
+            IT must be well formed. <br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid bg-grey">
+    <div class="index_content">
+      <div class="row">
+        <div class="col-lg-5 col-md-5 mobile-show tablet-show">
+          <div class="thumbnail logo" style="border : 0;">
+            <img src="philosophy_04.png" />
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-7">
+          <h3>Just black Pen and white paper</h3>
+          <p>Last question is that. <br>
+            How can we do that? <br>
+            How can we divide or analyze or combine? <br>
+            Well Formed IT introduce classical guide for doing that, that is drawing with hands. <br>
+            Just drawing and some text can be good materials of discussion. <br>
+            We do not need to concentrate format of this. <br>
+            Just concentrate its concrete structure and hierarchy. <br>
+          </p>
+        </div>
+        <div class="col-lg-5 col-md-5 mobile-hidden tablet-hidden">
+          <div class="thumbnail logo" style="border : 0;">
+            <img src="philosophy_04.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Composition Section -->
+  <div class="container-fluid">
+    <div class="index_content">
+      <div class="row">
+        <h2> Well Formed IT Composition </h2>
+        <div class="col-lg-4 col-md-4">
+          <div class="thumbnail">
+            <img src="/cheatsheet_thumbnail.png" />
+            <h3>Cheat Sheet</h3>
+            <h4>Search fast and convenient</h4>
+            <p>Each IT layer contains own concepts. Cheat Sheet represent deep insight of some theme.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <div class="thumbnail">
+            <img src="/discussion_thumbnail.png" />
+            <h3>Discussion</h3>
+            <h4>Big & Correct Picture comes from discussion</h4>
+            <p>Discussion contains philosophy of IT concepts. Repeat discussion makes big & correct insight.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <div class="thumbnail">
+            <img src="/opensourceproject_thumbnail.png" />
+            <h3>Open Source Project</h3>
+            <h4>Technologies must be opened</h4>
+            <p>Hierarchical approach lead to create new products.</p>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div id="contact" class="container-fluid">
+    <div class="index_content">
+      <h2 class="text-center">CONTACT</h2>
+      <div class="row">
+        <div class="col-sm-5">
+          <p>Contact us and we'll get back to you within 24 hours.</p>
+          <p><span class="glyphicon glyphicon-map-marker"></span> Incheon, South Korea</p>
+          <p><span class="glyphicon glyphicon-phone"></span> +82 1515151515</p>
+          <p><span class="glyphicon glyphicon-envelope"></span> inodient@gmail.com</p>
+        </div>
+        <div class="col-sm-7">
+          <div class="row">
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+            </div>
+          </div>
+          <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <button id="mailSend"class="btn btn-default pull-right" >Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="index_content">
+      <% include partials/footer.ejs %>
+    </div>
+  </footer>
+
+</body>
+</html>

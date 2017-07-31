@@ -12,6 +12,110 @@
   <script src="design.js"></script>  <!-- CSS Script -->
   <script src="common.js"></script>  <!-- Logic Script -->
 
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script>
+    $(window).on( "load", function(){
+      $(document).ready( function(){
+        $(".after").css( "height", $(".base").outerHeight() + $(".navbar").outerHeight() );
+
+        $(document).ready( function(){
+          $('.clickable-row').click(function () {
+            document.location.href = $(this).data("href");
+          } );
+        } );
+
+        // ------ Google Chart - Start
+        $(window).resize( function(){
+          if( $("#id_discussion_keywordRanking" ).length && $("#id_discussion_hitCountRanking").length ){
+            drawKeywordsChart();
+            drawContentsChart();
+          }
+        } );
+
+        if( $("#id_discussion_keywordRanking" ).length && $("#id_discussion_hitCountRanking").length ){
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback( drawKeywordsChart );
+          google.charts.setOnLoadCallback( drawContentsChart );
+        }
+        // ------ Google Chart - End
+      } );
+    } );
+
+
+
+
+    function drawKeywordsChart() {
+      var keywordsChart = new google.visualization.BarChart(document.getElementById('id_discussion_keywordRanking'));
+      var data = google.visualization.arrayToDataTable( keywordsChartData );
+
+      google.visualization.events.addListener( keywordsChart, "select", function selectHandler( e ){
+        if( keywordsChart.getSelection()[0] ){
+          var selectedKeyword = data.getFormattedValue(keywordsChart.getSelection()[0].row, 0);
+          var str = "KEYWORD : " + data.getFormattedValue(keywordsChart.getSelection()[0].row, 0);
+
+          if( confirm( "Are you sure want to go to [ " + str + " ] ?" ) ){
+            redirectKeyword( selectedKeyword );
+          }
+        }
+      } );
+
+      keywordsChart.draw( data, keywordsChartOptions );
+    }
+
+    function redirectKeyword( keywordTitle ){
+      $.post( "/getKeywordLocation",
+      { keywordtitle : keywordTitle },
+      function( keywordInfo, status ){
+        let specificId = keywordInfo.specificId;
+        let keywordId = keywordInfo.keywordId;
+
+        document.location.href = "./discussion?contentid=" + specificId + "#" + keywordId + "_redirect";
+      } );
+    }
+
+
+
+
+    function drawContentsChart() {
+      var contentsChart = new google.visualization.BarChart(document.getElementById('id_discussion_hitCountRanking'));
+      var data = google.visualization.arrayToDataTable( contentsChartData );
+
+      google.visualization.events.addListener( contentsChart, "select", function selectHandler( e ){
+        if( contentsChart.getSelection()[0] ){
+          var selectedContent = data.getFormattedValue(contentsChart.getSelection()[0].row, 0);
+          var str = "CONTENT : " + data.getFormattedValue(contentsChart.getSelection()[0].row, 0);
+
+
+          if( confirm( "Are you sure want to go to [ " + str + " ] ?" ) ){
+            redirectContent( selectedContent );
+          }
+        }
+      } );
+
+      contentsChart.draw( data, contentsChartOptions );
+    }
+
+    function redirectContent( contentTitle ){
+      $.post( "/getContentIdByTitle",
+        { contenttitle : contentTitle},
+        function( contentId, status ){
+          document.location.href = "./discussion?contentid=" + contentId;
+        }
+      );
+    }
+
+    function toggleDiscussionList(){
+      if( $("#discussionList").css( "display" ).indexOf( "none" ) > -1 ){
+        $("#discussionList").show();
+        $("#btn_discussionToggle").text( "Hide Discussion List" );
+      } else{
+        $("#discussionList").hide();
+        $("#btn_discussionToggle").text( "View Whole Discussion List" );
+      }
+    }
+  </script>
+
 </head>
 <body class="base">
   <header>
@@ -25,8 +129,16 @@
           </button>
           <%- systemTitle %>
         </div>
-        <div class="collapse navbar-collapse navbar-content">
+        <div class="collapse navbar-collapse navbar-content" id="menu">
           <ul class="nav navbar-nav top-nav">
+            <p class="navbar-text">[ <%- title %> ]</p>
+            <%- subMenuListCollapsed %>
+          </ul>
+          <% if( subMenuListCollapsed && subMenuListCollapsed.length > 0 ) { %>
+            <hr class="nav-divider">
+          <% } %>
+          <ul class="nav navbar-nav top-nav">
+            <p class="navbar-text">[ Well Formed IT ]</p>
             <%- menuList %>
           </ul>
           <ul class="nav navbar-nav navbar-right top-nav">
@@ -52,87 +164,27 @@
       <div class="col-lg-9 col-md-9 doc-content">
 
         <div class="content">
-          <h1>Menu ##</h1>
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
 
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
+          <div class="form-group" id="id_form_discussion">
 
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-
-            <h2>Sub Menu ##</h2>
-              <p>...</p>
-
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-              <h4>Sub Sub Menu ##</h4>
-                <p>...</p>
-        </div>
-
-        <footer>
-          <div class="container-fluid footer-bottom">
-            <div class="row">
-              <hr>
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-                <ul style="list-style: none; margin: 0; padding: 0;">
-                  <li style="display: inline; padding-left: 30px;"><span class="glyphicon glyphicon-copyright-mark" ></span>&nbsp;2017 <u>Company Name</u>, All rights reserved</li>
-                  <li style="display: inline; padding-left: 30px;"><a href="https://github.com/inodient/Nodejs_Template"><u>GitHub</u></a></li>
-                  <li style="display: inline; padding-left: 30px;"><a href="https://developer.github.com"><u>Developer</u></a></li>
-                  <li style="display: inline; padding-left: 30px;"><a href="/index"><u>About</u></a></li>
-                </ul>
-              </div>
-              <div class="col-md-1"></div>
+            <div class="content_specifics">
+              <%- specifics %>
             </div>
           </div>
-        </footer>
 
+          <div id="div_chart">
+          </div>
+
+        </div>
+
+        <% include partials/footer.ejs %>
 
       </div>
     </div>
   </div>
 
   <div class="after"></div>
+
+  <% include partials/about.ejs %>
 </body>
 </html>

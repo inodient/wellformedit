@@ -14,85 +14,212 @@
   <link rel="stylesheet" href="wellformedit.css">
   <script src="design.js"></script>  <!-- CSS Script -->
   <script src="common.js"></script>  <!-- Logic Script -->
+  <script src="editor.js"></script>  <!-- Editor Script -->
 
   <!-- summer note -->
   <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.css" rel="stylesheet">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
 
+  <!-- bootstrap-treeview -->
+  <script src="bootstrap-treeview.min.js"></script>
+
   <script>
-    $(document).ready( function(){
+    $(window).on( "load", function(){
+      $(document).ready( function(){
 
-      // summernote initializer
-      $('#summernote').summernote({
-        height : 300,
-        minHeight : null,
-        maxHeight : null,
+        // keyword functions
+        var selectedKeywords = [];
+        var savedKeywords = [];
 
-        callbacks : {
-            onImageUpload: function(files, editor, welEditable) {
-              sendFile( files[0], editor, welEditable );
+        $(function(){ $('#keyword_treeview').treeview({
+            data: '<%- JSON.stringify( keywordList ) %>',
+            levels: 1,
+            checkedIcon: 'glyphicon-ok',
+            multiSelect: true,
+            onNodeSelected: function(event, data) {
+              var lastKeywords = $("#id_keywords").val();
+              var keywords = "";
+
+              if( lastKeywords === "" ){
+                keywords = data.text;
+              } else{
+                keywords = lastKeywords + ", " + data.text;
+              }
+
+              $("#id_keywords").val( keywords );
+
+              selectedKeywords.push( data.id );
+            },
+            onNodeUnselected: function(event, data) {
+              var lastKeywords = $("#id_keywords").val();
+              var keywords = "";
+
+              if( lastKeywords === data.text ){
+                keywords = "";
+              } else{
+                if( lastKeywords.indexOf( data.text ) == 0 ){
+                  keywords = lastKeywords.replace( data.text + ", ", "" );
+                } else{
+                  keywords = lastKeywords.replace( ", " + data.text, "" );
+                }
+              }
+
+              $("#id_keywords").val( keywords );
+
+              selectedKeywords.pop( data.id );
             }
-        }
-      });
+          });
+        });
 
-      function sendFile( file, editor, welEditable ){
-        data = new FormData();
-        data.append( "file", file );
-        $.ajax( {
-          data: data,
-          type: "POST",
-          url: "/upload",
-          cache: false,
-          contentType: false,
-          processData: false,
-          success: function(url){
-            $("#summernote").summernote( "insertImage", "/2017-06-05/" + file.name, file.name );
+        $("#id_content_select").on( "change", function(){
+
+          selectedKeywords.length = 0;
+
+          var selectedNode = $('#keyword_treeview').treeview(true).getSelected();
+
+          if( selectedNode.length > 0 ){
+            for( var i=0; i<selectedNode.length; i++ ){
+              $('#keyword_treeview').treeview(true).unselectNode( selectedNode[i].nodeId );
+            }
+          }
+
+
+          if( $("#id_content_select option:selected").val() == "new_creation" ){
+            $("#id_title").val("");
+            $("#id_subtitle").val("");
+            $("#id_summarise").val("");
+            $("#id_summernode_form-group .note-editor .note-editing-area .panel-body").html("");
+            $("#id_keywords").val("");
+            selectedKeywords.length = 0;
+            selectedKeywords = [];
+          } else{
+            $.post( "/contentLoad", {
+              content_id : $("#id_content_select option:selected").val()
+            },
+            function( data, status ){
+              var type = data.savedContent[0].type;
+
+              $("input[type=radio][name=radio_category]:checked").removeAttr( "checked" );
+              $(`input[type=radio][name=radio_category][id=id_category_` + type + `]`).attr( "checked", true );
+
+              $(`#id_menu_select option[value=` + data.savedContent[0].parentMenu + `]`).attr( "selected", "selected" );
+              $("#id_title").val( data.savedContent[0].title );
+              $("#id_subtitle").val( data.savedContent[0].subtitle );
+              $("#id_summarise").val( data.savedContent[0].summary );
+
+              var specifics = data.savedContent[0].specifics;
+              specifics = specifics.split( "<div class=image-info>" ).join( "WI%-" );
+              specifics = specifics.split( `,"end":"true"</div>` ).join( "%IW" );
+
+              $("#id_summernode_form-group .note-editor .note-editing-area .panel-body").html( specifics );
+
+              savedKeywords = data.savedContent[0].keywords;
+
+              $("#id_keywords").val("");
+
+              var unSelectedNode = $('#keyword_treeview').treeview(true).getUnselected();
+
+              var lastKeywords = $("#id_keywords").val();
+
+              for( var i=0; i<savedKeywords.length; i++ ){
+                if( lastKeywords === "" ){
+                  lastKeywords = savedKeywords[i].displayName;
+                } else{
+                  lastKeywords = lastKeywords + ", " + savedKeywords[i].displayName;
+                }
+
+                for( var j=0; j<unSelectedNode.length; j++ ){
+                  if( unSelectedNode[j].id == savedKeywords[i].keyword_id ){
+                    $('#keyword_treeview').treeview(true).selectNode(j);
+                  }
+                }
+              }
+              $("#id_keywords").val( lastKeywords );
+
+            });
           }
         } );
-      }
-
-      // on save function
-      $("#btn_save").on( "click", () => {
-
-        var content = $("#summernote").summernote("code");
-        var parsedContent = $.parseHTML( content );
-
-        for( var i=0; i<parsedContent.length; i++ ){
-          console.log( parsedContent[i].nodeName, parsedContent[i].innerHTML, parsedContent[i].innerText );
-        }
 
 
-        $.post( "/contentSave", {
-          title : $("#id_title").val(),
-          subtitle : $("#id_subtitle").val(),
-          keywords : $("#id_keywords").val(),
-          summarise : $("#id_summarise").val(),
-          contents : $("#summernote").summernote("code"),
-          writer : $("#id_writer").val(),
-          history : $("#id_history").val(),
-          discussion : $("#id_discussion").val()
-        },
-        function( data, status ){
-          alert( "Data : " + data.results + "\nStatus : " + status );
+
+
+        // on save function
+        $("#btn_save").on( "click", () => {
+
+          var content = $("#specific_editor").summernote("code");
+
+          $.post( "/contentSave", {
+            category : $("input[type=radio][name=radio_category]:checked").attr( "id" ),
+            top_menu_id : $("#id_menu_select option:selected").val(),
+            content_id : $("#id_content_select option:selected").val(),
+            title : $("#id_title").val(),
+            subtitle : $("#id_subtitle").val(),
+            keywords : $("#id_keywords").val(),
+            keywords_id : selectedKeywords,
+            summary : $("#id_summarise").val(),
+            specifics : content,
+            specifics_index : getSpecificIndex( content ),
+            specifics_tags : getDividedSpecific( content ),
+            img_srcs : getImageSrcs( $("#specific_editor").summernote("code") )
+          },
+          function( data, status ){
+
+            var contentID = data.contentID;
+
+            if( status == "success" ){
+              var redirectPath = $("#id_menu_select option:selected").val();
+              var category = $("input[type=radio][name=radio_category]:checked").attr( "id" );
+
+              if( category.indexOf("main") > -1 ){
+                category = "main";
+              } else{
+                category = "content";
+              }
+
+              if( redirectPath.indexOf("id_menu_0035") > -1 ){
+                redirectPath = "index";
+              } else if( redirectPath.indexOf("id_menu_0001") > -1 ){
+                redirectPath = "cheatsheet";
+              } else if( redirectPath.indexOf("id_menu_0002") > -1 ){
+                redirectPath = "discussion";
+              } else if( redirectPath.indexOf("id_menu_0004") > -1 ){
+                redirectPath = "opensourceproject";
+              } else if( redirectPath.indexOf("id_menu_0036") > -1 ){
+                redirectPath = "about";
+              }
+
+              var redirctTo = "";
+              if( category == "main" ){
+                redirectTo = `/` + redirectPath
+              } else{
+                redirectTo = `/` + redirectPath + `?contentid=` + contentID;
+              }
+
+              $(location).attr( "href" , redirectTo );
+              // $(location).attr( "href", "/discussion?contentid=" + contentID );
+            } else{
+              alert( "Data : " + data.content_id + "\nStatus : " + status );
+            }
+          });
         });
-      });
 
-      // $("#id_keywords").on( "keypress click", function(){
-      //   $("#modal_keywords").modal();
-      // } );
 
-      var str = "hello, <b><u>my name is</u></b> jQuery.";
-      var html = $.parseHTML( str );
-      var nodeNames = [];
-
-      $.each( html, function( i, el ) {
-        nodeNames[ i ] = "<li>" + el.nodeName + "</li>";
-      });
-
-      console.log( html );
+        $(".after").css( "height", $(".base").outerHeight() + $(".navbar").outerHeight() );
+      } );
     } );
-
   </script>
+
+  <style>
+    #specific_editor h1,
+    #specific_editor h2,
+    #specific_editor h3,
+    #specific_editor h4,
+    #specific_editor h5,
+    #specific_editor h6, {
+      padding-top : 15px !important;
+      margin-top : 15px !important;
+    }
+  </style>
 </head>
 
 <body class="base">
@@ -107,7 +234,7 @@
           </button>
           <%- systemTitle %>
         </div>
-        <div class="collapse navbar-collapse navbar-content">
+        <div class="collapse navbar-collapse navbar-content" id="menu">
           <ul class="nav navbar-nav top-nav">
             <%- menuList %>
           </ul>
@@ -134,38 +261,50 @@
       <div class="col-lg-9 col-md-9 doc-content">
 
         <form class="form">
+          <div class="form-group">
+            <label for="id_category"><h4>Category</h4></label>
+            <hr>
+            <div class="radio">
+              <label><input type="radio" id="id_category_main" name="radio_category" checked>Displayed Main</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" id="id_category_content" name="radio_category">Contents</label>
+            </div>
+          </div>
+
+          <div class="form-group" id="id_menu_form-group">
+            <label for="id_menu_select"><h4>Main Menus</h4></label>
+            <select class="form-control" id="id_menu_select">
+              <%- topMenuList %>
+            </select>
+          </div>
 
           <div class="form-group">
-            <label for="id_title"><span class="glyphicons glyphicon glyphicon-edit"></span> Title</label>
+            <label for="id_content_select"><h4>Contents</h4></label>
+            <select class="form-control" id="id_content_select">
+              <%- contentList %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="id_title"><h4>Title</h4></label>
             <input type="text" class="form-control" id="id_title"/>
           </div>
           <div class="form-group">
-            <label for="id_subtitle"><span class="glyphicons glyphicon glyphicon-edit"></span> SubTitle</label>
+            <label for="id_subtitle"><h4>SubTitle</h4></label>
             <input type="text" class="form-control" id="id_subtitle"/>
           </div>
           <div class="form-group">
-            <label for="id_keywords"><span class="glyphicons glyphicon glyphicon-edit"></span> Key Words</label>
+            <label for="id_keywords"><h4>Key Words</h4></label>
             <input type="text" class="form-control" id="id_keywords" data-toggle="modal" data-target="#modal_keywords"/>
           </div>
           <div class="form-group">
-            <label for="id_summarise"><span class="glyphicons glyphicon glyphicon-edit"></span> Summarise</label>
+            <label for="id_summarise"><h4>Summary</h4></label>
             <textarea class="form-control" rows=5 id="id_summarise"></textarea>
           </div>
-          <div class="form-group">
-            <label id="id_summernode" for="summernode"><span class="glyphicons glyphicon glyphicon-edit"></span> Contents</label>
-            <div id="summernote"><p>Hello Summernote</p></div>
-          </div>
-          <div class="form-group">
-            <label for="id_writer"><span class="glyphicons glyphicon glyphicon-edit"></span> Writer</label>
-            <input type="text" class="form-control" id="id_writer"/>
-          </div>
-          <div class="form-group">
-            <label for="id_history"><span class="glyphicons glyphicon glyphicon-edit"></span> History</label>
-            <input type="date" class="form-control" id="id_history"/>
-          </div>
-          <div class="form-group">
-            <label for="id_discussion"><span class="glyphicons glyphicon glyphicon-edit"></span> Discussion</label>
-            <textarea class="form-control" rows=5 id="id_discussion"></textarea>
+          <div class="form-group" id="id_summernode_form-group">
+            <label id="id_summernode" for="summernode" onclick="javascript:expandEditor();"><h4>Contents</h4></label>
+            <div id="specific_editor"><p id="id_specific_editor_content">Please Enter Contents</p></div>
           </div>
 
           <div class="btn-group pull-right">
@@ -175,234 +314,68 @@
 
         </form>
 
-        <footer>
-          <div class="container-fluid footer-bottom">
-            <div class="row">
-              <hr>
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-                <ul style="list-style: none; margin: 0; padding: 0;">
-                  <li style="display: inline; padding-left: 30px;"><span class="glyphicon glyphicon-copyright-mark" ></span>&nbsp;2017 <u>Company Name</u>, All rights reserved</li>
-                  <li style="display: inline; padding-left: 30px;"><a href="https://github.com/inodient/Nodejs_Template"><u>GitHub</u></a></li>
-                  <li style="display: inline; padding-left: 30px;"><a href="https://developer.github.com"><u>Developer</u></a></li>
-                  <li style="display: inline; padding-left: 30px;"><a href="/index"><u>About</u></a></li>
-                </ul>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
-          </div>
-        </footer>
+        <% include partials/footer.ejs %>
 
       </div>
     </div>
   </div>
+  <div class="after"></div>
 
   <div class="modal modal-center fade" role="dialog" id="modal_keywords">
     <div class="modal-dialog modal-center modal-fullsize">
       <div class="modal-content modal-fullsize">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <label id="selectedKeywords"></label>
         </div>
         <div class="modal-body">
           <div class="container-fluid" style="vertical-align: middle;">
             <div class="row">
-              <div class="table-responsive">
-                <table class="table table-condensed table-hover">
-                  <%- keywordList %>
-                  <tbody>
-                    <tr>
-                      <td>Computer Architecture & Composition</td>
-                      <td>Composition & Transfer</td>
-                      <td>bla bla bla.....</td>
-                    </tr>
-                    <tr class="active">
-                      <td></td>
-                      <td>Operating System</td>
-                      <td>bla bla bla.....</td>
-                    </tr>
-                    <tr>
-                      <td>Interpretation & Analysis</td>
-                      <td>Math</td>
-                      <td>bla bla bla.....</td>
-                    </tr>
-                    <tr class="active">
-                      <td></td>
-                      <td>Algorithm</td>
-                      <td>bla bla bla.....</td>
-                    </tr>
-                    <tr class="active">
-                      <td></td>
-                      <td>Data Structure</td>
-                      <td>bla bla bla.....</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <div id="keyword_treeview"></div>
             </div>
-
-            <!-- <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Computer Architecture</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Composition</h6>
-                <h6>Operating System</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3" style="height: 100px; border-bottom: 1px solid darkgray">
-                <h6>Interpretation & Analysis</h6>
-              </div>
-              <div class="col-md-9" style=" border-bottom: 1px solid darkgray">
-                <h6>Math</h6>
-                <h6>Algorithm__</h6>
-                <h6>Data Structure</h6>
-              </div>
-            </div> -->
-
           </div>
         </div>
         <div class="modal-footer">
-          <h4>footer</h4>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="after"></div>
+  <div class="modal modal-center fade" role="dialog" id="modal_editor">
+    <div class="modal-dialog modal-center modal-fullsize">
+      <div class="modal-content modal-fullsize">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="form-group" id="id_summernode_full_form-group">
+                <div id="specific_editor_full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="moadl-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal modal-center fade" rold="dialog" id="modal_writers">
+    <div class="modal-dialog modal-center modal-fullsize">
+      <div class="modal-content modal-fullsize">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% include partials/about.ejs %>
+
 </body>
 </html>

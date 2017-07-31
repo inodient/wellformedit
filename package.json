@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mysql": "^2.13.0"
+    "bootstrap-treeview": "^1.2.0",
+    "gm": "^1.23.0",
+    "mysql": "^2.13.0",
+    "thumbnail": "^0.1.9"
   }
 }
