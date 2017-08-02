@@ -544,7 +544,7 @@ exports.contentModelValueGenerator = function(){
             <div class="col-lg-4 col-md-4 search-result-content">
               <div class="mobile-show">
                 <p><b><u>
-                  Popular Ranking : ` + ranking + `
+                  Ranking : ` + ranking + `
                 </u></b></p>
               </div>
               <div class="mobile-show tablet-show thumbnail search-result-image">
@@ -1066,12 +1066,14 @@ exports.contentModelValueGenerator = function(){
 
       let code = `
         <hr>
-        <div class="row">
-          <div class="col-lg-7 col-md-7">
-            <img style="max-height:600px; max-width:100%;" src="` + modelValueData.keywordsInfo[0].imageFileName + `">
+        <div class="row keywordarchitecture_row">
+          <div class="col-lg-7 col-md-7 keywordarchitecture_img_col">
+            <img class="keywordarchitecture_img" src="` + modelValueData.keywordsInfo[0].imageFileName + `">
           </div>
           <div class="col-lg-5 col-md-5">
             <!-- <p><b><u>Keyword Description</u></b></p> -->
+            <br class="mobile-show tablet-show">
+            <br class="mobile-show tablet-show">
             <p>
               ` + modelValueData.keywordsInfo[0].description + `
             </p>
@@ -1081,7 +1083,7 @@ exports.contentModelValueGenerator = function(){
               <thead>
                 <tr>
                   <th class="col-lg-2 col-md-2">Seq</th>
-                  <th class="col-lg-10 col-md-10">Sub Layer</th>
+                  <th class="col-lg-10 col-md-10">Sub Keywords</th>
                 </tr>
               </thead>
               <tbody>

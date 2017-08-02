@@ -21,9 +21,9 @@ exports.menuGenerator = function(){
               innerMenuCodes += `<li><a href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a></li>`;
             }
           } else if( menuList[i].level == -1 ){
-            // innerTitleCodes += `<a class="mobile-hidden navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
-            // innerTitleCodes += `<a class="mobile-show glyphicon glyphicon-home navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `"></a>`;
-            innerTitleCodes += `<a class="navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
+            innerTitleCodes += `<a class="mobile-show navbar-brand glyphicon glyphicon-home" href="` + redirectPath + `" id="` + id + `" name="` + name + `"></a>`;
+            innerTitleCodes += `<a class="mobile-show navbar-brand navbar-index" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
+            innerTitleCodes += `<a class="mobile-hidden navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
           } else if( menuList[i].level == -2 ){
             innerRightMenuCodes += `<li ><a href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a></li>`;
           }

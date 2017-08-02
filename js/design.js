@@ -74,8 +74,11 @@ $(document).ready( function(){
   // scrolled
   var offset = 80;
   var activeElement = "";
+  var lastScrolledId = "";
 
   $(window).scroll( function(event){
+
+    // Side Nav Active - Start
     var specifics = document.getElementsByClassName( "header" );
 
     if( specifics == null ){
@@ -125,6 +128,29 @@ $(document).ready( function(){
       $("*").removeClass( "scrolled" );
       $(".side-nav *, .sub-side-nav *").removeClass( "active" );
     }
+
+    // Side Nav Active - end
+
+    // Mobile H3 affix - start
+    if( $(window).width() < 768 ){
+
+      $(".scrolled").each( function(){
+        let navId = $(this).attr("id");
+        let scrolledId = navId + "_redirect";
+
+        if( navId != undefined ){
+          let urlStr = $(location).attr("href");
+
+          $(".navbar-brand.navbar-index").attr( "href", urlStr.split( "#" )[0] + "#" + scrolledId );
+          $(".navbar-brand.navbar-index").text( $("#" + scrolledId).text() );
+        } else{
+          $(".navbar-brand.navbar-index").text( "Well Formed IT" );
+          $(".navbar-brand.navbar-index").attr( "href", "/" );
+        }
+      } );
+    }
+
+    // Mobile H3 affix - end
   } );
 
 
@@ -148,9 +174,6 @@ $(document).ready( function(){
     }
   } );
 
-
-
-
   // adjust img width
   $(".doc img").each(function(){
     var ratio_img = $(this).width() / $(this).height();
@@ -164,4 +187,15 @@ $(document).ready( function(){
         $(this).css({"width": "auto", "height": "100%"});
     }
   } );
+
+
+  // adjust keyword architecture img
+  if( $(window).width() >= 767 ){
+    $(".keywordarchitecture_img").each( function(){
+      let marginTopBottom = ( $(this).parent().parent().height() - $(this).height() ) / 2;;
+
+      $(this).css( "margin-top", marginTopBottom );
+      $(this).css( "margin-bottom", marginTopBottom );
+    } );
+  }
 } );

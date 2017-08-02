@@ -9,7 +9,7 @@
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="Well Formed IT" />
 <meta property="og:description"        content="Divide structure specific, Construct structure well-formed" />
-<meta property="og:image"              content="http://104.199.217.31:3000/welcome_background.png" />
+<meta property="og:image"              content="http://104.199.217.31:3000/wellformedit_logo.png" />
 <!-- Facebook opengraph meta - end -->
 
 
@@ -22,6 +22,7 @@
 <script src="common.js"></script>  <!-- Logic Script -->
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<% include partials/facebookSDK.ejs %>
 
 <script>
   $(document).ready( function(){
@@ -137,53 +138,6 @@
 
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId            : '1910794212495192',
-        autoLogAppEvents : true,
-        xfbml            : true,
-        version          : 'v2.10'
-      });
-      // FB.AppEvents.logPageView();
-
-      FB.getLoginStatus(function(response) {
-          statusChangeCallback(response);
-      });
-    };
-
-    (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-
-    function checkLoginState() {
-      FB.getLoginStatus(function(response) {
-        statusChangeCallback(response);
-      });
-    }
-
-    function statusChangeCallback(response) {
-      if (response.status === 'connected') {
-        // alert( "Connected" );
-
-        // FB.ui({
-        //   app_id: "1910794212495192",
-        //   redirect_uri: "http://104.199.217.31:3000/cheatsheet",
-        //   method: 'share',
-        //   href: 'http://104.199.217.31:3000/',
-        //   quote:"WELL FORMED IT"
-        // }, function(response){});
-      } else {
-        // alert( "Disconnected" );
-      }
-    }
-  </script>
-
   <header>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid nav-container">
@@ -214,7 +168,7 @@
       <h1>Well <br class="mobile-show">Formed <br class="mobile-show">IT</h1>
       <p>Divide structure specific, <br class="mobile-show">Construct structure well-formed</p>
       <!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div> -->
-      <fb:login-button scope="public_profile,email" size="large" onlogin="javascript:checkLoginState();" auto-logout-link="true" use-continue-as="true">Well Formed IT with Facebook</fb:login-button>
+      <fb:login-button id="id_fblogin" scope="public_profile,email" size="large" onlogin="javascript:checkLoginState();" auto-logout-link="true" use-continue-as="true"></fb:login-button>
     </div>
   </div>
 
@@ -318,7 +272,7 @@
         <h2> Well Formed IT Composition </h2>
         <div class="col-lg-4 col-md-4">
           <div class="thumbnail">
-            <img src="/cheatsheet_thumbnail.png" />
+            <img style="max-width:80%" src="/cheatsheet_intro.png" />
             <h3>Cheat Sheet</h3>
             <h4>Search fast and convenient</h4>
             <p>Each IT layer contains own concepts. Cheat Sheet represent deep insight of some theme.</p>
@@ -326,7 +280,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
           <div class="thumbnail">
-            <img src="/discussion_thumbnail.png" />
+            <img style="max-width:80%" src="/discussion_intro.png" />
             <h3>Discussion</h3>
             <h4>Big & Correct Picture comes from discussion</h4>
             <p>Discussion contains philosophy of IT concepts. Repeat discussion makes big & correct insight.</p>
@@ -334,7 +288,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
           <div class="thumbnail">
-            <img src="/opensourceproject_thumbnail.png" />
+            <img style="max-width:80%" src="/opensourceproject_intro.png" />
             <h3>Open Source Project</h3>
             <h4>Technologies must be opened</h4>
             <p>Hierarchical approach lead to create new products.</p>

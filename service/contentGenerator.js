@@ -148,7 +148,7 @@ exports.contentGenerator = function(){
             <div class="col-lg-4 col-md-4 search-result-content">
               <div class="mobile-show">
                 <p><b><u>
-                  Popular Ranking : ` + ranking + `
+                  Ranking : ` + ranking + `
                 </u></b></p>
               </div>
               <div class="mobile-show tablet-show thumbnail search-result-image">
