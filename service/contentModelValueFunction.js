@@ -10,7 +10,25 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "mostrecent" ] = function( connection, contentId ){
+  this.functionArray[ "recenttopic" ] = function(connection){
+    return new Promise( function(resolve, reject){
+      oQueryManager.getRecentTopicList(connection)
+      .then( function(results){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.functionArray[ "populartopic" ] = function(connection){
+    return new Promise( function(resolve, reject){
+      oQueryManager.getPopularTopicList(connection)
+      .then( function(results){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.functionArray[ "recentcheatsheet" ] = function( connection, contentId ){
     return new Promise( function(resolve, reject){
       oQueryManager.getMostRecentImgs(connection)
       .then( function(results){
@@ -19,7 +37,7 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "mostpopular" ] = function( connection, arguments ){
+  this.functionArray[ "popularcheatsheet" ] = function( connection, arguments ){
     return new Promise( function(resolve, reject){
       oQueryManager.getMostPopularImgs(connection)
       .then( function(results){
@@ -382,9 +400,18 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "togglediscussionlist" ] = function(connection){
+  this.functionArray[ "topiclist" ] = function(connection){
     return new Promise( function(resolve, reject){
-      oQueryManager.getDiscussionContentsList(connection)
+      oQueryManager.getTopicList(connection)
+      .then( function(results){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.functionArray[ "topiclisttable" ] = function(connection){
+    return new Promise( function(resolve, reject){
+      oQueryManager.getTopicListTable(connection)
       .then( function(results){
         resolve( results );
       } );

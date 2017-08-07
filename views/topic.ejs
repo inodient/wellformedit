@@ -74,6 +74,13 @@
         } );
         // ------ Window resize - End
 
+        // ------ Topic List Row Click - Start
+        $(".topic_table tbody tr").click( function(){
+          alert( $(this).data("href") );
+          $(location).attr("href", $(this).data("href") );
+        } );
+        // ------ Topic List Row Click - End
+
       } );
     } );
 
@@ -152,13 +159,13 @@
       $.post( "/getContentIdByImg",
       { imgid : imgId },
       function( results, status ){
-        window.location.href = "./discussion?contentid=" + results.contentId + "#" + results.imgId;
+        window.location.href = "./topic?contentid=" + results.contentId + "#" + results.imgId;
       } );
     }
 
     function getCheatsheetData(){
       return new Promise( function(resolve, reject){
-        $.post( "/searchCheatsheet", {
+        $.post( "/searchTopic", {
           searchWord : $("#search-word").val()
         },
         function( data, status ){

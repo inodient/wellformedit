@@ -125,7 +125,7 @@ exports.queryManager = function(){
       let queryString = `
         select
           A.id, A.title, A.subtitle, A.description, A.savedDate, A.originalFileName, A.savedFileName, A.thumbnailWithRatioFileName, A.thumbnailRectangleFileName, A.ratio, A.savedPath, A.encoding, A.mimetype, A.hitCount as image_hitcount,
-          B.id as content_id, B.title as content_title, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, C.redirectPath as topRedirect
+          B.id as content_id, B.title as content_title, B.summary as content_summary, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, C.redirectPath as topRedirect
         from wellformedit.TB_CONTENT_IMAGE A, wellformedit.TB_CONTENT B, wellformedit.TB_MENU C
         where A.content_id = B.id and B.parentMenu = C.id
         order by savedDate desc limit 6;
@@ -231,11 +231,12 @@ exports.queryManager = function(){
 
   this.getDefaultContentImageInfo = function( connection, path ){
     return new Promise( function(resolve, reject){
+
       let queryString = `
         select
         id, content_id, title, subtitle, description, savedDate, originalFileName, savedFileName, thumbnailWithRatioFileName, thumbnailRectangleFileName, ratio, savedPath, encoding, mimetype, hitCount
         from wellformedit.TB_CONTENT_IMAGE
-        where content_id = ( select id from wellformedit.TB_CONTENT where parentMenu = ( select id from wellformedit.TB_MENU where redirectPath = '` + path + `') and type = 'main' )
+        where content_id = ( select id from wellformedit.TB_CONTENT where parentMenu = ( select id from wellformedit.TB_MENU where redirectPath = '/` + path.split("/")[1] + `') and type = 'main' )
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -391,25 +392,25 @@ exports.queryManager = function(){
         promises.push( eachPromise );
       }
 
-      let discussionWords = searchWordObject.searchDiscussionWordsWithLevel;
+      let cheatsheetWords = searchWordObject.searchCheatsheetWordsWithLevel;
 
-      for( let i=0; i<discussionWords.length; i++ ){
+      for( let i=0; i<cheatsheetWords.length; i++ ){
         var eachPromise = new Promise( function(_resolve, _reject){
-          let discussionWord = discussionWords[i].word;
+          let cheatsheetWord = cheatsheetWords[i].word;
 
-          let queryStringSelect = `select count(*) from wellformedit.TB_SEARCHWORD where word = '` + discussionWord + `' and type = 'discussion'`;
+          let queryStringSelect = `select count(*) from wellformedit.TB_SEARCHWORD where word = '` + cheatsheetWord + `' and type = 'cheatsheet'`;
 
           connection.query( queryStringSelect, function( err, results, fields ){
 
             if( results && results[0]['count(*)'] > 0 ){
-              let queryStringUpdate = `Update wellformedit.TB_SEARCHWORD set hitLevel = hitLevel + ` + discussionWords[i].level + ` where word = '` + discussionWord + `' and type ='discussion'`;
+              let queryStringUpdate = `Update wellformedit.TB_SEARCHWORD set hitLevel = hitLevel + ` + cheatsheetWords[i].level + ` where word = '` + cheatsheetWord + `' and type ='cheatsheet'`;
 
               connection.query( queryStringUpdate, function( _err, _results, _fields ){
                 _resolve( _results );
               } );
 
             } else{
-              let queryStringInsert = `Insert into wellformedit.TB_SEARCHWORD values ( 'discussion', '` + discussionWord + `', ` + discussionWords[i].level + `, 0 );`;
+              let queryStringInsert = `Insert into wellformedit.TB_SEARCHWORD values ( 'cheatsheet', '` + cheatsheetWord + `', ` + cheatsheetWords[i].level + `, 0 );`;
 
               connection.query( queryStringInsert, function( _err, _results, _fields ){
                 _resolve( _results );
@@ -432,15 +433,177 @@ exports.queryManager = function(){
       let promises = [];
 
 
-      // type : normal
+      // type : topic
       let eachPromise = new Promise( function(_resolve, _reject){
-        let searchWherePhaseTemplate = `( title like '%WFIT%' or subtitle like '%WFIT%' or description like '%WFIT%' )`;
+        let searchWherePhaseTemplate = `( title like '%WFIT%' or subtitle like '%WFIT%' or summary like '%WFIT%' )`;
+
         let searchWherePhase = ``;
 
         let searchWords = searchWordObject.searchWordsWithLevel;
 
         for( let i=0; i<searchWords.length; i++ ){
           searchWherePhase += searchWherePhaseTemplate.replace( /WFIT/gi, searchWords[i].word );
+
+          if( i != searchWords.length - 1 ){
+            searchWherePhase += ' or ';
+          }
+        }
+
+        // let queryString = `select * from wellformedit.TB_CONTENT_IMAGE where id in ( select distinct(id) from wellformedit.TB_CONTENT_IMAGE where title in (` + searchWherePhase + `) or subtitle in (` + searchWherePhase + `) or description in (` + searchWherePhase + `) ) order by hitCount;`;
+
+        // let queryString = `
+        //   select
+        //     A.id, A.title, A.subtitle, A.description, A.savedDate, A.originalFileName, A.savedFileName, A.thumbnailWithRatioFileName, A.thumbnailRectangleFileName, A.ratio, A.savedPath, A.encoding, A.mimetype, A.hitCount as image_hitcount,
+        //     B.id as content_id, B.title as content_title, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, false as duplicated, C.redirectPath as topRedirect
+        //   from wellformedit.TB_CONTENT_IMAGE A, wellformedit.TB_CONTENT B, wellformedit.TB_MENU C
+        //   where A.id in ( select distinct(id) from wellformedit.TB_CONTENT_IMAGE where ` + searchWherePhase + ` )
+        //   and A.content_id = B.id and B.parentMenu = C.id
+        //   order by A.hitCount;
+        // `;
+
+        let queryString = `
+          select distinct
+            B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, false as duplicated
+          from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+          where B.id in ( select distinct(id) from wellformedit.TB_CONTENT where ` + searchWherePhase + ` )
+            and A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu
+            and B.parentMenu = D.id and B.id = E.content_id
+          order by B.hitCount;
+        `;
+
+        // console.log( queryString );
+
+        connection.query( queryString, function(err, results, fields){
+          _resolve( { "searchWords":searchWords, "cheatsheets":results } );
+        } );
+      } );
+
+      promises.push( eachPromise );
+
+
+      // type : keyword
+      eachPromise = new Promise( function(_resolve, _reject){
+        let searchWherePhaseTemplate = `displayName like '%WFIT%'`;
+        let searchWherePhase = ``;
+
+        let searchWords = searchWordObject.searchKeywordWordsWithLevel;
+
+        for( let i=0; i<searchWords.length; i++ ){
+          searchWherePhase += searchWherePhaseTemplate.replace( /WFIT/gi, searchWords[i].word );
+          if( i != searchWords.length - 1 ){
+            searchWherePhase += ' or ';
+          }
+        }
+
+        // let queryString = `select * from wellformedit.TB_CONTENT_IMAGE where content_id in ( select distinct(content_id) from wellformedit.TB_CONTENT_KEYWORD where keyword_id in ( select id from wellformedit.TB_KEYWORD where displayName in ( ` + searchWherePhase + `) ) ) order by hitCount;`;
+
+        // let queryString = `
+        //   select
+        //     A.id, A.title, A.subtitle, A.description, A.savedDate, A.originalFileName, A.savedFileName, A.thumbnailWithRatioFileName, A.thumbnailRectangleFileName, A.ratio, A.savedPath, A.encoding, A.mimetype, A.hitCount as image_hitcount,
+        //     B.id as content_id, B.title as content_title, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, false as duplicated
+        //   from wellformedit.TB_CONTENT_IMAGE A, wellformedit.TB_CONTENT B
+        //   where A.content_id in ( select distinct(content_id) from wellformedit.TB_CONTENT_KEYWORD where keyword_id in ( select id from wellformedit.TB_KEYWORD where ( ` + searchWherePhase + ` ) ) )
+        //   and A.content_id = B.id
+        //   order by A.hitCount;
+        // `;
+
+        let queryString = `
+          select
+            B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, false as duplicated
+          from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+          where B.id in ( select distinct(content_id) from wellformedit.TB_CONTENT_KEYWORD where keyword_id in ( select id from wellformedit.TB_KEYWORD where ( ` + searchWherePhase + ` ) ) )
+            and A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu
+            and B.parentMenu = D.id and B.id = E.content_id
+          order by B.hitCount;
+        `;
+
+        // console.log( queryString );
+
+        connection.query( queryString, function(err, results, fields){
+          _resolve( { "searchWords":searchWords, "cheatsheets":results } );
+        } );
+      } );
+
+      promises.push( eachPromise );
+
+
+      // type : image
+      eachPromise = new Promise( function(_resolve, _reject){
+        let searchWherePhaseTemplate = `( title like '%WFIT%' or subtitle like '%WFIT%' or description like '%WFIT%' )`;
+        let searchWherePhase = ``;
+
+        let searchWords = searchWordObject.searchCheatsheetWordsWithLevel;
+
+        for( let i=0; i<searchWords.length; i++ ){
+          searchWherePhase += searchWherePhaseTemplate.replace( /WFIT/gi, searchWords[i].word );
+          if( i != searchWords.length - 1 ){
+            searchWherePhase += ' or ';
+          }
+        }
+
+        // let queryString = `select * from wellformedit.TB_CONTENT_IMAGE where content_id in ( select id from wellformedit.TB_CONTENT where title in( ` + searchWherePhase + ` ) ) order by hitCount;`;
+
+        // let queryString = `
+        //   select
+        //     A.id, A.title, A.subtitle, A.description, A.savedDate, A.originalFileName, A.savedFileName, A.thumbnailWithRatioFileName, A.thumbnailRectangleFileName, A.ratio, A.savedPath, A.encoding, A.mimetype, A.hitCount as image_hitcount,
+        //     B.id as content_id, B.title as content_title, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, false as duplicated
+        //   from wellformedit.TB_CONTENT_IMAGE A, wellformedit.TB_CONTENT B
+        //   where A.content_id in ( select id from wellformedit.TB_CONTENT where ( ` + searchWherePhase + ` ) )
+        //   and A.content_id = B.id
+        //   order by A.hitCount;
+        // `;
+
+        let queryString = `
+          select distinct
+            B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, false as duplicated
+          from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+          where E.id in ( select distinct(id) from wellformedit.TB_CONTENT_IMAGE where ` + searchWherePhase + ` )
+            and A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu
+            and B.parentMenu = D.id and B.id = E.content_id
+          order by B.hitCount;
+        `;
+
+        // console.log( queryString );
+
+        connection.query( queryString, function(err, results, fields){
+          _resolve( { "searchWords":searchWords, "cheatsheets":results } );
+        } );
+      } );
+
+      promises.push( eachPromise );
+
+      Promise.all( promises )
+      .then( function(){
+        let cheatsheets = [];
+        let cheatsheetObject = {};
+        let argv = arguments[0];
+
+        if( argv[0].cheatsheets != undefined && argv[0].cheatsheets != null ) cheatsheets = cheatsheets.concat( argv[0].cheatsheets );
+        if( argv[1].cheatsheets != undefined && argv[1].cheatsheets != null ) cheatsheets = cheatsheets.concat( argv[1].cheatsheets );
+        if( argv[2].cheatsheets != undefined && argv[2].cheatsheets != null ) cheatsheets = cheatsheets.concat( argv[2].cheatsheets );
+
+        resolve( cheatsheets );
+      } );
+
+    } );
+  }
+
+  this.getCheatsheet__ = function( connection, searchWordObject ){
+    return new Promise( function(resolve, reject){
+      let promises = [];
+
+
+      // type : normal
+      let eachPromise = new Promise( function(_resolve, _reject){
+        let searchWherePhaseTemplate = `( title like '%WFIT%' or subtitle like '%WFIT%' or description like '%WFIT%' )`;
+
+        let searchWherePhase = ``;
+
+        let searchWords = searchWordObject.searchWordsWithLevel;
+
+        for( let i=0; i<searchWords.length; i++ ){
+          searchWherePhase += searchWherePhaseTemplate.replace( /WFIT/gi, searchWords[i].word );
+
           if( i != searchWords.length - 1 ){
             searchWherePhase += ' or ';
           }
@@ -458,7 +621,16 @@ exports.queryManager = function(){
           order by A.hitCount;
         `;
 
-        // console.log( queryString );
+        // let queryString = `
+        //   select
+        //     B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
+        //   from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+        //   where E.id in ( select distinct(id) from wellformedit.TB_CONTENT_IMAGE where ` + searchWherePhaseForImageTable + ` )
+        //     and A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
+        //   order by hitCount desc;
+        // `;
+
+        console.log( queryString );
 
         connection.query( queryString, function(err, results, fields){
           _resolve( { "searchWords":searchWords, "cheatsheets":results } );
@@ -1143,14 +1315,46 @@ exports.queryManager = function(){
     } );
   }
 
-  this.getDiscussionContentsList = function(connection){
+  this.getTopicList = function(connection){
     return new Promise( function(resolve, reject){
       let queryString = `
         select
-          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect
-        from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D
-        where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu
-        order by hitCount desc;
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
+        from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+        where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
+        order by hitCount desc limit 5;
+      `;
+
+      connection.query( queryString, function(err, results, fields){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.getRecentTopicList = function(connection){
+    return new Promise( function(resolve, reject){
+      let queryString = `
+        select
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
+        from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+        where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
+        order by createdDate desc limit 5;
+      `;
+
+      connection.query( queryString, function(err, results, fields){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.getPopularTopicList = function(connection){
+    return new Promise( function(resolve, reject){
+      let queryString = `
+        select
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
+        from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
+        where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
+        order by hitCount desc limit 5;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -1182,6 +1386,22 @@ exports.queryManager = function(){
       let queryString = `
         select id, title, subtitle, hitCount from wellformedit.TB_CONTENT
         where id = ( select content_id from wellformedit.TB_CONTENT_KEYWORD where keyword_id = ( select id from wellformedit.TB_KEYWORD where DisplayName = '` + displayName + `') limit 1 );
+      `;
+
+      connection.query( queryString, function(err, results, fields){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.getTopicListTable = function(connection){
+    return new Promise( function(resolve, reject){
+      let queryString = `
+        select
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect
+        from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D
+        where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu
+        order by hitCount desc;
       `;
 
       connection.query( queryString, function(err, results, fields){

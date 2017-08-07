@@ -189,13 +189,21 @@ $(document).ready( function(){
   } );
 
 
-  // adjust keyword architecture img
-  if( $(window).width() >= 767 ){
-    $(".keywordarchitecture_img").each( function(){
-      let marginTopBottom = ( $(this).parent().parent().height() - $(this).height() ) / 2;;
+  // adjust keyword architecture img margin
+  // if( $(window).width() >= 767 ){
+  //   $(".keywordarchitecture_description_col").each( function(){
+  //     let margin = ( $(this).siblings(".keywordarchitecture_img_col").height() - $(this).height() );
+  //
+  //     $(this).css( "margin-top", margin );
+  //   } );
+  // }
 
-      $(this).css( "margin-top", marginTopBottom );
-      $(this).css( "margin-bottom", marginTopBottom );
+  // adjust topic thumbnail img margin
+  if( $(window).width() >= 767 ){
+    $(".topic_thumbnail_img").each( function(){
+      let margin = ( $(this).siblings(".topic_content").height() - $(this).find("img").height() );
+
+      $(this).css( "margin-top", margin-10 );
     } );
   }
 } );

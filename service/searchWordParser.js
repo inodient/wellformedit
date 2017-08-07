@@ -1,9 +1,7 @@
 exports.searchWordParser = function(){
 
-  this.parseSearchWords = function( req ){
+  this.parseSearchWords = function( searchWord ){
     return new Promise( function(resolve, reject){
-
-      let searchWord = req.body.searchWord;
 
       getSearchWords( searchWord )
       .then( getSeparatedSearchWords )
@@ -12,7 +10,7 @@ exports.searchWordParser = function(){
       .then( getSearchDiscussionWordsWithSearchLevel )
       .then( getSearchWordsIgnoreDuplication )
       .then( getSearchKeywordWordsIgnoreDuplication )
-      .then( getSearchDiscussionWordsIgnoreDuplication )
+      .then( getSearchCheatsheetWordsIgnoreDuplication )
       .then( function(results){
         resolve( results );
       } );
@@ -50,7 +48,7 @@ exports.searchWordParser = function(){
     return new Promise( function(resolve, reject){
       var separatedSearchWord = [];
       var keywordWord = [];
-      var discussionWord = [];
+      var cheatsheetWord = [];
 
       for( let i=0; i<searchWordObject.searchWordArray.length; i++ ){
         // console.log( searchWordObject.searchWordArray[i] );
@@ -58,8 +56,8 @@ exports.searchWordParser = function(){
 
         if( tempSearchWord.indexOf( "KEYWORD:" ) > -1 ){
           keywordWord.push( tempSearchWord.replace( "KEYWORD:", "" ) );
-        } else if( tempSearchWord.indexOf( "DISCUSSION" ) > -1 ){
-          discussionWord.push( tempSearchWord.replace( "DISCUSSION:", "" ) );
+        } else if( tempSearchWord.indexOf( "CHEATSHEET" ) > -1 ){
+          cheatsheetWord.push( tempSearchWord.replace( "CHEATSHEET:", "" ) );
         } else if( searchWordObject.searchWordArray[i].indexOf( " " ) > -1 ){
           separatedSearchWord.push( ( searchWordObject.searchWordArray[i].split( " " ) ).filter( function(e){ return e } ) );
         }
@@ -67,7 +65,7 @@ exports.searchWordParser = function(){
 
       searchWordObject.separatedSearchWord = separatedSearchWord.filter( function(e){ return e });
       searchWordObject.keywordWord = keywordWord;
-      searchWordObject.discussionWord = discussionWord;
+      searchWordObject.cheatsheetWord = cheatsheetWord;
 
       // console.log( searchWordObject );
 
@@ -86,7 +84,7 @@ exports.searchWordParser = function(){
       for( let i=0; i<searchWordArray.length; i++ ){
         let tempSearchWord = searchWordArray[i].replace( / : | :|: /g, ":" );
 
-        if( tempSearchWord.indexOf( "KEYWORD:" ) < 0 && tempSearchWord.indexOf( "DISCUSSION:" ) ){
+        if( tempSearchWord.indexOf( "KEYWORD:" ) < 0 && tempSearchWord.indexOf( "CHEATSHEET:" ) < 0 ){
           searchWordsWithLevel.push( {"word":searchWordArray[i], "level":10, "duplicated":false} );
         }
       }
@@ -126,16 +124,16 @@ exports.searchWordParser = function(){
 
   function getSearchDiscussionWordsWithSearchLevel( searchWordObject ){
     return new Promise( function(resolve, reject){
-      var searchDiscussionWordsWithLevel = [];
+      var searchCheatsheetWordsWithLevel = [];
 
-      let searchWordArray = searchWordObject.discussionWord;
+      let searchWordArray = searchWordObject.cheatsheetWord;
 
       for( let i=0; i<searchWordArray.length; i++ ){
         let tempSearchWord = searchWordArray[i].replace( / : | :|: /g, ":" );
-        searchDiscussionWordsWithLevel.push( {"word":searchWordArray[i], "level":3, "duplicated":false} );
+        searchCheatsheetWordsWithLevel.push( {"word":searchWordArray[i], "level":3, "duplicated":false} );
       }
 
-      searchWordObject.searchDiscussionWordsWithLevel = searchDiscussionWordsWithLevel;
+      searchWordObject.searchCheatsheetWordsWithLevel = searchCheatsheetWordsWithLevel;
 
       resolve( searchWordObject );
     } );
@@ -207,11 +205,11 @@ exports.searchWordParser = function(){
     } );
   }
 
-  function getSearchDiscussionWordsIgnoreDuplication( searchWordObject ){
+  function getSearchCheatsheetWordsIgnoreDuplication( searchWordObject ){
     return new Promise( function(resolve, reject){
       var searchKeywordWordsIgnoreDuplication = [];
 
-      let searchWordsWithLevel = searchWordObject.searchDiscussionWordsWithLevel;
+      let searchWordsWithLevel = searchWordObject.searchCheatsheetWordsWithLevel;
 
       for( let i=0; i<searchWordsWithLevel.length; i++ ){
         for( let j=0; j<searchWordsWithLevel.length; j++ ){
@@ -230,9 +228,9 @@ exports.searchWordParser = function(){
       // console.log( searchWordsWithLevel );
       // console.log( searchWordsWithLevel.filter( function(e){ return !(e.duplicated) } ) );
 
-      delete searchWordObject.discussionWord;
+      delete searchWordObject.cheatsheetWord;
 
-      searchWordObject.searchDiscussionWordsWithLevel = searchWordsWithLevel.filter( function(e){ return !(e.duplicated) } );
+      searchWordObject.searchCheatsheetWordsWithLevel = searchWordsWithLevel.filter( function(e){ return !(e.duplicated) } );
 
       resolve( searchWordObject );
     } );

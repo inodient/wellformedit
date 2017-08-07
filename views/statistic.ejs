@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Well Formed IT</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="wellformedit.css">
+
+  <script src="design.js"></script>  <!-- CSS Script -->
+  <script src="common.js"></script>  <!-- Logic Script -->
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <% include partials/facebookSDK.ejs %>
+
+  <script>
+    $(window).on( "load", function(){
+      $(document).ready( function(){
+        // ------ Google Chart - Start
+        $(window).resize( function(){
+          drawCheatsheetChart();
+          drawKeywordsChart();
+          drawContentsChart();
+        } );
+
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback( drawCheatsheetChart );
+        google.charts.setOnLoadCallback( drawKeywordsChart );
+        google.charts.setOnLoadCallback( drawContentsChart );
+        // ------ Google Chart - End
+      } );
+    } );
+
+    function drawCheatsheetChart() {
+      var cheatSheetChart = new google.visualization.BarChart(document.getElementById('id_cheatsheetChart'));
+      var data = google.visualization.arrayToDataTable( cheatsheetChartData );
+
+      google.visualization.events.addListener( cheatSheetChart, "select", function selectHandler( e ){
+        if( cheatSheetChart.getSelection()[0] ){
+          var str = data.getFormattedValue(cheatSheetChart.getSelection()[0].row, 0);
+
+          if( confirm( "Are you sure want to search with [" + str + "] ?" ) ){
+            $("#search-word").val( str ).focus();
+            searchCheatsheet();
+            $(window).scrollTop(0);
+          }
+        }
+      } );
+
+      cheatSheetChart.draw( data, cheatsheetChartOptions );
+    }
+
+    function drawKeywordsChart() {
+      var keywordsChart = new google.visualization.BarChart(document.getElementById('id_keywordsChart'));
+      var data = google.visualization.arrayToDataTable( keywordsChartData );
+
+      google.visualization.events.addListener( keywordsChart, "select", function selectHandler( e ){
+        if( keywordsChart.getSelection()[0] ){
+          var str = "KEYWORD : " + data.getFormattedValue(keywordsChart.getSelection()[0].row, 0);
+
+          if( confirm( "Are you sure want to search with [ " + str + " ] ?" ) ){
+            $("#search-word").val( str ).focus();
+            searchCheatsheet();
+            $(window).scrollTop(0);
+          }
+        }
+      } );
+
+      keywordsChart.draw( data, keywordsChartOptions );
+    }
+
+    function drawContentsChart() {
+      var contentsChart = new google.visualization.BarChart(document.getElementById('id_contentsChart'));
+      var data = google.visualization.arrayToDataTable( contentsChartData );
+
+      google.visualization.events.addListener( contentsChart, "select", function selectHandler( e ){
+        if( contentsChart.getSelection()[0] ){
+          var str = "DISCUSSION : " + data.getFormattedValue(contentsChart.getSelection()[0].row, 0);
+
+          if( confirm( "Are you sure want to search with [ " + str + " ] ?" ) ){
+            $("#search-word").val( str ).focus();;
+            searchCheatsheet();
+            $(window).scrollTop(0);
+          }
+        }
+      } );
+
+      contentsChart.draw( data, contentsChartOptions );
+    }
+
+    function searchCheatsheet(){
+      getCheatsheetData()
+      .then( function( data ){
+        $("#search-word").blur();
+        $("#cheatsheet-search").blur();
+        $(".appending-search-result").remove();
+        $(".search-result").append( data.cheatsheet );
+        $(".search-result").css( "margin-bottom", 150 );
+      } ).then( function(){
+        $(".search-result-image img").on( "click", function(){
+          // alert( $(this).attr("id") );
+
+          if( $(window).width() < 1024 ){
+            redirectContent( $(this).attr("id") );
+          } else{
+            let modalId = "#modal_" + $(this).attr("id");
+            $(modalId).modal();
+
+            setCheatsheetImgAspect( $(this).attr("id") );
+            setCheatsheetMargin( $(this).attr("id") );
+          }
+        } );
+      } );
+    }
+
+    function getCheatsheetData(){
+      return new Promise( function(resolve, reject){
+        $.post( "/searchCheatsheet", {
+          searchWord : $("#search-word").val()
+        },
+        function( data, status ){
+          if( status == "success" ){
+            resolve( data );
+          } else{
+            alert( "Data : " + data + "\nStatus : " + status );
+            resolve( false );
+          }
+        });
+      } );
+    }
+  </script>
+
+  <script>
+    $(window).on( "load", function(){
+      $(document).ready( function(){
+        $(".after").css( "height", $(".base").outerHeight() + $(".navbar").outerHeight() );
+      } );
+    } );
+  </script>
+
+  <style>
+    img {
+      max-width: 100%;
+    }
+  </style>
+
+</head>
+<body class="base">
+  <header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid nav-container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%- systemTitle %>
+        </div>
+        <div class="collapse navbar-collapse navbar-content" id="menu">
+          <ul class="nav navbar-nav top-nav">
+            <p class="navbar-text">[ <%- title %> ]</p>
+            <%- subMenuListCollapsed %>
+          </ul>
+          <% if( subMenuListCollapsed && subMenuListCollapsed.length > 0 ) { %>
+            <hr class="nav-divider">
+          <% } %>
+          <ul class="nav navbar-nav top-nav">
+            <p class="navbar-text">[ Well Formed IT ]</p>
+            <%- menuList %>
+          </ul>
+          <ul class="nav navbar-nav navbar-right top-nav">
+            <%- rightMenuList %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-fluid doc">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 doc-nav">
+        <blockquote class="doc-description">
+          <%- menuDescription %>
+        </blockquote>
+
+        <ul class="side-nav" >
+          <%- subMenuList %>
+        </ul>
+
+      </div>
+      <div class="col-lg-9 col-md-9 doc-content">
+
+        <div class="content">
+
+          <div class="form-group" id="id_form_discussion">
+
+            <div class="content_specifics">
+              <%- specifics %>
+            </div>
+          </div>
+
+        </div>
+
+        <% include partials/footer.ejs %>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="after"></div>
+
+  <% include partials/about.ejs %>
+</body>
+</html>

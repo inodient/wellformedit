@@ -1,6 +1,25 @@
 {
   "GET" : [
     {
+      "id": "gettingstarted",
+      "path": "/getting-started",
+      "controllerJS": "controller_getting_started.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "getting-started.ejs"
+    },
+    {
+      "id": "topic",
+      "path": "/topic",
+      "controllerJS": "controller_topic.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "topic.ejs"
+    },
+
+
+
+    {
       "id": "getdb",
       "path": "/getdb",
       "controllerJS": "controller_db.js",
@@ -143,6 +162,14 @@
       "controlFunction": "control",
       "viewPath": "",
       "view": "facebooklogin.ejs"
+    },
+    {
+      "id": "statistic",
+      "path": "/statistic",
+      "controllerJS": "controller_statistic.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "statistic.ejs"
     }
   ],
   "POST" : [
@@ -173,10 +200,18 @@
     {
       "id": "searchCheatsheet",
       "path": "/searchCheatsheet",
-      "controllerJS": "controller_cheatsheet.js",
+      "controllerJS": "controller_topic.js",
       "controlFunction": "controlSearchCheatsheet",
       "viewPath": "",
       "view": "cheatsheet.ejs"
+    },
+    {
+      "id": "searchTopic",
+      "path": "/searchTopic",
+      "controllerJS": "controller_topic.js",
+      "controlFunction": "controlSearchTopic",
+      "viewPath": "",
+      "view": "topic.ejs"
     },
     {
       "id": "contentLoad",

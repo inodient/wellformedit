@@ -77,7 +77,7 @@ exports.menuGenerator = function(){
     } );
   }
 
-  this.createSideMenu = function( mainSideMenuList, contentSideMenuList ){
+  this.createSideMenu = function( mainSideMenuList, contentSideMenuList, reqPath ){
     return new Promise( function(resolve, reject){
       var innerSubMenuCodes = "";
       var specificMenuCodes = "";
@@ -122,7 +122,8 @@ exports.menuGenerator = function(){
           var nodeName = mainSideMenuList[i].nodeName;
 
           if( contentSideMenuList.length > 0 ){
-            redirectPath = "./discussion" + redirectPath;
+            // redirectPath = "./topic" + redirectPath;
+            redirectPath = reqPath + redirectPath;
           }
 
           if( nodeName == "H3" ){
@@ -192,7 +193,8 @@ exports.menuGenerator = function(){
           var nodeName = mainSideMenuList[i].nodeName;
 
           if( contentSideMenuList.length > 0 ){
-            redirectPath = "./discussion" + redirectPath;
+            // redirectPath = "./topic" + redirectPath;
+            redirectPath = reqPath + redirectPath;
           }
 
           if( nodeName == "H3" ){

@@ -15,7 +15,19 @@ exports.contentModelValueGenerator = function(){
 
   this.functionArray[ "gotodiscussion" ] = function(){
     return new Promise( function(resolve, reject){
-      resolve( `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./discussion'">` + "Go To Discussion" + `</button>` );
+      resolve( `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./topic'">` + "Go To Discussion" + `</button>` );
+    } );
+  }
+
+  this.functionArray[ "gototopiclist" ] = function(){
+    return new Promise( function(resolve, reject){
+      resolve( `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./topic'">` + "View More Topics" + `</button>` );
+    } );
+  }
+
+  this.functionArray[ "gotostatistic" ] = function(){
+    return new Promise( function(resolve, reject){
+      resolve( `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./statistic'">` + "View Statistic Info." + `</button>` );
     } );
   }
 
@@ -43,21 +55,16 @@ exports.contentModelValueGenerator = function(){
     } );
   }
 
-  this.functionArray[ "gotokeywordcontent" ] = function(){
+  this.functionArray[ "keywordstructurebuttons" ] = function(){
     return new Promise( function(resolve, reject){
-      resolve( `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./discussion?contentid=id_content_0051'">` + "View Discussion List by Keyword" + `</button>` );
-    } );
-  }
-
-  this.functionArray[ "gotokeywordcontent2" ] = function(){
-    return new Promise( function(resolve, reject){
-      resolve( `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./discussion?contentid=id_content_0051'">` + "View Discussion List by Keyword" + `</button>` );
+      let code = `<button type="button" class="btn btn-important" onclick="javascript:window.location.href='./getting-started?contentid=id_content_0051'">` + "View Keyword Specifics" + `</button>`;
+      resolve( code );
     } );
   }
 
   this.functionArray[ "divider" ] = function(){
     return new Promise( function(resolve, reject){
-      resolve( `<hr>` );
+      resolve( `<hr class="mobile-hidden">` );
     } );
   }
 
@@ -71,7 +78,7 @@ exports.contentModelValueGenerator = function(){
         let subCodes = ``;
 
         for( let i=0; i<modelValueData.length; i++ ){
-          subCodes += `<tr class="clickable-row" data-href="./discussion?contentid=` + modelValueData[i].content_id + `">`
+          subCodes += `<tr class="clickable-row" data-href="./topic?contentid=` + modelValueData[i].content_id + `">`
           // subCodes += `<td>` + modelValueData[i].content_id + `</td>`;
           subCodes += `<td class="title_td" id="` + modelValueData[i].content_id + `">` + `<span>` + modelValueData[i].title + `</span>` + `<br>` + modelValueData[i].subtitle + `</td>`;
           subCodes += `<td>` + modelValueData[i].summary + `</td>`;
@@ -360,7 +367,7 @@ exports.contentModelValueGenerator = function(){
         let subCodes = ``;
 
         for( let i=0; i<modelValueData.length; i++ ){
-          subCodes += `<tr class="clickable-row" data-href="./discussion?contentid=` + modelValueData[i].content_id + `">`
+          subCodes += `<tr class="clickable-row" data-href="./topic?contentid=` + modelValueData[i].content_id + `">`
           // subCodes += `<td>` + modelValueData[i].content_id + `</td>`;
           subCodes += `<td>` + modelValueData[i].displayName + `</td>`;
           subCodes += `<td class="title_td" id="` + modelValueData[i].content_id + `">` + `<span>` + modelValueData[i].title + `</span>` + `<br>` + modelValueData[i].subtitle + `</td>`;
@@ -473,8 +480,119 @@ exports.contentModelValueGenerator = function(){
     } );
   }
 
+  this.functionArray[ "recenttopic" ] = function( modelValueData ){
+    return new Promise( function(resolve, reject){
+      if( modelValueData && modelValueData.length > 0 ){
 
-  this.functionArray[ "mostrecent" ] = function( modelValueData ){
+        let code = ``;
+        let keywords = '';
+        let createdData = ``;
+
+        for( let i=0; i<modelValueData.length; i++ ){
+          let contentRedirectPath = '';
+
+          if( modelValueData[i].content_type == "main" ){
+            contentRedirectPath = modelValueData[i].topRedirect;
+          } else{
+            contentRedirectPath = `./topic?contentid=` + modelValueData[i].content_id;
+          }
+
+          if( i < modelValueData.length-1 && modelValueData[i].content_id == modelValueData[i+1].content_id ){
+            if( keywords.indexOf( modelValueData[i].keywordDisplayName ) > -1 ){
+              keywords += modelValueData[i].keywordDisplayName + ", ";
+            }
+            continue;
+          } else{
+
+            if( keywords.length > 0 ){
+              keywords += modelValueData[i].keywordDisplayName;
+            } else{
+              keywords = modelValueData[i].keywordDisplayName;
+            }
+
+            code += `<div class="row topic_row">`
+
+            code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
+            code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
+            code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
+            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p>Keyword <b>` + keywords + `</b><p>`;
+            code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
+            code += `</div>`;
+
+            code += `<div class="col-lg-3 col-md-3 col-sm-3 topic_thumbnail_img">`;
+            code += `<img id="` + modelValueData[i].imageId + `" src="` + modelValueData[i].thumbnailRectangleFileName + `" />`;
+            code += `</div>`;
+
+            code += `</div>`;
+
+            code += `<hr>`
+            keywords = '';
+
+          }
+        }
+
+        resolve( code + `<p style="text-align:right"><h4><a href="./cheatsheet">View More Topics</a></h4></p>` );
+      }
+    } );
+  }
+
+  this.functionArray[ "populartopic" ] = function( modelValueData ){
+    return new Promise( function(resolve, reject){
+      if( modelValueData && modelValueData.length > 0 ){
+
+        let code = ``;
+        let keywords = '';
+
+        for( let i=0; i<modelValueData.length; i++ ){
+          let contentRedirectPath = '';
+
+          if( modelValueData[i].content_type == "main" ){
+            contentRedirectPath = modelValueData[i].topRedirect;
+          } else{
+            contentRedirectPath = `./topic?contentid=` + modelValueData[i].content_id;
+          }
+
+          if( i < modelValueData.length-1 && modelValueData[i].content_id == modelValueData[i+1].content_id ){
+            if( keywords.indexOf( modelValueData[i].keywordDisplayName ) > -1 ){
+              keywords += modelValueData[i].keywordDisplayName + ", ";
+            }
+            continue;
+          } else{
+
+            if( keywords.length > 0 ){
+              keywords += modelValueData[i].keywordDisplayName;
+            } else{
+              keywords = modelValueData[i].keywordDisplayName;
+            }
+
+            code += `<div class="row topic_row">`
+            code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
+            code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
+            code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
+            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p>Keyword <b>` + keywords + `</b><p>`;
+            code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
+            code += `</div>`;
+
+            code += `<div class="col-lg-3 col-md-3 col-sm-3 topic_thumbnail_img">`;
+            code += `<img id="` + modelValueData[i].imageId + `" src="` + modelValueData[i].thumbnailRectangleFileName + `" />`;
+            code += `</div>`;
+            code += `</div>`;
+
+            code += `<hr>`
+            keywords = '';
+
+          }
+        }
+
+        resolve( code + `<p style="text-align:right"><h4><a href="./cheatsheet">View More Topics</a></h4></p>` );
+      }
+    } );
+  }
+
+
+  this.functionArray[ "recentcheatsheet" ] = function( modelValueData ){
     return new Promise( function(resolve, reject){
 
       let promises = [];
@@ -494,7 +612,7 @@ exports.contentModelValueGenerator = function(){
     } );
   }
 
-  this.functionArray[ "mostpopular" ] = function( modelValueData ){
+  this.functionArray[ "popularcheatsheet" ] = function( modelValueData ){
     return new Promise( function(resolve, reject){
 
       let promises = [];
@@ -516,7 +634,7 @@ exports.contentModelValueGenerator = function(){
 
   function getCheatsheetListCode( modelValueData ){
     return new Promise( function(resolve, reject){
-      var codes = `<hr>`;
+      var codes = ``;
 
       if( modelValueData ){
         for( var i=0; i<modelValueData.length; i++ ){
@@ -534,23 +652,23 @@ exports.contentModelValueGenerator = function(){
             cheatsheetRedirectPath = modelValueData[i].topRedirect + `#` + modelValueData[i].id;
             contentRedirectPath = modelValueData[i].topRedirect;
           } else{
-            cheatsheetRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
-            contentRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id;
+            cheatsheetRedirectPath = `./topic?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
+            contentRedirectPath = `./topic?content_id=` + modelValueData[i].content_id;
           }
 
 
 
           codes += `
-            <div class="col-lg-4 col-md-4 search-result-content">
+            <div class="col-lg-4 col-md-4 col-sm-4 search-result-content">
               <div class="mobile-show">
                 <p><b><u>
                   Ranking : ` + ranking + `
                 </u></b></p>
               </div>
-              <div class="mobile-show tablet-show thumbnail search-result-image">
+              <div class="mobile-show thumbnail search-result-image">
                 <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailWithRatioFileName + `" />
               </div>
-              <div class="mobile-hidden tablet-hidden thumbnail search-result-image">
+              <div class="mobile-hidden thumbnail search-result-image">
                 <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailRectangleFileName + `" />
               </div>
               <div class="search-result-text">
@@ -591,8 +709,8 @@ exports.contentModelValueGenerator = function(){
             cheatsheetRedirectPath = modelValueData[i].topRedirect + `#` + modelValueData[i].id;
             contentRedirectPath = modelValueData[i].topRedirect;
           } else{
-            cheatsheetRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
-            contentRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id;
+            cheatsheetRedirectPath = `./topic?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
+            contentRedirectPath = `./topic?content_id=` + modelValueData[i].content_id;
           }
 
           modalCodes += `
@@ -600,10 +718,10 @@ exports.contentModelValueGenerator = function(){
               <div class="modal-dialog modal-center">
                 <div class="modal-content">
                   <div class="modal-content row">
-                    <div data-col="6" class="col-lg-6 col-md-6 img_container">
+                    <div data-col="6" class="col-lg-6 col-md-6 col-sm-12 img_container">
                       <img id="modal_img_` + modelValueData[i].id + `" ratio="` + modelValueData[i].ratio + `" class="cheatsheet_img" src="` + modelValueData[i].savedFileName + `"/>
                     </div>
-                    <div data-col="6" class="col-lg-6 col-md-6 info_container">
+                    <div data-col="6" class="col-lg-6 col-md-6 mobile-hidden tablet-hidden info_container">
                       <div class="cheatsheet_info">
                         <!-- <button type="button" class="close cheatsheet_close" data-dismiss="modal">&times;</button> -->
 
@@ -928,6 +1046,37 @@ exports.contentModelValueGenerator = function(){
   }
 
   // discussion - start
+  this.functionArray[ "keywordstructurethumbnaillist" ] = function(){
+    return new Promise( function(resolve, reject){
+      let code = ``;
+
+      code += `
+        <div class="row mobile-show keywordarchitecture_thumbnail_row">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            <img src="intro_architecture_inverse.jpg">
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            <img src="intro_interpretationanalysis_inverse.jpg">
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            <img src="intro_designprogramming_inverse.jpg">
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            <img src="intro_connectioncommunication_inverse.jpg">
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            <img src="intro_frameworkstructure_inverse.jpg">
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            <img src="intro_discussionhotpotato_inverse.jpg">
+          </div>
+        </div>
+      `;
+
+      resolve( code );
+    } );
+  }
+
   this.functionArray[ "discussionstatus" ] = function( modelValueData ){
     return new Promise( function(resolve, reject){
       let contentCount = modelValueData[0].count;
@@ -942,8 +1091,8 @@ exports.contentModelValueGenerator = function(){
             <thead>
               <tr>
                 <th class="col-lg-2 col-lg-2" >Status</th>
-                <th class="col-lg-5 col-md-5" >Discussion Content</th>
-                <th class="col-lg-5 col-md-5" >Cheatsheet</th>
+                <th class="col-lg-5 col-md-5" >Topics (Content)</th>
+                <th class="col-lg-5 col-md-5" >Cheat Sheet</th>
               </tr>
             </thead>
             <tbody>
@@ -966,12 +1115,76 @@ exports.contentModelValueGenerator = function(){
     } );
   }
 
-  this.functionArray[ "togglediscussionlist" ] = function( modelValueData ){
+  this.functionArray[ "topiclist" ] = function( modelValueData ){
+    return new Promise( function(resolve, reject){
+      if( modelValueData && modelValueData.length > 0 ){
+
+        let code = ``;
+        let keywords = '';
+
+        for( let i=0; i<modelValueData.length; i++ ){
+          let contentRedirectPath = '';
+
+          if( modelValueData[i].content_type == "main" ){
+            contentRedirectPath = modelValueData[i].topRedirect;
+          } else{
+            contentRedirectPath = `./topic?contentid=` + modelValueData[i].content_id;
+          }
+
+          if( i < modelValueData.length-1 && modelValueData[i].content_id == modelValueData[i+1].content_id ){
+            if( keywords.indexOf( modelValueData[i].keywordDisplayName ) > -1 ){
+              keywords += modelValueData[i].keywordDisplayName + ", ";
+            }
+            continue;
+          } else{
+
+            if( keywords.length > 0 ){
+              keywords += modelValueData[i].keywordDisplayName;
+            } else{
+              keywords = modelValueData[i].keywordDisplayName;
+            }
+
+            code += `<div class="row topic_row">`
+            code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
+            code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
+            code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
+            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p>Keyword <b>` + keywords + `</b><p>`;
+            code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
+            code += `</div>`;
+
+            code += `<div class="col-lg-3 col-md-3 col-sm-3 topic_thumbnail_img mobile-hidden">`;
+            code += `<img src="` + modelValueData[i].thumbnailRectangleFileName + `" />`;
+            code += `</div>`;
+            code += `</div>`;
+
+            code += `<hr>`
+            keywords = '';
+
+          }
+        }
+
+        resolve( code );
+        // resolve( code + `<p style="text-align:right"><h4><a href="./cheatsheet">View More Topics</a></h4></p>` );
+      }
+    } );
+  }
+
+  this.functionArray[ "togglekeywordarchitecture" ] = function(){
+    return new Promise( function(resolve, reject){
+      let code = `
+        <button id="btn_keywordToggle" class="btn btn-important" onclick="javascript:toggleKeywordList();" style="margin-bottom: 10px;">View Whole Discussion List</button>
+      `;
+      resolve( code );
+    } );
+  }
+
+  this.functionArray[ "topiclisttable" ] = function( modelValueData ){
     return new Promise( function(resolve, reject){
       let codes = ``;
 
       codes += `
-        <button id="btn_discussionToggle" class="btn btn-important" onclick="javascript:toggleDiscussionList();">View Whole Discussion List</button>
+        <!-- <button id="btn_discussionToggle" class="btn btn-important" onclick="javascript:toggleDiscussionList();" style="margin-bottom: 10px;">View Whole Discussion List</button> -->
       `;
 
       if( modelValueData && modelValueData.length > 0 ){
@@ -986,7 +1199,7 @@ exports.contentModelValueGenerator = function(){
           if( modelValueData[i].content_type == "main" ){
             contentRedirectPath = modelValueData[i].topRedirect;
           } else{
-            contentRedirectPath = `./discussion?contentid=` + modelValueData[i].content_id;
+            contentRedirectPath = `./topic?contentid=` + modelValueData[i].content_id;
           }
 
           if( i < modelValueData.length-1 && modelValueData[i].content_id == modelValueData[i+1].content_id ){
@@ -1014,7 +1227,7 @@ exports.contentModelValueGenerator = function(){
         }
 
         let tableCodes = `
-          <table id="discussionList" class="discussion_table table table-condensed table-hover table-bordered" style="display:none">
+          <table id="topicList" class="topic_table table table-condensed table-hover table-bordered">
             <thead>
               <tr>
                 <th class="col-lg-2 col-md-2">Keyword</th>
@@ -1038,14 +1251,13 @@ exports.contentModelValueGenerator = function(){
 
   function getKeywordsStructureCode( modelValueData ){
     return new Promise( function(resolve, reject){
-      let tableBody = ``;
+      let code = ``;
+
+      let subKeywordsCode = ``;
 
       for( let i=1; i<modelValueData.keywordsInfo.length; i++ ){
-        tableBody += `
-          <tr>
-            <td>` + modelValueData.keywordsInfo[i].sequence + `</td>
-            <td>` + modelValueData.keywordsInfo[i].displayName + `</td>
-          <tr>
+        subKeywordsCode += `
+            ` + modelValueData.keywordsInfo[i].displayName + `<br>
         `;
       }
 
@@ -1056,43 +1268,33 @@ exports.contentModelValueGenerator = function(){
           <!-- <p><b><u>Famous Discussion</u></b></p> -->
           <p>
             <span><b>Most Popular Discussion</b></span>
-            <br>
-            <a style="text-decoration : none; color: #ce0000" href="./discussion?contentid=` + modelValueData.contentTop1[0].id + `">
+            <hr style="margin-bottom: 5px">
+            <a style="text-decoration : none; color: #ce0000; font-weight: bold;" href="./topic?contentid=` + modelValueData.contentTop1[0].id + `">
             ` + modelValueData.contentTop1[0].title + `
             </a>
           </p>
         `;
       }
 
-      let code = `
-        <hr>
+      code = `
         <div class="row keywordarchitecture_row">
-          <div class="col-lg-7 col-md-7 keywordarchitecture_img_col">
+          <div class="col-lg-8 col-md-8 col-sm-8 keywordarchitecture_img_col mobile-hidden">
             <img class="keywordarchitecture_img" src="` + modelValueData.keywordsInfo[0].imageFileName + `">
           </div>
-          <div class="col-lg-5 col-md-5">
-            <!-- <p><b><u>Keyword Description</u></b></p> -->
+          <div class="col-lg-4 col-md-4 col-sm-4 keywordarchitecture_description_col">
             <br class="mobile-show tablet-show">
             <br class="mobile-show tablet-show">
-            <p>
+            <h4>` + modelValueData.keywordsInfo[0].displayName + `</h4>
+            <hr style="margin-bottom: 5px">
               ` + modelValueData.keywordsInfo[0].description + `
             </p>
             <br>
-            <!-- <p><b><u>Sub Layers</u></b></p> -->
-            <table class="discussion_table table table-condensed table-responsive table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th class="col-lg-2 col-md-2">Seq</th>
-                  <th class="col-lg-10 col-md-10">Sub Keywords</th>
-                </tr>
-              </thead>
-              <tbody>
-                ` + tableBody + `
-              </tbody>
-            </table>
+            <p><span><b>Sub Keywords</b></span>
+            <hr style="margin-bottom: 5px">
+              ` + subKeywordsCode + `
             <br>`
             + top1Code +
-            `<button class="btn btn-important btn-small" onclick="javascript:document.location.href='./discussion?contentid=id_content_0051#` + modelValueData.keywordsInfo[0].redirectUrl + `'">View Keyword Specific</button>
+            `<button class="btn btn-important-inverse btn-small" onclick="javascript:document.location.href='./getting-started?contentid=id_content_0051#` + modelValueData.keywordsInfo[0].redirectUrl + `'">View Keyword Specific</button>
           </div>
         </div>
       `;
@@ -1152,6 +1354,64 @@ exports.contentModelValueGenerator = function(){
       .then( function(code){
         resolve( code );
       } );
+    } );
+  }
+
+  this.functionArray[ "topicconceptsketch" ] = function(){
+    return new Promise( function(resolve, reject){
+      let code = `
+        <img class="topic_img" src="intro_architecture_inverse.jpg"/>
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <b>Well-formed IT</b>'s basic concept is a structured approach.
+            All IT technologies and environments can be divided into several layers and levels,
+            using their abstract and simultaneous characteristics.
+          </div>
+          <br class="mobile-show">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            And these puzzles must be combined according to the hierarchy.
+            A keyword map is a simplified map for doing this.
+            This includes computer architecture, analytical methodology, network concepts and new technologies in IT, etc.
+          </div>
+          <br class="mobile-show">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <b>Well-formed IT</b>'s authors assign each topic to this map.
+            <b>Topics will be analyzed using this map
+            and combined using the structure of this map.</b>
+          </div>
+          <br class="mobile-show">
+        </div>
+        <div class="row" style="margin-top:30px">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <button class="mobile-hidden btn btn-important-inverse btn-small" onclick="javascript:goto(this);">Keyword Structure</button>
+            <a class="mobile-show" href="">Topic List</a>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <button class="mobile-hidden btn btn-important-inverse btn-small" onclick="javascript:goto(this);">Topic List</button>
+            <a class="mobile-show" href="">Keyword Structure</a>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <button class="mobile-hidden btn btn-important-inverse btn-small" onclick="javascript:goto(this);">Status</button>
+            <a class="mobile-show" href="">Status</a>
+          </div>
+        </div>
+
+        <script>
+          function goto( button ){
+            $("H3").each( function(){
+              if( $(this).text() == $(button).text() ){
+                if( $(location).attr("href").indexOf( $(this).attr("id") ) > -1 ){
+                  $(location).attr("href", $(location).attr("href") );
+                } else{
+                  window.location.hash = "#" + $(this).attr("id");
+                }
+              }
+            } );
+          }
+        </script>
+      `;
+
+      resolve( code );
     } );
   }
   // discussion - end

@@ -27,7 +27,7 @@ exports.menuResolver = function(){
         var subPromises = [];
 
         subPromises.push( oMenuGenerator.createMenuList( argv[0], req._parsedUrl.pathname ) );
-        subPromises.push( oMenuGenerator.createSideMenu( argv[5], argv[6] ) );
+        subPromises.push( oMenuGenerator.createSideMenu( argv[5], argv[6], req._parsedUrl.pathname ) );
         // subPromises.push( oMenuGenerator.getTopMenu( argv[0], req._parsedUrl.pathname ) );
         subPromises.push( oMenuGenerator.createSideManuCollapsed( argv[5], argv[6], argv[0], req._parsedUrl.pathname ) );
         subPromises.push( oMenuGenerator.createMenuDescription( argv[3], req._parsedUrl.pathname ) );

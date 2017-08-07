@@ -67,6 +67,7 @@ exports.contentGenerator = function(){
 
   this.setContentsImageId = function( imageInfo, content ){
     return new Promise( function(resolve, reject){
+
       for( let i=0; i<imageInfo.length; i++ ){
         let savedFileName = imageInfo[i].savedFileName;
         let imageId = imageInfo[i].id;
@@ -94,13 +95,15 @@ exports.contentGenerator = function(){
         let modalCodes = "";
 
         if( cheatsheetData.length == 1 ){
-          cheatsheetCode += `<H5>Only 1 cheatsheet is founded.</H5>`;
+          cheatsheetCode += `<H5>Only 1 topic content is founded.</H5>`;
         } else{
-          cheatsheetCode += `<H5>Total ` + cheatsheetData.length + ` cheatsheets are founded.</H5>`;
+          cheatsheetCode += `<H5>Total ` + cheatsheetData.length + ` topic contents are founded.</H5>`;
         }
 
 
         let promises = [];
+
+        // console.log( cheatsheetData );
 
         promises.push( getCheatsheetListCode( cheatsheetData ) );
         promises.push( getCheatsheetModalCode( cheatsheetData ) );
@@ -120,63 +123,60 @@ exports.contentGenerator = function(){
 
   function getCheatsheetListCode( modelValueData ){
     return new Promise( function(resolve, reject){
-      var codes = `<hr>`;
+      if( modelValueData && modelValueData.length > 0 ){
 
-      if( modelValueData ){
-        for( var i=0; i<modelValueData.length; i++ ){
-          if( i % 3 == 0 ){
-            codes += `
-              <div class="row search-result-row">`;
-          }
+        let code = `<hr>`;
+        let keywords = '';
+        let createdData = ``;
 
-          let ranking = i+1;
-
-          let cheatsheetRedirectPath = '';
+        for( let i=0; i<modelValueData.length; i++ ){
           let contentRedirectPath = '';
 
           if( modelValueData[i].content_type == "main" ){
-            cheatsheetRedirectPath = modelValueData[i].topRedirect + `#` + modelValueData[i].id;
             contentRedirectPath = modelValueData[i].topRedirect;
           } else{
-            cheatsheetRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
-            contentRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id;
+            contentRedirectPath = `./topic?contentid=` + modelValueData[i].content_id;
           }
 
+          if( i < modelValueData.length-1 && modelValueData[i].content_id == modelValueData[i+1].content_id ){
+            if( keywords.indexOf( modelValueData[i].keywordDisplayName ) > -1 ){
+              keywords += modelValueData[i].keywordDisplayName + ", ";
+            }
+            continue;
+          } else{
 
+            if( keywords.length > 0 ){
+              keywords += modelValueData[i].keywordDisplayName;
+            } else{
+              keywords = modelValueData[i].keywordDisplayName;
+            }
 
-          codes += `
-            <div class="col-lg-4 col-md-4 search-result-content">
-              <div class="mobile-show">
-                <p><b><u>
-                  Ranking : ` + ranking + `
-                </u></b></p>
-              </div>
-              <div class="mobile-show tablet-show thumbnail search-result-image">
-                <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailWithRatioFileName + `" />
-              </div>
-              <div class="mobile-hidden tablet-hidden thumbnail search-result-image">
-                <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailRectangleFileName + `" />
-              </div>
-              <div class="search-result-text">
-                <a style="text-decoration:none;" href="` + cheatsheetRedirectPath + `"><h5 class="mobile-hidden tablet-hidden">` + modelValueData[i].title + `<br><small>` + modelValueData[i].subtitle + `</small>` + `</h5></a>
-                <p class="mobile-show tablet-show"><b><u>[Cheat Sheet Info]</u></b></p>
-                <a style="text-decoration:none;" href="` + cheatsheetRedirectPath + `"><h5 class="mobile-show tablet-show">` + modelValueData[i].title + `<br><small>` + modelValueData[i].subtitle + `</small>` + `</h5></a>
-                <a style="text-decoration:none; color:#5a656f;" " href="` + cheatsheetRedirectPath + `"><p class="mobile-show tablet-show">` + modelValueData[i].description + `</p></a><br>
-                <p class="mobile-show tablet-show"><b><u>[Content Discussion Info]</u></b></p>
-                <a style="text-decoration:none; color:#5a656f;" href="` + contentRedirectPath + `"><h5 class="mobile-show tablet_show"><b>` + modelValueData[i].content_title + `</b><br><small>` + modelValueData[i].content_subtitle + `</small>` + `</a></h5>
-                <span>` + modelValueData[i].writer + `, ` + ( (modelValueData[i].savedDate).toISOString() ).substring( 0, 10 ) + `</span>
-              </div>
-            </div>
-            <hr class="mobile-show">
-          `;
+            code += `<div class="row topic_row">`
 
-          if( i % 3 == 2 || i == 8 ){
-            codes += `</div>`;
+            code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
+            code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
+            code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
+            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p>Keyword <b>` + keywords + `</b><p>`;
+            code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
+            code += `</div>`;
+
+            code += `<div class="col-lg-3 col-md-3 col-sm-3 topic_thumbnail_img">`;
+            code += `<img id="` + modelValueData[i].imageId + `" src="` + modelValueData[i].thumbnailRectangleFileName + `" />`;
+            code += `</div>`;
+
+            code += `</div>`;
+
+            code += `<hr>`
+            keywords = '';
+
           }
         }
-      }
 
-      resolve( codes );
+        console.log( code );
+
+        resolve( code + `<p style="text-align:right"><h4><a href="./cheatsheet">View More Topics</a></h4></p>` );
+      }
     } );
   }
 
@@ -242,6 +242,194 @@ exports.contentGenerator = function(){
   }
 
   function getRemoveDuplicationCheatsheets( cheatsheetData ){
+    return new Promise( function(resolve, reject){
+
+      for( let i=0; i<cheatsheetData.length; i++ ){
+        for( let j=0; j<cheatsheetData.length; j++ ){
+
+          // if( (cheatsheetData[i].imageId == cheatsheetData[j].imageId && cheatsheetData[i].content_id == cheatsheetData[j].content_id) && i != j ){
+
+          if( (cheatsheetData[i].content_id == cheatsheetData[j].content_id) && i != j ){
+            if( cheatsheetData[i].duplicated == 0 && cheatsheetData[j].duplicated == 0 ){
+              cheatsheetData[i].duplicated = 0;
+              cheatsheetData[j].duplicated = 1;
+            }
+          }
+        }
+      }
+
+      cheatsheetData = cheatsheetData.filter( function(e){ return (e.duplicated == 0) } );
+
+      console.log( cheatsheetData );
+
+      resolve( cheatsheetData );
+    } );
+  }
+
+  this.getCheatsheetCode__ = function( cheatsheetData ){
+    return new Promise( function(resolve, reject){
+
+      getRemoveDuplicationCheatsheets( cheatsheetData )
+      .then( function( results ){
+        cheatsheetData = results;
+
+        if( cheatsheetData.length == 0 ){
+          resolve( `<div class="appending-search-result"><H5>No results founded</H5></div>` );
+        }
+
+
+        let cheatsheetCode = "";
+        let modalCodes = "";
+
+        if( cheatsheetData.length == 1 ){
+          cheatsheetCode += `<H5>Only 1 topic content is founded.</H5>`;
+        } else{
+          cheatsheetCode += `<H5>Total ` + cheatsheetData.length + ` topic contents are founded.</H5>`;
+        }
+
+
+        let promises = [];
+
+        promises.push( getCheatsheetListCode( cheatsheetData ) );
+        promises.push( getCheatsheetModalCode( cheatsheetData ) );
+
+        Promise.all( promises )
+        .then( function(){
+          let argv = arguments[0];
+
+          cheatsheetCode += argv[0];
+          modalCodes = argv[1];
+
+          resolve( `<div class="appending-search-result">` + cheatsheetCode + `</div><div class="mobile-show"><br><br><br></div>` + modalCodes );
+        } );
+      } );
+    } );
+  }
+
+  function getCheatsheetListCode__( modelValueData ){
+    return new Promise( function(resolve, reject){
+      var codes = `<hr>`;
+
+      if( modelValueData ){
+        for( var i=0; i<modelValueData.length; i++ ){
+          if( i % 3 == 0 ){
+            codes += `
+              <div class="row search-result-row">`;
+          }
+
+          let ranking = i+1;
+
+          let cheatsheetRedirectPath = '';
+          let contentRedirectPath = '';
+
+          if( modelValueData[i].content_type == "main" ){
+            cheatsheetRedirectPath = modelValueData[i].topRedirect + `#` + modelValueData[i].id;
+            contentRedirectPath = modelValueData[i].topRedirect;
+          } else{
+            cheatsheetRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
+            contentRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id;
+          }
+
+
+
+          codes += `
+            <div class="col-lg-4 col-md-4 search-result-content">
+              <div class="mobile-show">
+                <p><b><u>
+                  Ranking : ` + ranking + `
+                </u></b></p>
+              </div>
+              <div class="mobile-show tablet-show thumbnail search-result-image">
+                <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailWithRatioFileName + `" />
+              </div>
+              <div class="mobile-hidden tablet-hidden thumbnail search-result-image">
+                <img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailRectangleFileName + `" />
+              </div>
+              <div class="search-result-text">
+                <a style="text-decoration:none;" href="` + cheatsheetRedirectPath + `"><h5 class="mobile-hidden tablet-hidden">` + modelValueData[i].title + `<br><small>` + modelValueData[i].subtitle + `</small>` + `</h5></a>
+                <p class="mobile-show tablet-show"><b><u>[Cheat Sheet Info]</u></b></p>
+                <a style="text-decoration:none;" href="` + cheatsheetRedirectPath + `"><h5 class="mobile-show tablet-show">` + modelValueData[i].title + `<br><small>` + modelValueData[i].subtitle + `</small>` + `</h5></a>
+                <a style="text-decoration:none; color:#5a656f;" " href="` + cheatsheetRedirectPath + `"><p class="mobile-show tablet-show">` + modelValueData[i].description + `</p></a><br>
+                <p class="mobile-show tablet-show"><b><u>[Content Discussion Info]</u></b></p>
+                <a style="text-decoration:none; color:#5a656f;" href="` + contentRedirectPath + `"><h5 class="mobile-show tablet_show"><b>` + modelValueData[i].content_title + `</b><br><small>` + modelValueData[i].content_subtitle + `</small>` + `</a></h5>
+                <span>` + modelValueData[i].writer + `, ` + ( (modelValueData[i].savedDate).toISOString() ).substring( 0, 10 ) + `</span>
+              </div>
+            </div>
+            <hr class="mobile-show">
+          `;
+
+          if( i % 3 == 2 || i == 8 ){
+            codes += `</div>`;
+          }
+        }
+      }
+
+      resolve( codes );
+    } );
+  }
+
+  function getCheatsheetModalCode__( modelValueData ){
+    return new Promise( function(resolve, reject){
+      let modalCodes = '';
+
+      if( modelValueData ){
+        for( var i=0; i<modelValueData.length; i++ ){
+          let ratio = modelValueData[i].ratio;
+
+          let cheatsheetRedirectPath = '';
+          let contentRedirectPath = '';
+
+          if( modelValueData[i].content_type == "main" ){
+            cheatsheetRedirectPath = modelValueData[i].topRedirect + `#` + modelValueData[i].id;
+            contentRedirectPath = modelValueData[i].topRedirect;
+          } else{
+            cheatsheetRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
+            contentRedirectPath = `./discussion?content_id=` + modelValueData[i].content_id;
+          }
+
+          modalCodes += `
+            <div class="modal modal_cheatsheet modal-center" role="dialog" id="modal_` + modelValueData[i].id + `" >
+              <div class="modal-dialog modal-center">
+                <div class="modal-content">
+                  <div class="modal-content row">
+                    <div data-col="6" class="col-lg-6 col-md-6 img_container">
+                      <img id="modal_img_` + modelValueData[i].id + `" ratio="` + modelValueData[i].ratio + `" class="cheatsheet_img" src="` + modelValueData[i].savedFileName + `"/>
+                    </div>
+                    <div data-col="6" class="col-lg-6 col-md-6 info_container">
+                      <div class="cheatsheet_info">
+                        <!-- <button type="button" class="close cheatsheet_close" data-dismiss="modal">&times;</button> -->
+
+                        <p><b>[Cheat Sheet Info]</b></p>
+                        <h4>` + modelValueData[i].title + `<br><small>` + modelValueData[i].subtitle + `</small></h5>
+                        <p>` + modelValueData[i].description + `</p>
+                        <hr style="border-color:rgba(0,0,0,60)">
+                        <p>Hit Count : ` + modelValueData[i].image_hitcount + `</p>
+                        <p><a style="font-size: 16px; color:#b2b2b4" href="` + cheatsheetRedirectPath + `">Go To Image</a></p>
+                        <hr style="border-color:rgba(0,0,0,60)">
+
+                        <p style="margin-top:35px;"><b>[Discussion Info]</b></p>
+                        <h4>` + modelValueData[i].content_title + `<br><small>` + modelValueData[i].content_subtitle + `</small></h5>
+                        <p>` + modelValueData[i].content_summary + `</p>
+                        <hr style="border-color:rgba(0,0,0,60)">
+                        <p>Hit Count : </span>` + modelValueData[i].content_hitcount + `</p>
+                        <p><a style="font-size: 16px; color:#b2b2b4" href="` + contentRedirectPath + `">Go To Content</a></p>
+                        <hr style="border-color:rgba(0,0,0,60)">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      resolve( modalCodes );
+    } );
+  }
+
+  function getRemoveDuplicationCheatsheets__( cheatsheetData ){
     return new Promise( function(resolve, reject){
 
       // console.log( cheatsheetData );
