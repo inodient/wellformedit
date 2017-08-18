@@ -10,7 +10,16 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "recenttopic" ] = function(connection){
+  this.functionArray[ "wholetopiclist" ] = function(connection){
+    return new Promise( function(resolve, reject){
+      oQueryManager.getWholeTopicList(connection)
+      .then( function(results){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.functionArray[ "recenttopics" ] = function(connection){
     return new Promise( function(resolve, reject){
       oQueryManager.getRecentTopicList(connection)
       .then( function(results){
@@ -19,7 +28,7 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "populartopic" ] = function(connection){
+  this.functionArray[ "populartopics" ] = function(connection){
     return new Promise( function(resolve, reject){
       oQueryManager.getPopularTopicList(connection)
       .then( function(results){
@@ -28,7 +37,7 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "recentcheatsheet" ] = function( connection, contentId ){
+  this.functionArray[ "recentcheatsheets" ] = function( connection, contentId ){
     return new Promise( function(resolve, reject){
       oQueryManager.getMostRecentImgs(connection)
       .then( function(results){
@@ -37,7 +46,7 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "popularcheatsheet" ] = function( connection, arguments ){
+  this.functionArray[ "popularcheatsheets" ] = function( connection, arguments ){
     return new Promise( function(resolve, reject){
       oQueryManager.getMostPopularImgs(connection)
       .then( function(results){
@@ -400,16 +409,16 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "topiclist" ] = function(connection){
-    return new Promise( function(resolve, reject){
-      oQueryManager.getTopicList(connection)
-      .then( function(results){
-        resolve( results );
-      } );
-    } );
-  }
+  // this.functionArray[ "topiclist" ] = function(connection){
+  //   return new Promise( function(resolve, reject){
+  //     oQueryManager.getTopicList(connection)
+  //     .then( function(results){
+  //       resolve( results );
+  //     } );
+  //   } );
+  // }
 
-  this.functionArray[ "topiclisttable" ] = function(connection){
+  this.functionArray[ "topictable" ] = function(connection){
     return new Promise( function(resolve, reject){
       oQueryManager.getTopicListTable(connection)
       .then( function(results){
@@ -548,4 +557,21 @@ exports.contentModelValueFunction = function(){
   // }
   // Discussion Main - End
 
+  this.functionArray[ "dependencyinfo" ] = function(connection){
+    return new Promise( function(resolve, reject){
+      oQueryManager.getDependencyInfo(connection)
+      .then( function(results){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.functionArray[ "releasehistory" ] = function(connection){
+    return new Promise( function(resolve, reject){
+      oQueryManager.getReleaseHistory(connection)
+      .then( function(results){
+        resolve( results );
+      } );
+    } );
+  }
 }

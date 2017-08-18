@@ -25,10 +25,27 @@ exports.menuGenerator = function(){
             innerTitleCodes += `<a class="mobile-show navbar-brand navbar-index" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
             innerTitleCodes += `<a class="mobile-hidden navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
           } else if( menuList[i].level == -2 ){
-            innerRightMenuCodes += `<li ><a href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a></li>`;
+            if( reqPath.indexOf(redirectPath) > -1 ){
+              innerRightMenuCodes += `<li class="active"><a href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a></li>`;
+            } else{
+              innerRightMenuCodes += `<li ><a href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a></li>`;
+            }
           }
         }
       }
+
+      innerRightMenuCodes += `
+        <form class="navbar-form navbar-left" method="GET" action="./search">
+          <div class="input-group">
+            <input id="searchWord" name="searchWord" type="text" class="form-control" placeholder="Search">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      `;
 
       resolve( { "innerMenuCodes" : innerMenuCodes, "innerTitleCodes" : innerTitleCodes, "innerRightMenuCodes" : innerRightMenuCodes } );
     } );

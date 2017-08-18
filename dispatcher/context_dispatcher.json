@@ -1,12 +1,20 @@
 {
   "GET" : [
     {
-      "id": "gettingstarted",
-      "path": "/getting-started",
-      "controllerJS": "controller_getting_started.js",
+      "id": "search",
+      "path": "/search",
+      "controllerJS": "controller_search.js",
       "controlFunction": "control",
       "viewPath": "",
-      "view": "getting-started.ejs"
+      "view": "search.ejs"
+    },
+    {
+      "id": "keywordmap",
+      "path": "/keywordmap",
+      "controllerJS": "controller_keywordmap.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "keywordmap.ejs"
     },
     {
       "id": "topic",
@@ -16,7 +24,6 @@
       "viewPath": "",
       "view": "topic.ejs"
     },
-
 
 
     {

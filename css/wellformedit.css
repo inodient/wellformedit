@@ -27,6 +27,7 @@
   background-origin: initial;
   background-clip: initial;
   background-color: #ffffff;
+  /*background-color : #eeeeee; */
   /*background-color: #fcfcfd;*/
   /*background-color: #f0f3f9;*/
   /*background-color: gray;*/
@@ -1056,7 +1057,8 @@ hr {
   margin-top:15px;
   margin-bottom:15px;
   min-height: 380px;
-  max-height:40vh;
+  max-height:55vh;
+  height: 47vh;
   max-width:65vw;
 }
 

@@ -15,6 +15,42 @@ exports.queryManager = function(){
   //   console.log('Connection %d released', connection.threadId);
   // });
 
+  this.getDependencyInfo = function( connection ){
+    return new Promise( function(resolve, reject){
+      let queryString = `
+        select execution, type, name, version, url, license from wellformedit.TB_DEPENDENCY order by id;
+      `;
+
+      connection.query( queryString, function(err, results, fields){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.getReleaseHistory = function( connection ){
+    return new Promise( function(resolve, reject){
+      let queryString = `
+        select version, changes, date, committer from wellformedit.TB_HISTORY order by date desc;
+      `;
+
+      connection.query( queryString, function(err, results, fields){
+        resolve( results );
+      } );
+    } );
+  }
+
+  this.getPopularSearchWord = function( connection ){
+    return new Promise( function(resolve, reject){
+      let queryString = `
+        select word from wellformedit.TB_SEARCHWORD where type = 'normal' order by hitlevel desc limit 1;
+      `;
+
+      connection.query( queryString, function(err, results, fields){
+        resolve( results );
+      } );
+    } );
+  }
+
   this.getContentList = function( connection ){
     return new Promise( function(resolve, reject){
       let queryString = "select id, type, title from wellformedit.TB_CONTENT";
@@ -128,7 +164,7 @@ exports.queryManager = function(){
           B.id as content_id, B.title as content_title, B.summary as content_summary, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, C.redirectPath as topRedirect
         from wellformedit.TB_CONTENT_IMAGE A, wellformedit.TB_CONTENT B, wellformedit.TB_MENU C
         where A.content_id = B.id and B.parentMenu = C.id
-        order by savedDate desc limit 6;
+        order by savedDate desc limit 9;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -147,7 +183,7 @@ exports.queryManager = function(){
           B.id as content_id, B.title as content_title, B.subtitle as content_subtitle, B.summary as content_summary, B.specifics as content_specifics, B.type as content_type, B.writer, B.hitCount as content_hitcount, C.redirectPath as topRedirect
         from wellformedit.TB_CONTENT_IMAGE A, wellformedit.TB_CONTENT B, wellformedit.TB_MENU C
         where A.content_id = B.id and B.parentMenu = C.id
-        order by A.hitCount desc limit 6;
+        order by A.hitCount desc limit 9;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -163,7 +199,7 @@ exports.queryManager = function(){
   // menu - start
   this.getMenuList = function(connection){
     return new Promise( function(resolve, reject){
-      let queryString = `select id, level, parent, sequence, name, displayName, redirectPath from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.level <= 0 group by level, parent, sequence;`;
+      let queryString = `select id, level, parent, sequence, name, displayName, redirectPath from wellformedit.TB_MENU where TB_MENU.usage = 'Y' and TB_MENU.level <= 0 and TB_MENU.display != 'N' group by level, parent, sequence;`;
 
       connection.query( queryString, function( err, results, fields ){
         console.log( "getMenuList" );
@@ -240,6 +276,9 @@ exports.queryManager = function(){
       `;
 
       connection.query( queryString, function(err, results, fields){
+        console.log( queryString );
+        console.log( results );
+
         console.log( "getDefaultContentImageInfo" );
 
         resolve( results );
@@ -1315,14 +1354,14 @@ exports.queryManager = function(){
     } );
   }
 
-  this.getTopicList = function(connection){
+  this.getWholeTopicList = function(connection){
     return new Promise( function(resolve, reject){
       let queryString = `
         select
           B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
-        order by hitCount desc limit 5;
+        order by hitCount desc;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -1338,7 +1377,7 @@ exports.queryManager = function(){
           B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
-        order by createdDate desc limit 5;
+        order by createdDate desc limit 10;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -1354,7 +1393,7 @@ exports.queryManager = function(){
           B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
-        order by hitCount desc limit 5;
+        order by hitCount desc limit 10;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -1825,8 +1864,6 @@ exports.queryManager = function(){
         // specifics = specifics.replace( "WI%-" + imageInfo + "%IW", "" );
         specifics = specifics.replace( "WI%-", "<%-" );
         specifics = specifics.replace ("%IW", "%>" );
-
-
 
         imageInfo = imageInfo.replace(/\s+/, "");//왼쪽 공백제거
         imageInfo = imageInfo.replace(/\s+$/g, "");//오른쪽 공백제거

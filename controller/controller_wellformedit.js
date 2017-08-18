@@ -1,18 +1,14 @@
 const menuResolver = require( require("path").join(process.cwd(), "service", "menuResolver.js") ).menuResolver;
 const contentResolver = require( require("path").join(process.cwd(), "service", "contentResolver.js") ).contentResolver;
 
+const queryManager = require( require("path").join(process.cwd(), "modeler", "queryManager.js") ).queryManager;
+const oQueryManager = new queryManager();
 
 exports.control = function( req, res ){
   var oMenuResolver = new menuResolver();
   var oContentResolver = new contentResolver();
 
-  // var model = {};
-
   var promises = [];
-
-  // promises.push( oMenuResolver.resolveMenu(req, res) );
-  // promises.push( oContentResolver.resolveContent(req, res) );
-
 
 
   return new Promise( function(resolve, reject){
@@ -21,32 +17,27 @@ exports.control = function( req, res ){
       oMenuResolver.resolveMenu( connection, req, res )
       .then( setModelWithObject.bind(null, {}) )
       .then( function( model ){
-        connection.release();
+        oQueryManager.getDiscussionStatus(connection)
+        .then( function(results){
+          model.topicStatus = results[0];
+          model.cheatsheetStatus = results[1];
+        } )
+        .then( function(){
+          oQueryManager.getPopularSearchWord(connection)
+          .then( function(_results){
+            model.popularSearchWord = _results[0];
+          } )
+          .then( function(){
+            connection.release();
 
-        resolve( model );
+            console.log( model );
+
+            resolve( model );
+          } );
+        } );
       } )
       .catch( console.err );
     } );
-
-    // oMenuResolver.resolveMenu( req, res )
-    // .then( setModelWithObject.bind(null, {}) )
-    // .then( function( model ){
-    //   resolve( model );
-    // } )
-    // .catch( console.err );
-
-    // Promise.all( promises )
-    // .then( function(){
-    //   var argv = arguments[0];
-    //
-    //   model = argv[0];
-    //   setModelWithObject( model, argv[0] );
-    //   // setModelWithObject( model, argv[1] );
-    // } )
-    // .then( function(){
-    //   resolve( model );
-    // } )
-    // .catch( console.err )
   } );
 }
 

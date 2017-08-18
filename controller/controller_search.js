@@ -23,8 +23,7 @@ exports.control = function( req, res ){
 
       pool.getConnection( function(err, connection){
         promises.push( oMenuResolver.resolveMenu(connection, req, res) );
-        promises.push( oContentResolver.resolveContent(connection, req, res) );
-
+        // promises.push( oContentResolver.resolveContent(connection, req, res) );
 
         Promise.all( promises )
         .then( function(){
@@ -32,12 +31,14 @@ exports.control = function( req, res ){
 
           model = argv[0];
           setModelWithObject( model, argv[0] );
-          setModelWithObject( model, argv[1] );
+          // setModelWithObject( model, argv[1] );
           model.searchWord = "";
           model.cheatsheet = "";
         } )
         .then( function(){
           connection.release();
+
+          console.log( model );
 
           resolve( model );
         } )
@@ -62,7 +63,7 @@ function controlOpenWithSearchTopic( req, res ){
 
     pool.getConnection( function(err, connection){
       promises.push( oMenuResolver.resolveMenu(connection, req, res) );
-      promises.push( oContentResolver.resolveContent(connection, req, res) );
+      // promises.push( oContentResolver.resolveContent(connection, req, res) );
       promises.push( getSearchTopicResult(connection, req, res) );
 
       Promise.all( promises )
@@ -71,8 +72,13 @@ function controlOpenWithSearchTopic( req, res ){
 
         model = argv[0];
         setModelWithObject( model, argv[0] );
-        setModelWithObject( model, argv[1] );
-        model.cheatsheet = argv[2];
+
+        // setModelWithObject( model, argv[1] );
+        // model.cheatsheet = argv[1];
+        // model.cheatsheet = argv[2];
+
+        // model.cheatsheet = argv[1];
+        model.cheatsheet = argv[1];
         model.searchWord = req.query.searchWord;
       } )
       .then( function(){

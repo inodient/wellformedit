@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <!-- Facebook opengraph meta - start -->
-<meta property="og:url"                content="http://104.199.217.31:3000" />
+<meta property="og:url"                content="http://192.168.0.2:3000" />
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="Well Formed IT" />
-<meta property="og:description"        content="Divide structure specific, Construct structure well-formed" />
-<meta property="og:image"              content="http://104.199.217.31:3000/wellformedit_logo.png" />
+<meta property="og:description"        content="Divide as specific as possible, Build as well-formed as possible" />
+<meta property="og:image"              content="http://192.168.0.2:3000/wellformedit_logo.png" />
 <!-- Facebook opengraph meta - end -->
 
 
@@ -22,19 +22,54 @@
 <script src="common.js"></script>  <!-- Logic Script -->
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<% include partials/facebookSDK.ejs %>
 
 <script>
   $(document).ready( function(){
-      $('#mailSend').on('click', function (event) {
-        event.preventDefault();
+    $('#mailSend').on('click', function (event) {
+      event.preventDefault();
 
-        var email = 'inodient@gmail.com';
-        var subject = 'Well Formed IT Test';
-        var emailBody = 'Well Formed IT Test Body';
-        window.location = 'mailto:' + email + '?subject=' + subject + '&body=' +   emailBody;
-      });
+      var email = 'inodient@gmail.com';
+      var subject = 'Well Formed IT Test';
+      var emailBody = 'Well Formed IT Test Body';
+      window.location = 'mailto:' + email + '?subject=' + subject + '&body=' +   emailBody;
+    } );
+
+    // ----- Search Function - Start
+    // cheatsheet search
+    $("#cheatsheet-search").on( "click", () => {
+      searchCheatsheet();
+    });
+
+    // cheatsheet search - keydown enter
+    $("#search-word").on( "keydown", function(e){
+      if( e.keyCode == 13 ){
+        searchCheatsheet();
+      }
+    } );
+    // ------ Search Function - End
   } );
+
+  function searchCheatsheet(){
+    let searchWord = $("#search-word").val();
+    alert( searchWord );
+    $(location).attr( "href", "./search?searchWord=" + searchWord );
+  }
+
+  function gotoTopicList(){
+    $(location).attr( "href", "./topic" );
+  }
+
+  function gotoKeywordMap(){
+    $(location).attr( "href", "./keywordmap" );
+  }
+
+  function gotoAbout(){
+    $(location).attr( "href", "./about" );
+  }
+
+  function gotoSummerMVC(){
+    $(location).attr( "href", "https://www.npmjs.com/package/summer-mvc" );
+  }
 
 </script>
 
@@ -76,8 +111,8 @@
 
   .index_title {
     margin : auto;
-    padding: 150px 25px;
-    background : url( "/welcome_background.png" ) no-repeat center center;
+    padding: 200px 25px;
+    background : url( "/wellformedit_background__.jpg" ) no-repeat center center;
 
     -webkit-background-size : cover;
     -moz-background-size : cover;
@@ -90,7 +125,8 @@
 
   .index_title h1 {
     font-size : 63px;
-    color : #333333;
+    /*color : #333333;*/
+    color: black;
   }
 
   .index_title p {
@@ -163,144 +199,161 @@
   </header>
 
   <!-- Introduce -->
-  <div class="index_title">
-    <div class="index_content">
+  <div class="index_title container-fluid">
+    <div class="index_content row">
       <h1>Well <br class="mobile-show">Formed <br class="mobile-show">IT</h1>
-      <p>Divide structure specific, <br class="mobile-show">Construct structure well-formed</p>
-      <!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div> -->
-      <fb:login-button id="id_fblogin" scope="public_profile,email" size="large" onlogin="javascript:checkLoginState();" auto-logout-link="true" use-continue-as="true"></fb:login-button>
+      <p>Divide as specific as possible, <br class="mobile-show">Build as well-formed as possible</p>
+      <div class="searchbar" style="max-width: 600px;">
+        <div class="input-group" style="max-width: 600px;">
+          <input id="search-word" type="text" class="form-control" placeholder="<%- popularSearchWord.word %>" required>
+          <div class="input-group-btn">
+            <button id="cheatsheet-search" type="button" class="btn btn-important">Search</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Philosophy section -->
+  <!-- Keyword Map -->
+  <div class="index_content container-fluid">
+    <h2>Keyword Map</h2>
+
+    <button class="btn btn-important" onclick="javascript:gotoKeywordMap();">View Keyword Map Specifics</button>
+
+    <p>
+      <b>Well-formed IT</b>'s basic concept is a structured approach.<br>
+      All IT technologies and environments can be divided into several layers and levels,
+      using their abstract and simultaneous characteristics.
+    </p>
+    <p>
+      And these puzzles must be combined according to the hierarchy. <br>
+      A keyword map is a simplified map for doing this. <br>
+      This includes computer architecture, analytical methodology, network concepts <br> and new technologies in IT, etc. <br>
+    </p>
+    <p>
+      <b>Well-formed IT</b>'s authors assign each topic to this map. <br>
+      <b>Topics will be analyzed using this map and combined using the structure of this map.</b><br>
+    </p>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12" style="padding-right: 5px">
+        <img class="topic_img" style="max-width: 100%; width: 100%;" src="keywordmap_inverse.jpg"/>
+      </div>
+      <!-- <div class="col-lg-4 col-md-4 col-sm-4" style="padding-left: 5px;">
+        <img class="topic_img" style="max-width: 100%; width: 100%;" src="keywordmap_inverse_second.jpg"/>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="container-fluid" style="background-color: #eeeeee">
+    <div class="index_content row">
+      <div class="col-lg-7 col-md-7 col-sm-7">
+        <h2>Topic and Cheatsheet</h2>
+        <p>
+          <b>Well Formed IT</b>'s only one goal is <br>
+          to introduce IT concepts as structural as possible. <br>
+          Each concept consists with its content and <b>cheatsheet</b>. <br>
+          And <b>topic</b> represents each concept by simplified terms.<br>
+        </p>
+
+        <table class="table" style="font-size: 16px; margin-top:35px;">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Topic (Content)</th>
+              <th>Cheatsheet</th>
+            <tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Count</td>
+              <td><%- topicStatus.count %></td>
+              <td><%- cheatsheetStatus.count %></td>
+            </tr>
+            <tr>
+              <td>Hit Count</td>
+              <td><%- topicStatus.hitCount %></td>
+              <td><%- cheatsheetStatus.hitCount %></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button class="btn btn-important" onclick="javascript:gotoTopicList();">View Topic List</button>
+      </div>
+      <div class="col-lg-5 col-md-5 col-sm-5">
+        <img class="topic_img" style="max-width: 100%; width: 100%;" src="topic_cheatsheet.png"/>
+      </div>
+    </div>
+  </div>
+
   <div class="container-fluid">
-    <div class="index_content">
-      <div class="row">
-        <div class="col-lg-5 col-md-5">
-          <div class="thumbnail logo" style="border : 0;">
-            <img src="philosophy_01.png" style="max-height: 350px" />
-          </div>
-        </div>
-        <div class="col-lg-7 col-md-7">
-          <h3>Structural and Hierarchical</h3>
-          <p>IT is one of most structural and hierarchical range in these days. <br>
-            IT has lots of layers and consists of connections of each layer. <br>
-            And these are wrapped by abstract levels. <br>
-            <br>
-          </p>
-        </div>
+    <div class="index_content row">
+      <div class="col-lg-5 col-md-5 col-sm-5">
+        <img class="topic_img" style="max-width: 100%; width: 100%;" src="summer-mvc.png"/>
+      </div>
+      <div class="col-lg-7 col-md-7 col-sm-7">
+        <h2>summer-mvc</h2>
+        <p>
+          <b>well formed IT</b> itself is small web application system. <br>
+          So, it needed to control HTTP request and HTTP Response. <br>
+          <br>
+          For doing this, <b>well formed IT</b> is implemented with <b>summer-mvc</b> framework <br>which is Nodejs web application framework for speedy development. <br>
+          All controllers, services and data accessing logics are using <b>summer-mvc</b>. <br>
+          <br>
+          <b>well formed IT</b> is opened for everyone. <br>
+          And <b>summer-mvc</b> is also opened. <br>
+          You can download, access and redesign our source code under <b>MIT</b> license.
+        </p>
+
+        <button class="btn btn-important" onclick="javascript:gotoAbout();">View Well Formed IT Architecture</button>
+        <button class="btn btn-important" onclick="javascript:gotoSummerMVC();">Go To summer-mvc</button>
       </div>
     </div>
   </div>
 
-  <div class="container-fluid bg-grey">
-    <div class="index_content">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 mobile-show tablet-show">
-          <div class="thumbnail logo" style="border : 0;">
-            <img src="philosophy_02.png" />
-          </div>
-        </div>
-        <div class="col-lg-7 col-md-7">
-          <h3>Abstraction and Concurrency</h3>
-          <p>Even if we know about this, a structural and hierarchical approach is very difficult. <br>
-            Because of IT's own characteristics, that is the abstraction and concurrency.  <br>
-            So, all of IT elements must be analyzed with upper and lower layers of that, be treatened with concurrency signal transfer. <br>
-          </p>
-        </div>
-        <div class="col-lg-5 col-md-5 mobile-hidden tablet-hidden">
-          <div class="thumbnail logo" style="border : 0;">
-            <img src="philosophy_02.png" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- <div class="index_content container-fluid" style="background-color: black; height: 500px; max-height: 500px;">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <h2 style="color:#dddddd">Topic and Cheatsheet</h2>
+        <p style="color:#aaaaaa">
+          <b>Well Formed IT</b>'s only one goal is <br>
+          to introduce IT concepts as structural as possible. <br>
+          Each concept consists with its content and <b>cheatsheet</b>. <br>
+          And <b>topic</b> represents each concept by simplified terms.<br>
+        </p>
 
-  <div class="container-fluid">
-    <div class="index_content">
-      <div class="row">
-        <div class="col-lg-5 col-md-5">
-          <div class="thumbnail logo" style="border : 0;">
-            <img src="philosophy_03.png" />
-          </div>
-        </div>
-        <div class="col-lg-7 col-md-7">
-          <h3>Well Formed IT</h3>
-          <p>Of course, code development and system integration are the most influence jobs to the world.  <br>
-            But if we can understand IT structure and hierarchy, we would get a power to control IT environment and skills more stable, more convenient. <br>
-            We have to divide computer or its components as specific as possible and to combine as strong as possible. <br>
-            IT must be well formed. <br>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+        <table class="table" style="max-width: 35vw; font-size: 16px; margin-top:35px; color:#999999;">
+          <thead>
+            <tr style="border-bottom: 1px solid #999999;">
+              <th style="border-bottom: 1px solid #999999;">Category</th>
+              <th style="border-bottom: 1px solid #999999;">Topic (Content)</th>
+              <th style="border-bottom: 1px solid #999999;">Cheatsheet</th>
+            <tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #999999;">
+              <td style="border-bottom: 1px solid #999999;">Count</td>
+              <td style="border-bottom: 1px solid #999999;">1999</td>
+              <td style="border-bottom: 1px solid #999999;">7070</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #999999;">
+              <td style="border-bottom: 1px solid #999999;">Hit Count</td>
+              <td style="border-bottom: 1px solid #999999;">1999</td>
+              <td style="border-bottom: 1px solid #999999;">7070</td>
+            </tr>
+          </tbody>
+        </table>
 
-  <div class="container-fluid bg-grey">
-    <div class="index_content">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 mobile-show tablet-show">
-          <div class="thumbnail logo" style="border : 0;">
-            <img src="philosophy_04.png" />
-          </div>
-        </div>
-        <div class="col-lg-7 col-md-7">
-          <h3>Just black Pen and white paper</h3>
-          <p>Last question is that. <br>
-            How can we do that? <br>
-            How can we divide or analyze or combine? <br>
-            Well Formed IT introduce classical guide for doing that, that is drawing with hands. <br>
-            Just drawing and some text can be good materials of discussion. <br>
-            We do not need to concentrate format of this. <br>
-            Just concentrate its concrete structure and hierarchy. <br>
-          </p>
-        </div>
-        <div class="col-lg-5 col-md-5 mobile-hidden tablet-hidden">
-          <div class="thumbnail logo" style="border : 0;">
-            <img src="philosophy_04.png" />
-          </div>
-        </div>
+        <button class="btn btn-important" style="border: 1px solid #aaaaaa">Go To Status</button>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <img class="topic_img" style="max-width: 100%; width: 100%;" src="intro_architecture_inverse.jpg"/>
       </div>
     </div>
-  </div>
-
-  <!-- Composition Section -->
-  <div class="container-fluid">
-    <div class="index_content">
-      <div class="row">
-        <h2> Well Formed IT Composition </h2>
-        <div class="col-lg-4 col-md-4">
-          <div class="thumbnail">
-            <img style="max-width:80%" src="/cheatsheet_intro.png" />
-            <h3>Cheat Sheet</h3>
-            <h4>Search fast and convenient</h4>
-            <p>Each IT layer contains own concepts. Cheat Sheet represent deep insight of some theme.</p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-4">
-          <div class="thumbnail">
-            <img style="max-width:80%" src="/discussion_intro.png" />
-            <h3>Discussion</h3>
-            <h4>Big & Correct Picture comes from discussion</h4>
-            <p>Discussion contains philosophy of IT concepts. Repeat discussion makes big & correct insight.</p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-4">
-          <div class="thumbnail">
-            <img style="max-width:80%" src="/opensourceproject_intro.png" />
-            <h3>Open Source Project</h3>
-            <h4>Technologies must be opened</h4>
-            <p>Hierarchical approach lead to create new products.</p>
-          </div>
-        </div>
-      </div>
-      <hr>
-    </div>
-  </div>
+  </div> -->
 
   <!-- Contact Section -->
-  <div id="contact" class="container-fluid">
+  <!-- <div id="contact" class="container-fluid">
     <div class="index_content">
       <h2 class="text-center">CONTACT</h2>
       <div class="row">
@@ -328,7 +381,23 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+  <div class="index_content" style="text-align:right">
+    <div id="fb-root"></div>
+    <script>
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=1910794212495192";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <div id="facebook_buttons" class="fb-like" data-href="http://192.168.0.2:3000" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
   </div>
+
 
   <footer>
     <div class="index_content">

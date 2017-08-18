@@ -68,11 +68,13 @@ exports.contentGenerator = function(){
   this.setContentsImageId = function( imageInfo, content ){
     return new Promise( function(resolve, reject){
 
-      for( let i=0; i<imageInfo.length; i++ ){
-        let savedFileName = imageInfo[i].savedFileName;
-        let imageId = imageInfo[i].id;
+      if( imageInfo ){
+        for( let i=0; i<imageInfo.length; i++ ){
+          let savedFileName = imageInfo[i].savedFileName;
+          let imageId = imageInfo[i].id;
 
-        content.specifics = ( content.specifics ).split( `src="` + savedFileName + `"` ).join( `style="margin-top:-80px; padding-top:80px;" id="` + imageId + `" src="` + savedFileName + `"` );
+          content.specifics = ( content.specifics ).split( `src="` + savedFileName + `"` ).join( `style="margin-top:-80px; padding-top:80px;" id="` + imageId + `" src="` + savedFileName + `"` );
+        }
       }
 
       resolve( content );
@@ -175,7 +177,7 @@ exports.contentGenerator = function(){
 
         console.log( code );
 
-        resolve( code + `<p style="text-align:right"><h4><a href="./cheatsheet">View More Topics</a></h4></p>` );
+        resolve( code );
       }
     } );
   }

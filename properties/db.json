@@ -1,7 +1,7 @@
 {
   "connectionLimit" : 100,
-  "host" : "104.199.217.31",
-  "user" : "root",
-  "password" : "123qwer@",
+  "host" : "wellformedit.ckmurt8wcdsu.ap-northeast-2.rds.amazonaws.com",
+  "user" : "inodient",
+  "password" : "fern3829",
   "database" : "wellformedit"
 }
