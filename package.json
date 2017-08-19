@@ -12,6 +12,7 @@
     "bootstrap-treeview": "^1.2.0",
     "gm": "^1.23.0",
     "mysql": "^2.13.0",
+    "summer-mvc": "^1.1.1",
     "thumbnail": "^0.1.9"
   }
 }
