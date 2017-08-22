@@ -297,6 +297,7 @@
             <%- cheatsheet %>
           </div> -->
 
+          <!-- facebook SDK Load - Start -->
           <div style="text-align:right">
             <div id="fb-root"></div>
             <script>
@@ -308,8 +309,87 @@
                 fjs.parentNode.insertBefore(js, fjs);
               }(document, 'script', 'facebook-jssdk'));
             </script>
+            <!-- facebook SDK Load - End -->
+
+            <!-- LinkedIn SDK Load - Start -->
+            <!-- <script type="text/javascript" src="//platform.linkedin.com/in.js">
+                api_key:   81lgq7z32l5lke
+                onLoad:    onLinkedInLoad
+                // authorize: [AUTHORIZE]
+                // lang:      "US_en"
+            </script> -->
+
+            <!-- LinkedIn SDK Load - End -->
 
             <div id="facebook_buttons" class="fb-like" data-href="http://www.wellformedit.com/topic" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+            <a class="btn btn-default icon" href="javascript:void(0)" onclick="window.open( 'http://www.linkedin.com/shareArticle?mini=true&url=http://www.wellformedit.com/topic&title=wellformeditisfirstsharing&summary=thisisfirstsharing&source=wellformedit.com', 'sharer', 'toolbar=0, status=0, width=626, height=436');return false;" title="Linkedin"><span class="character">j</span></a>
+
+            <script src="//platform.linkedin.com/in.js" type="text/javascript">
+              api_key:   81lgq7z32l5lke
+              onLoad:    onLinkedInLoad
+              // authorize: [AUTHORIZE]
+              lang:      "en_US"
+            </script>
+            <!-- <script type="IN/Share" data-url="https://stackoverflow.com/questions/10713542/how-to-make-custom-linkedin-share-button/10737122&title=How%20to%20make%20custom%20linkedin%20share%20button&summary=some%20summary%20if%20you%20want&source=stackoverflow.com" data-counter="right"> -->
+            <script type="IN/Share" data-url="http://www.wellformedit.com/topic?contentid=id_content_0051" data-counter="right">
+
+              // <a class="btn btn-default icon" href="javascript:void(0)" onclick="window.open( 'http://www.linkedin.com/shareArticle?mini=true&url=http://www.wellformedit.com/topic&title=wellformeditisfirstsharing&summary=thisisfirstsharing', 'sharer', 'toolbar=0, status=0, width=626, height=436');return false;" title="Linkedin"><span class="character">j</span></a>
+
+            </script>
+
+
+
+            <script type="text/javascript">
+
+            // Setup an event listener to make an API call once auth is complete
+            function onLinkedInLoad() {
+              IN.Event.on(IN, "auth", shareContent);
+            }
+
+            // Handle the successful return from the API call
+            function onSuccess(data) {
+              console.log(data);
+            }
+
+            // Handle an error response from the API call
+            function onError(error) {
+              console.log(error);
+            }
+
+            // Use the API call wrapper to share content on LinkedIn
+            function shareContent() {
+
+              alert( "shareContent()" );
+
+              let title = '<%- title %>';
+              let description = '<%- summary %>';
+
+              // Build the JSON payload containing the content to be shared
+              var payload = {
+                "comment": "[WELL FORMED IT] Divide as specific as possible, Build as well-formed as possible!!",
+                "content": {
+                  "title" : title,
+                  "description" : description,
+                  "submitted-url" : "http://localhost:3000",
+                  "submitted-image-url" : "http://www.wellformedit.com/wellformedit_logo.png"
+                },
+                "visibility": {
+                  "code": "anyone"
+                }
+              };
+
+              IN.API.Raw("/people/~/shares?format=json")
+                .method("POST")
+                .body(JSON.stringify(payload))
+                .result(onSuccess)
+                .error(onError);
+              }
+
+              </script>
+
+            <!-- <script type="in/Login" style="height:300px"></script> -->
+
           </div>
 
           <div class="form-group" id="id_form_discussion">
