@@ -1,12 +1,28 @@
 {
   "GET" : [
     {
+      "id": "index",
+      "path": "/",
+      "controllerJS": "controller_wellformedit.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "index.ejs"
+    },
+    {
       "id": "search",
       "path": "/search",
       "controllerJS": "controller_search.js",
       "controlFunction": "control",
       "viewPath": "",
       "view": "search.ejs"
+    },
+    {
+      "id": "topic",
+      "path": "/topic",
+      "controllerJS": "controller_topic.js",
+      "controlFunction": "control",
+      "viewPath": "",
+      "view": "topic.ejs"
     },
     {
       "id": "keywordmap",
@@ -17,144 +33,6 @@
       "view": "keywordmap.ejs"
     },
     {
-      "id": "topic",
-      "path": "/topic",
-      "controllerJS": "controller_topic.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "topic.ejs"
-    },
-
-
-    {
-      "id": "getdb",
-      "path": "/getdb",
-      "controllerJS": "controller_db.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
-    {
-      "id": "ajaxRequest",
-      "path": "/ajaxRequest",
-      "controllerJS": "controller_ajax.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "ajax.ejs"
-    },
-    {
-      "id": "setCookie",
-      "path": "/setCookie",
-      "controllerJS": "controller_cookie_session.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
-    {
-      "id": "setSession",
-      "path": "/setSession",
-      "controllerJS": "controller_cookie_session.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
-    {
-      "id": "getDB",
-      "path": "/getdb",
-      "controllerJS": "controller_db.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
-    {
-      "id": "file",
-      "path": "/file",
-      "controllerJS": "controller_file.js",
-      "controlFunction": "control_get",
-      "viewPath": "",
-      "view": "upload.ejs"
-    },
-    {
-      "id": "download",
-      "path": "/download",
-      "controllerJS": "controller_file.js",
-      "controlFunction": "control_download",
-      "viewPath": "",
-      "view": "upload.ejs"
-    },
-    {
-      "id": "main",
-      "path": "/main",
-      "controllerJS": "controller_menu.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "main.ejs"
-    },
-    {
-      "id": "write",
-      "path": "/write",
-      "controllerJS": "controller_write.js",
-      "controlFunction": "controlDisplay",
-      "viewPath": "",
-      "view": "write.ejs"
-    },
-    {
-      "id": "template",
-      "path": "/template",
-      "controllerJS": "controller_basic.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "template.ejs"
-    },
-    {
-      "id": "index",
-      "path": "/index",
-      "controllerJS": "controller_wellformedit.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
-    {
-      "id": "index",
-      "path": "/",
-      "controllerJS": "controller_wellformedit.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
-    {
-      "id": "cheatsheet",
-      "path": "/cheatsheet",
-      "controllerJS": "controller_cheatsheet.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "cheatsheet.ejs"
-    },
-    {
-      "id": "discussion",
-      "path": "/discussion",
-      "controllerJS": "controller_discussion.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "discussion.ejs"
-    },
-    {
-      "id": "exercise",
-      "path": "/exercise",
-      "controllerJS": "controller_menu.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "exercise.ejs"
-    },
-    {
-      "id": "opensourceproject",
-      "path": "/opensourceproject",
-      "controllerJS": "controller_opensourceproject.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "opensourceproject.ejs"
-    },
-    {
       "id": "about",
       "path": "/about",
       "controllerJS": "controller_about.js",
@@ -163,31 +41,15 @@
       "view": "about.ejs"
     },
     {
-      "id": "facebooklogin",
-      "path": "/facebooklogin",
-      "controllerJS": "controller_basic.js",
-      "controlFunction": "control",
+      "id": "write",
+      "path": "/write",
+      "controllerJS": "controller_write.js",
+      "controlFunction": "controlDisplay",
       "viewPath": "",
-      "view": "facebooklogin.ejs"
-    },
-    {
-      "id": "statistic",
-      "path": "/statistic",
-      "controllerJS": "controller_statistic.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "statistic.ejs"
+      "view": "write.ejs"
     }
   ],
   "POST" : [
-    {
-      "id": "indexPost",
-      "path": "/",
-      "controllerJS": "controller_post.js",
-      "controlFunction": "control",
-      "viewPath": "",
-      "view": "index.ejs"
-    },
     {
       "id": "upload",
       "path": "/upload",
@@ -195,30 +57,6 @@
       "controlFunction": "control",
       "viewPath": "",
       "view": "upload.ejs"
-    },
-    {
-      "id": "contentSave",
-      "path": "/contentSave",
-      "controllerJS": "controller_write.js",
-      "controlFunction": "controlWrite",
-      "viewPath": "",
-      "view": "write.ejs"
-    },
-    {
-      "id": "searchCheatsheet",
-      "path": "/searchCheatsheet",
-      "controllerJS": "controller_topic.js",
-      "controlFunction": "controlSearchCheatsheet",
-      "viewPath": "",
-      "view": "cheatsheet.ejs"
-    },
-    {
-      "id": "searchTopic",
-      "path": "/searchTopic",
-      "controllerJS": "controller_topic.js",
-      "controlFunction": "controlSearchTopic",
-      "viewPath": "",
-      "view": "topic.ejs"
     },
     {
       "id": "contentLoad",
@@ -229,28 +67,20 @@
       "view": "write.ejs"
     },
     {
-      "id": "getContentIdByTitle",
-      "path": "/getContentIdByTitle",
-      "controllerJS": "controller_discussion.js",
-      "controlFunction": "controlGetContentIdByTitle",
+      "id": "contentSave",
+      "path": "/contentSave",
+      "controllerJS": "controller_write.js",
+      "controlFunction": "controlWrite",
       "viewPath": "",
       "view": "write.ejs"
     },
     {
-      "id": "getKeywordLocation",
-      "path": "/getKeywordLocation",
-      "controllerJS": "controller_discussion.js",
-      "controlFunction": "controlGetKeywordLocation",
+      "id": "searchTopic",
+      "path": "/searchTopic",
+      "controllerJS": "controller_topic.js",
+      "controlFunction": "controlSearchTopic",
       "viewPath": "",
-      "view": ""
-    },
-    {
-      "id": "getContentIdByImg",
-      "path": "/getContentIdByImg",
-      "controllerJS": "controller_cheatsheet.js",
-      "controlFunction": "controlGetContentIdByImg",
-      "viewPath": "",
-      "view": ""
+      "view": "topic.ejs"
     }
   ]
 }

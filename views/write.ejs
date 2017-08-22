@@ -23,8 +23,6 @@
   <!-- bootstrap-treeview -->
   <script src="bootstrap-treeview.min.js"></script>
 
-  <% include partials/facebookSDK.ejs %>
-
   <script>
     $(window).on( "load", function(){
       $(document).ready( function(){
@@ -181,12 +179,10 @@
               if( redirectPath.indexOf("id_menu_0035") > -1 ){
                 redirectPath = "index";
               } else if( redirectPath.indexOf("id_menu_0001") > -1 ){
-                redirectPath = "cheatsheet";
+                redirectPath = "topic";
               } else if( redirectPath.indexOf("id_menu_0002") > -1 ){
-                redirectPath = "discussion";
-              } else if( redirectPath.indexOf("id_menu_0004") > -1 ){
-                redirectPath = "opensourceproject";
-              } else if( redirectPath.indexOf("id_menu_0036") > -1 ){
+                redirectPath = "keywordmap";
+              } else if( redirectPath.indexOf("id_menu_0003") > -1 ){
                 redirectPath = "about";
               }
 
@@ -362,22 +358,6 @@
       </div>
     </div>
   </div>
-
-  <div class="modal modal-center fade" rold="dialog" id="modal_writers">
-    <div class="modal-dialog modal-center modal-fullsize">
-      <div class="modal-content modal-fullsize">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-        </div>
-        <div class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <% include partials/about.ejs %>
 
 </body>
 </html>

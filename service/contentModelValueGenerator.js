@@ -982,6 +982,8 @@ exports.contentModelValueGenerator = function(){
         }
 
         resolve( `<div id="topiclist_` + type + `">` + code + `</div>` );
+      } else{
+        resolve( `<div></div>` );
       }
     } );
   }
@@ -1049,7 +1051,7 @@ exports.contentModelValueGenerator = function(){
 
         resolve( codes + tableCodes );
       } else{
-        resolve( "" );
+        resolve( "<div></div>" );
       }
 
       resolve( codes );
@@ -1198,9 +1200,6 @@ exports.contentModelValueGenerator = function(){
 
       getWholeTopicListModalCode( modelValueData )
       .then( function( results ){
-
-        console.log( results );
-
         resolve( results );
       } );
     } );
@@ -1213,7 +1212,8 @@ exports.contentModelValueGenerator = function(){
     return new Promise( function(resolve, reject){
       var codes = ``;
 
-      if( modelValueData ){
+      if( modelValueData && modelValueData.length > 0 ){
+
         for( var i=0; i<modelValueData.length; i++ ){
           if( i % 3 == 0 ){
             codes += `
@@ -1229,8 +1229,8 @@ exports.contentModelValueGenerator = function(){
             cheatsheetRedirectPath = modelValueData[i].topRedirect + `#` + modelValueData[i].id;
             contentRedirectPath = modelValueData[i].topRedirect;
           } else{
-            cheatsheetRedirectPath = `./topic?content_id=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
-            contentRedirectPath = `./topic?content_id=` + modelValueData[i].content_id;
+            cheatsheetRedirectPath = `./topic?contentid=` + modelValueData[i].content_id + `#` + modelValueData[i].id;
+            contentRedirectPath = `./topic?contentid=` + modelValueData[i].content_id;
           }
 
 
@@ -1265,6 +1265,8 @@ exports.contentModelValueGenerator = function(){
             codes += `</div>`;
           }
         }
+      } else{
+        codes = `<div></div>`;
       }
 
       resolve( codes );
@@ -1275,7 +1277,7 @@ exports.contentModelValueGenerator = function(){
     return new Promise( function(resolve, reject){
       let modalCodes = '';
 
-      if( modelValueData ){
+      if( modelValueData && modelValueData.length > 0 ){
         for( var i=0; i<modelValueData.length; i++ ){
           let ratio = modelValueData[i].ratio;
 
@@ -1326,6 +1328,8 @@ exports.contentModelValueGenerator = function(){
             </div>
           `;
         }
+      } else{
+        modalCodes = `<div></div>`;
       }
 
       resolve( modalCodes );
@@ -1406,8 +1410,6 @@ exports.contentModelValueGenerator = function(){
           <div class="col-lg-7 col-md-7 col-sm-7 keywordarchitecture_description_col">
             <br class="mobile-show tablet-show">
             <br class="mobile-show tablet-show">
-            <!-- <h4>` + modelValueData.keywordsInfo[0].displayName + `</h4> -->
-            <!-- <hr style="margin-bottom: 5px"> -->
             <p>  ` + modelValueData.keywordsInfo[0].description + ` </p>
             <br>
             <p><span><b>Sub Keywords</b></span>

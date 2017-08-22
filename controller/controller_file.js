@@ -135,6 +135,7 @@ function insertTempFileInfo( fileInfo ){
 
     var currentTime = new Date();
     currentTime = currentTime.toISOString();
+    currentTime = currentTime.substring( 0, 10 );
 
     var tempContentID = "id_content_0000";
     var contentImageID = fileInfo.content_image_id;

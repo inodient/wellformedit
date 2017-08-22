@@ -122,8 +122,6 @@ exports.queryManager = function(){
       queryString = `Update wellformedit.TB_CONTENT set hitCount = hitCount + 1 where id = '` + contentId + `';`;
 
       connection.query( queryString, function(err, results, fields){
-        console.log( queryString );
-
         resolve( results[0] );
         if( err ) reject( err );
       } );
@@ -319,8 +317,6 @@ exports.queryManager = function(){
       `;
 
       connection.query( queryString, function(err, results, fields){
-        console.log( "getSpecificContentImageInfo" );
-
         resolve( results );
         if( err ) reject( err );
       } );
@@ -1404,14 +1400,22 @@ exports.queryManager = function(){
 
   this.getKeywordsInfo = function( connection, displayName ){
     return new Promise( function(resolve, reject){
+      // let queryString = `
+      //    select A.level, A.sequence, A.imageFileName, A.description, A.id, A.parent, A.displayName, A.name, concat( B.id ,'_redirect' ) as redirectUrl
+      //      from wellformedit.TB_KEYWORD A, wellformedit.TB_CONTENT_SPECIFIC_TAG B
+      //     where ( A.DisplayName = '` + displayName + `'
+      //        or A.parent = ( select id from wellformedit.TB_KEYWORD where DisplayName = '` + displayName + `' ) )
+      //       and A.displayName = B.outerText
+      //       and B.content_id = 'id_content_0051'
+      //  order by level, sequence;
+      // `;
+
       let queryString = `
-      select A.level, A.sequence, A.imageFileName, A.description, A.id, A.parent, A.displayName, A.name, concat( B.id ,'_redirect' ) as redirectUrl
-      from wellformedit.TB_KEYWORD A, wellformedit.TB_CONTENT_SPECIFIC_TAG B
-      where ( A.DisplayName = '` + displayName + `'
-       or A.parent = ( select id from wellformedit.TB_KEYWORD where DisplayName = '` + displayName + `' ) )
-      and A.displayName = B.outerText
-      and B.content_id = 'id_content_0051'
-      order by level, sequence;
+        select A.level, A.sequence, A.imageFileName, A.description, A.id, A.parent, A.displayName, A.name
+        from wellformedit.TB_KEYWORD A
+        where ( A.DisplayName = '` + displayName + `'
+         or A.parent = ( select id from wellformedit.TB_KEYWORD where DisplayName = '` + displayName + `' ) )
+        order by level, sequence;
       `;
 
       connection.query( queryString, function(err, results, fields){

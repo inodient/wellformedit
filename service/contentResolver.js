@@ -61,6 +61,7 @@ exports.contentResolver = function(){
 
       if( req.query.contentid ){
         contentId = req.query.contentid;
+
         promises.push( oQueryManager.getSpecificContent(connection, contentId) );
         promises.push( oQueryManager.getSpecificSideMenuList(connection, contentId) );
         promises.push( oContentModelValueResolver.getSpecificModelValue(connection, contentId) );
