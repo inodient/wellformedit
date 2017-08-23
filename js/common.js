@@ -6,7 +6,6 @@ $(document).ready( function(){
 
     window.location = url;
   } );
-
 } );
 
 function getTempContentID(){

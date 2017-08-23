@@ -171,6 +171,7 @@ function insertImageFileInfo( fileInfo ){
 
     var currentTime = new Date();
     currentTime = currentTime.toISOString();
+    currentTime = currentTime.substring( 0, 10 );
 
     var tempContentID = "id_content_0000";
     maxID = fileInfo.tempImageID;

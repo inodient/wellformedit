@@ -10,9 +10,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="font-awesome.min.css">
   <link rel="stylesheet" href="wellformedit.css">
+
   <script src="design.js"></script>  <!-- CSS Script -->
   <script src="common.js"></script>  <!-- Logic Script -->
+  <script src="sns.js"></script>  <!-- SNS Share Script -->
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -121,20 +124,7 @@
 
         <div class="content">
 
-          <div style="text-align:right">
-            <div id="fb-root"></div>
-            <script>
-              (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=1910794212495192";
-                fjs.parentNode.insertBefore(js, fjs);
-              }(document, 'script', 'facebook-jssdk'));
-            </script>
-
-            <div id="facebook_buttons" class="fb-like" data-href="http://www.wellformedit.com/keywordmap" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
-          </div>
+          <% include partials/sns.ejs %>
 
           <div class="form-group" id="id_form_discussion">
             <div class="content_specifics">
@@ -142,9 +132,7 @@
             </div>
           </div>
 
-          <div style="text-align:right">
-            <div id="facebook_buttons" class="fb-like" data-href="http://www.wellformedit.com/keywordmap" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
-          </div>
+          <% include partials/sns.ejs %>
 
         </div>
 

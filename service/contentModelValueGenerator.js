@@ -990,12 +990,6 @@ exports.contentModelValueGenerator = function(){
 
   function getTopicTableCode( modelValueData, type ){
     return new Promise( function(resolve, reject){
-      let codes = ``;
-
-      codes += `
-        <!-- <button id="btn_discussionToggle" class="btn btn-important" onclick="javascript:toggleDiscussionList();" style="margin-bottom: 10px;">View Whole Discussion List</button> -->
-      `;
-
       if( modelValueData && modelValueData.length > 0 ){
         let subCodes = ``;
 
@@ -1039,22 +1033,20 @@ exports.contentModelValueGenerator = function(){
           <table id="topictable_` + type + `" class="topic_table table table-condensed table-hover table-bordered" style="display:none">
             <thead>
               <tr>
-                <th class="col-lg-2 col-md-2">Keyword</th>
-                <th class="col-lg-3 col-md-3">Title</th>
-                <th class="mobile-hidden col-lg-6 col-md-6">Summary</th>
-                <th class="col-lg-1 col-md-1">Hit</th>
+                <th class="col-lg-2 col-md-2 col-sm-2">Keyword</th>
+                <th class="col-lg-3 col-md-3 col-sm-3">Title</th>
+                <th class="mobile-hidden col-lg-6 col-md-6 col-sm-6">Summary</th>
+                <th class="col-lg-1 col-md-1 col-sm-1">Hit</th>
               </tr>
             </thead>`
             + subCodes +
           `</table>
         `;
 
-        resolve( codes + tableCodes );
+        resolve( tableCodes );
       } else{
         resolve( "<div></div>" );
       }
-
-      resolve( codes );
     } );
   }
 
@@ -1269,7 +1261,7 @@ exports.contentModelValueGenerator = function(){
         codes = `<div></div>`;
       }
 
-      resolve( codes );
+      resolve( '<div>' + codes + '</div>' );
     } );
   }
 

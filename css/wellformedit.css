@@ -945,7 +945,17 @@ hr {
   font-weight: bold;
 }
 
+.sns_button:hover {
+  color:gray;
+}
 
+
+
+
+.topic_table {
+  max-width : 100%;
+  width : 100%;
+}
 
 .topic_table thead tr {
   /*background-color: #505050;*/
