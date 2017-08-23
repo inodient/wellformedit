@@ -35,6 +35,24 @@ exports.control = function( req, res ){
           setModelWithObject( model, argv[1] );
           model.searchWord = "";
           model.cheatsheet = "";
+
+          let openGraph = `
+            <!-- opengraph meta - start -->
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:site" content="@wellformedit" />
+            <meta name="twitter:creator" content="@wellformedit" />
+
+            <meta property="fb:app_id" content="1910794212495192" />
+
+            <meta property="og:url"                content="http://www.wellformedit.com/topic" />
+            <meta property="og:type"               content="blog" />
+            <meta property="og:title"              content="Well Formed IT's topic" />
+            <meta property="og:description"        content="[Well Formed IT]'s only one goal is to introduce IT concepts as structural as possible. There are so many approaches and analysis methodologies doing that. [Well Formed IT] predefine a keyword map to assign each concept with that. Such concept discussion would be wrapped as Topic and Cheat sheet, and each topic would be assigned at keyword map." />
+            <meta property="og:image"              content="http://www.wellformedit.com/summer-mvc.png" /> -->
+            <!-- opengraph meta - end -->
+          `;
+
+          model.openGraph = openGraph;
         } )
         .then( function(){
           connection.release();
