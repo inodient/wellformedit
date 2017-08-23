@@ -81,7 +81,7 @@ exports.contentGenerator = function(){
     } );
   }
 
-  this.getCheatsheetCode = function( cheatsheetData ){
+  this.getCheatsheetCode = function( searchWordObject, cheatsheetData ){
     return new Promise( function(resolve, reject){
 
       getRemoveDuplicationCheatsheets( cheatsheetData )
@@ -107,7 +107,7 @@ exports.contentGenerator = function(){
 
         // console.log( cheatsheetData );
 
-        promises.push( getCheatsheetListCode( cheatsheetData ) );
+        promises.push( getCheatsheetListCode( searchWordObject, cheatsheetData ) );
         promises.push( getCheatsheetModalCode( cheatsheetData ) );
 
         Promise.all( promises )
@@ -123,8 +123,24 @@ exports.contentGenerator = function(){
     } );
   }
 
-  function getCheatsheetListCode( modelValueData ){
+  function getCheatsheetListCode( searchWordObject, modelValueData ){
     return new Promise( function(resolve, reject){
+
+      console.log( searchWordObject );
+
+      // Search Word Parsing - Start
+      let separatedSearchWord = ( searchWordObject.separatedSearchWord )[0];
+      let searchWordsWithLevel = searchWordObject.searchWordsWithLevel;
+
+      if( !separatedSearchWord ){
+        separatedSearchWord = [];
+        if( searchWordsWithLevel.length ){
+          separatedSearchWord.push( searchWordsWithLevel[0].word );
+        }
+      }
+      // Search Word Parsing - End
+
+
       if( modelValueData && modelValueData.length > 0 ){
 
         let code = `<hr>`;
@@ -132,6 +148,43 @@ exports.contentGenerator = function(){
         let createdData = ``;
 
         for( let i=0; i<modelValueData.length; i++ ){
+
+          // Bold Search Word - Start
+          let orgSummary = modelValueData[i].summary.replace( /<br>/gi, " " );
+          orgSummary = orgSummary.replace( /\n/gi, " " );
+          orgSummary = orgSummary.replace( /  /gi, " " );
+
+          for( let j=0; j<separatedSearchWord.length; j++ ){
+            orgSummary = orgSummary.split( separatedSearchWord[j] ).join( '<b class="bold">' + separatedSearchWord[j] + '</b>' );
+          }
+          // Bold Search Word - End
+
+          // Extract Search word contained sentence - Start
+          let orgSummaryArray = orgSummary.split( ". " );
+          let summary = orgSummary;
+
+          for( let j=0; j<orgSummaryArray.length; j++ ){
+            for( let k=0; k<separatedSearchWord.length; k++ ){
+              if( ( orgSummaryArray[j] ).indexOf( separatedSearchWord[k] ) > -1 ){
+                if( j == 0 ){
+                  summary = orgSummaryArray[0] + ". " + orgSummaryArray[1] + ". " + orgSummaryArray[2] + ". " + orgSummaryArray[3] + ". ";
+                } else if( j >= orgSummaryArray.length - 4 ){
+                  summary = orgSummaryArray[orgSummaryArray.length-4] + ". " + orgSummaryArray[orgSummaryArray.length-3] + ". " + orgSummaryArray[orgSummaryArray.length-2] + ". " + orgSummaryArray[orgSummaryArray.length-1] + ". ";
+                } else{
+                  summary = orgSummaryArray[j] + ". " + orgSummaryArray[j+1] + ". " + orgSummaryArray[j+2] + ". " + orgSummaryArray[j+3] + ". ";
+                }
+
+                j = orgSummaryArray.length;
+                break;
+              }
+            }
+          }
+
+          console.log( summary );
+          // Extract Search word contained sentence - End
+
+
+
           let contentRedirectPath = '';
 
           if( modelValueData[i].content_type == "main" ){
@@ -158,7 +211,8 @@ exports.contentGenerator = function(){
             code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
             code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
             code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
-            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p class="topic_content_summary">` + summary + `</p>`;
+            code += `<p style="display:none" class="topic_content_summary_hidden">` + summary + `</p>`;
             code += `<p>Keyword <b>` + keywords + `</b><p>`;
             code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
             code += `</div>`;

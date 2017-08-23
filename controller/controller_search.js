@@ -37,9 +37,6 @@ exports.control = function( req, res ){
         } )
         .then( function(){
           connection.release();
-
-          console.log( model );
-
           resolve( model );
         } )
         .catch( console.err );
@@ -83,7 +80,6 @@ function controlOpenWithSearchTopic( req, res ){
       } )
       .then( function(){
         connection.release();
-
         resolve( model );
       } )
       .catch( console.err );
@@ -138,6 +134,7 @@ exports.controlSearchTopic = function( req, res ){
         connection.release();
 
         model.cheatsheet = results;
+        model.searchWord = searchWord;
         resolve( model );
       } );
     } );

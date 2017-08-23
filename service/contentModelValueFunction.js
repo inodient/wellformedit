@@ -56,7 +56,7 @@ exports.contentModelValueFunction = function(){
     } );
   }
 
-  this.functionArray[ "cheatsheettop10" ] = function( connection ){
+  this.functionArray[ "searchwordtop10" ] = function( connection ){
     return new Promise( function(resolve, reject){
       oQueryManager.getTop10SearchWords(connection)
       .then( function(results){

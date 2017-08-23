@@ -1108,12 +1108,15 @@ hr {
 }
 
 .topic_row .topic_content_summary {
-  display: block; /* or inline-block */
+  display: block;
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
   max-height: 3.6em;
-  line-height: 1.8em;      /* fallback */
+  line-height: 1.8em;
+  color: #4c4c4c;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .topic_row .topic_thumbnail_img {

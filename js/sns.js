@@ -15,6 +15,11 @@ $(document).ready( function(){
       return $("h1").text();
     }
     if( $("h2").length ){
+
+      if( ( $("h2").text() ).split( $("h2 small").text() )[0] == "" ){
+        return $("h2 small").text();
+      }
+
       return ( $("h2").text() ).split( $("h2 small").text() )[0];
     }
     if( $(".doc-description").length ){

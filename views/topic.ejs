@@ -8,10 +8,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="font-awesome.min.css">
   <link rel="stylesheet" href="wellformedit.css">
 
   <script src="design.js"></script>  <!-- CSS Script -->
   <script src="common.js"></script>  <!-- Logic Script -->
+  <script src="sns.js"></script>  <!-- SNS Share Script -->
 
   <% include partials/opengraph.ejs %>
 
@@ -21,25 +23,15 @@
     $(window).on( "load", function(){
       $(document).ready( function(){
 
-        <% if( searchWord ){ %>
-          $("#search-word").val( "<%- searchWord %>" );
-        <% } %>
+        wordWrap();
 
-
-        // ----- Search Function - Start
-        // cheatsheet search
-        $("#cheatsheet-search").on( "click", () => {
-          searchCheatsheet();
-        });
-
-        // cheatsheet search - keydown enter
-        $("#search-word").on( "keydown", function(e){
-          if( e.keyCode == 13 ){
-            searchCheatsheet();
-          }
-        } );
-        // ------ Search Function - End
-
+        // ------ Specific Content's Title Visibility - Start
+        if( ( $(location).attr("href") ).indexOf( "?contentid" ) > -1 ){
+          $("#doc-title").css( "display", "block" );
+        } else{
+          $("#doc-title").css( "display", "none" );
+        }
+        // ------ Specific Content's Title Visibility - End
 
         // ------ Modal, Carousel Function - Start
         $(".search-result-image img").on( "click", function(){
@@ -77,6 +69,8 @@
             setCheatsheetImgAspect( activeImgId );
             setCheatsheetMargin( activeImgId );
           }
+
+          wordWrap();
         } );
         // ------ Window resize - End
 
@@ -131,8 +125,6 @@
         $(modalImgId).css( "margin-bottom", margin );
       }
     }
-
-
 
     function searchCheatsheet(){
       getCheatsheetData()
@@ -230,77 +222,45 @@
       $("#modal_topiclist").find(".modal-body").css( "width", popupWidth );
 
       $("#modal_topiclist").modal();
+
+      wordWrap();
     }
     // ------ Topic List Button Event - End
 
-    // ------ Linked In - Start
-    // Setup an event listener to make an API call once auth is complete
-    function onLinkedInLoad() {
-      IN.Event.on(IN, "auth", shareContent);
-    }
+    // ------ Word Wrap Event - Start
+    function wordWrap(){
+      $(".topic_content_summary").each( function(){
 
-    // Handle the successful return from the API call
-    function onSuccess(data) {
-      console.log(data);
-    }
+        let content = $(this).siblings(".topic_content_summary_hidden").text();
+        let wordWrapArray = content.split( " " );
+        let textBuffer = "";
 
-    // Handle an error response from the API call
-    function onError(error) {
-      console.log(error);
-    }
+        $(this).text( wordWrapArray[0] );
+        textBuffer = $(this).text();
 
-    // Use the API call wrapper to share content on LinkedIn
-    function shareContent() {
+        let height = $(this).height();
 
-      let title = '<%- title %>';
-      let description = '<%- summary %>';
+        for( let i=1; i<wordWrapArray.length; i++ ){
+          $(this).text( $(this).text() + " " + wordWrapArray[i] );
 
-      // Build the JSON payload containing the content to be shared
-      var payload = {
-        "comment": "[WELL FORMED IT] Divide as specific as possible, Build as well-formed as possible!!",
-        "content": {
-          "title" : title,
-          "description" : description,
-          "submitted-url" : "http://localhost:3000",
-          "submitted-image-url" : "http://www.wellformedit.com/wellformedit_logo.png"
-        },
-        "visibility": {
-          "code": "anyone"
+          if( $(this).height() > height * 2 ){
+            height = $(this).height();
+
+            textBuffer = textBuffer.substring( 0, textBuffer.lastIndexOf( wordWrapArray[i-1] ) );
+            textBuffer += " ...";
+
+            $(this).text( textBuffer );
+            break;
+          }
+
+          textBuffer = $(this).text();
         }
-      };
-
-      IN.API.Raw("/people/~/shares?format=json")
-        .method("POST")
-        .body(JSON.stringify(payload))
-        .result(onSuccess)
-        .error(onError);
+      } );
     }
-    // ------ Linked In - End
+    // ------ Word Wrap Event - End
   </script>
-
-  <script src="//platform.linkedin.com/in.js" type="text/javascript">
-    api_key:   81lgq7z32l5lke
-    onLoad:    onLinkedInLoad
-    // authorize: [AUTHORIZE]
-    // lang:      "en_US"
-  </script>
-
 </head>
 <body class="base">
-  <!-- facebook SDK Load - Start -->
-  <div id="fb-root"></div>
-  <script>
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=1910794212495192";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
-  <!-- facebook SDK Load - End -->
-
-
   <header>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid nav-container">
@@ -348,35 +308,19 @@
 
         <div class="content">
 
-          <!-- Social Plugins - Start -->
-          <div class="fb-like" data-href="http://www.wellformedit.com/topic?contentid=id_content_0005" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true">Title</div>
-          <a class="btn btn-default icon" href="javascript:void(0)" onclick="window.open( 'http://www.linkedin.com/shareArticle?mini=true&url=http://www.wellformedit.com/topic&title=wellformeditisfirstsharing&summary=thisisfirstsharing&source=wellformedit.com', 'sharer', 'toolbar=0, status=0, width=626, height=436');return false;" title="Linkedin"></a>
-
-          <button class="linkedin btn btn-default" onclick='javascript:shareToLinkedIn()'></button>
-
-          <script>
-            function shareToLinkedIn(){
-              let url = 'http://www.linkedin.com/shareArticle?mini=true&url=http://www.wellformedit.com/topic&title=wellformeditisfirstsharing&summary=thisisfirstsharing&source=wellformedit.com';
-              let option = 'sharer';
-              let size = 'toolbar=0, status=0, width=626, height=436';
-
-              window.open( url, option, size );
-            }
-          </script>
-
-
-          <!-- <script type="IN/Share" data-url="http://www.wellformedit.com/topic?contentid=id_content_0051" data-counter="right"></script> -->
-          <div class="mobile-hidden" style="margin-bottom: 50px"></div>
-          <!-- Social Plugins - End -->
-
           <div class="form-group" id="id_form_discussion">
+            <h2 id="doc-title" style="dispaly:none; margin-bottom: 30px;"> <%- title %><br><small> <%- subtitle %></small> </h2>
+
+            <% include partials/sns.ejs %>
+
             <div class="content_specifics">
 
               <%- specifics %>
             </div>
-          </div>
 
-          <div class="fb-like" data-href="http://www.wellformedit.com/topic?contentid=id_content_0005" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+            <% include partials/sns.ejs %>
+
+          </div>
 
         </div>
 

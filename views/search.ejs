@@ -19,6 +19,8 @@
     $(window).on( "load", function(){
       $(document).ready( function(){
 
+        wordWrap();
+
         <% if( searchWord ){ %>
           $("#search-word").val( "<%- searchWord %>" );
         <% } %>
@@ -69,6 +71,8 @@
 
         // ------ Window resize - Start
         $(window).resize( function(){
+          wordWrap();
+
           if( $(".modal_cheatsheet.in") && $(".modal_cheatsheet.in img").attr("id") ){
             let activeImgId = ( $(".modal_cheatsheet.in img").attr("id") ).replace( "modal_img_", "" );
 
@@ -177,6 +181,62 @@
         window.location.href = "./topic?contentid=" + results.contentId + "#" + results.imgId;
       } );
     }
+
+    // ------ Word Wrap Event - Start
+    function wordWrap(){
+      $(".topic_content_summary").each( function(){
+
+        let content = $(this).siblings(".topic_content_summary_hidden").text();
+
+        let wordWrapArray = content.split( " " );
+        let textBuffer = "";
+
+        $(this).text( wordWrapArray[0] );
+        textBuffer = $(this).text();
+
+        let height = $(this).height();
+
+        for( let i=1; i<wordWrapArray.length; i++ ){
+          $(this).text( $(this).text() + " " + wordWrapArray[i] );
+
+          if( $(this).height() > height * 2 ){
+            height = $(this).height();
+
+            textBuffer = textBuffer.substring( 0, textBuffer.lastIndexOf( wordWrapArray[i-1] ) );
+            textBuffer += " ...";
+
+            $(this).text( textBuffer );
+            boldSearchWord( textBuffer );
+            break;
+          }
+
+          textBuffer = $(this).text();
+        }
+      } );
+    }
+
+    function boldSearchWord( textBuffer ){
+      let searchWord = "<%- searchWord %>";
+
+      searchWord = searchWord.replace( ",", " " );
+      searchWord = searchWord.replace( "[", " " );
+      searchWord = searchWord.replace( "]", " " );
+      searchWord = searchWord.replace( ":", " " );
+      searchWord = searchWord.replace( "  ", " " );
+
+      let searchWordArray = searchWord.split( " " );
+
+
+      $(".topic_content_summary").each( function(){
+        let html = $(this).html();
+        for( let i=0; i<searchWordArray.length; i++ ){
+          html = ( html ).split( searchWordArray[i] ).join( '<b>' + searchWordArray[i] + '</b>' );
+        }
+
+        $(this).html( html );
+      } );
+    }
+    // ------ Word Wrap Event - End
   </script>
 
 </head>

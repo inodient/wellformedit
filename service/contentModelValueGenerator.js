@@ -565,7 +565,7 @@ exports.contentModelValueGenerator = function(){
     } );
   }
 
-  this.functionArray[ "cheatsheettop10" ] = function( modelValueData ){
+  this.functionArray[ "searchwordtop10" ] = function( modelValueData ){
     return new Promise( function(resolve, reject){
       var cheatsheetChartString = `[`;
 
@@ -964,6 +964,7 @@ exports.contentModelValueGenerator = function(){
             code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
             code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
             code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p style="display:none" class="topic_content_summary_hidden">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
             code += `<p>Keyword <b>` + keywords + `</b><p>`;
             code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
             code += `</div>`;
@@ -1149,6 +1150,7 @@ exports.contentModelValueGenerator = function(){
             code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
             code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
             code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p style="display:none;" class="topic_content_summary_hidden">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
             code += `<p>Keyword <b>` + keywords + `</b><p>`;
             code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
             code += `</div>`;

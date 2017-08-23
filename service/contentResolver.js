@@ -99,21 +99,7 @@ exports.contentResolver = function(){
       oQueryManager.getCheatsheet( connection, searchWordObject )
       .then( oQueryManager.updateCheatsheetHitCount.bind(null, connection) )
       .then( oQueryManager.updateContentHitCount.bind(null, connection) )
-      .then( oContentGenerator.getCheatsheetCode )
-      .then( function(results){
-        // console.log( "resolveCheatsheet" );
-        // console.log( searchWordObject );
-        resolve( results );
-      } );
-    } );
-  }
-
-  this.resolveCheatsheet = function( connection, searchWordObject ){
-    return new Promise( function(resolve,reject){
-      oQueryManager.getCheatsheet( connection, searchWordObject )
-      .then( oQueryManager.updateCheatsheetHitCount.bind(null, connection) )
-      .then( oQueryManager.updateContentHitCount.bind(null, connection) )
-      .then( oContentGenerator.getCheatsheetCode )
+      .then( oContentGenerator.getCheatsheetCode.bind(null, searchWordObject) )
       .then( function(results){
         // console.log( "resolveCheatsheet" );
         // console.log( searchWordObject );
