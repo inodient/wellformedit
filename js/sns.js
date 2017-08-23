@@ -1,15 +1,15 @@
+let url = $(location).attr("href");
+let title = getTitle();
+let summary = getDescription();
+let media = getTitleImageUrl();
+
+$("meta[property='og\\:url']").attr("content", url);
+$("meta[property='og\\:title']").attr("content", title);
+$("meta[property='og\\:description']").attr("content", summary);
+$("meta[property='og\\:image']").attr("content", media);
+
 $(document).ready( function(){
   // meta tag setting - start
-  let url = $(location).attr("href");
-  let title = getTitle();
-  let summary = getDescription();
-  let media = getTitleImageUrl();
-
-  $("meta[property='og\\:url']").attr("content", url);
-  $("meta[property='og\\:title']").attr("content", title);
-  $("meta[property='og\\:description']").attr("content", summary);
-  $("meta[property='og\\:image']").attr("content", media);
-
   function getTitle(){
     if( $("h1").length ){
       return $("h1").text();
@@ -98,7 +98,8 @@ function shareOnFacebook(){
   let _Description = encodeURIComponent( $("meta[property='og\\:description']").attr("content") );
   let _Image = encodeURIComponent( $("meta[property='og\\:image']").attr("content") );
 
-  popupUrl = 'https://www.facebook.com/dialog/feed?app_id=' + appId + '&link=' + _Url + '&name=' + _Title + '&caption=' + "Well Formed IT" + '&description=' + _Description + '&picture=' + _Image + '&redirect_uri=' + _Url + '';
+  // popupUrl = 'https://www.facebook.com/dialog/feed?app_id=' + appId + '&link=' + _Url + '&name=' + _Title + '&caption=' + "Well Formed IT" + '&description=' + _Description + '&picture=' + _Image + '&redirect_uri=' + _Url + '';
+  popupUrl = 'https://www.facebook.com/dialog/feed?app_id=' + appId + '&link=' + _Url + '&name=' + _Title + '&description=' + _Description + '&redirect_uri=' + _Url + '';
 
   // popupUrl = `
   //   https://www.facebook.com/dialog/feed?app_id=` + appId + `
@@ -113,6 +114,8 @@ function shareOnFacebook(){
   // popupUrl = `
   //   https://www.facebook.com/sharer/sharer.php?u=` + _Url + `
   // `;
+
+  console.log( popupUrl );
 
   window.open( popupUrl, option, size );
 }
