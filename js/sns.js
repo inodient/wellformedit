@@ -1,15 +1,15 @@
-let url = $(location).attr("href");
-let title = getTitle();
-let summary = getDescription();
-let media = getTitleImageUrl();
-
-$("meta[property='og\\:url']").attr("content", url);
-$("meta[property='og\\:title']").attr("content", title);
-$("meta[property='og\\:description']").attr("content", summary);
-$("meta[property='og\\:image']").attr("content", media);
-
 $(document).ready( function(){
   // meta tag setting - start
+  let url = $(location).attr("href");
+  let title = getTitle();
+  let summary = getDescription();
+  let media = getTitleImageUrl();
+
+  $("meta[property='og\\:url']").attr("content", url);
+  $("meta[property='og\\:title']").attr("content", title);
+  $("meta[property='og\\:description']").attr("content", summary);
+  $("meta[property='og\\:image']").attr("content", media);
+
   function getTitle(){
     if( $("h1").length ){
       return $("h1").text();
