@@ -98,15 +98,17 @@ function shareOnFacebook(){
   let _Description = encodeURIComponent( $("meta[property='og\\:description']").attr("content") );
   let _Image = encodeURIComponent( $("meta[property='og\\:image']").attr("content") );
 
-  popupUrl = `
-    https://www.facebook.com/dialog/feed?app_id=` + appId + `
-    &link=` + _Url + `
-    &name=` + _Title + `
-    &caption=` + "Well Formed IT" + `
-    &description=` + _Description + `
-    &picture=` + _Image + `
-    &redirect_uri=` + _Url + `
-  `;
+  popupUrl = 'https://www.facebook.com/dialog/feed?app_id=' + appId + '&link=' + _Url + '&name=' + _Title + '&caption=' + "Well Formed IT" + '&description=' + _Description + '&picture=' + _Image + '&redirect_uri=' + _Url + '';
+
+  // popupUrl = `
+  //   https://www.facebook.com/dialog/feed?app_id=` + appId + `
+  //   &link=` + _Url + `
+  //   &name=` + _Title + `
+  //   &caption=` + "Well Formed IT" + `
+  //   &description=` + _Description + `
+  //   &picture=` + _Image + `
+  //   &redirect_uri=` + _Url + `
+  // `;
 
   // popupUrl = `
   //   https://www.facebook.com/sharer/sharer.php?u=` + _Url + `
@@ -143,6 +145,8 @@ function shareOnLinkedIn(){
     &summary=` + _Description + `
     &source=` + _Source + `
   `;
+
+  // popupUrl = 'http://www.linkedin.com/shareArticle?mini=true' + '&url=' + _Url + '&title=' + _Title + '&summary=' + _Description + '&source=' + _Source;
 
   window.open( popupUrl, option, size );
 }
