@@ -1,59 +1,59 @@
 $(document).ready( function(){
   // meta tag setting - start
-  let url = $(location).attr("href");
-  let title = getTitle();
-  let summary = getDescription();
-  let media = getTitleImageUrl();
-
-  $("meta[property='og\\:url']").attr("content", url);
-  $("meta[property='og\\:title']").attr("content", title);
-  $("meta[property='og\\:description']").attr("content", summary);
-  $("meta[property='og\\:image']").attr("content", media);
-
-  function getTitle(){
-    if( $("h1").length ){
-      return $("h1").text();
-    }
-    if( $("h2").length ){
-
-      if( ( $("h2").text() ).split( $("h2 small").text() )[0] == "" ){
-        return $("h2 small").text();
-      }
-
-      return ( $("h2").text() ).split( $("h2 small").text() )[0];
-    }
-    if( $(".doc-description").length ){
-      return "Well Formed IT 's " + $(".doc-description h3").text();
-    }
-
-    return "Well Formed IT";
-  }
-
-  function getDescription(){
-    if( $("h2 small").length ){
-      return $("h2 small").text();
-    }
-    if( $(".doc-description-content").length ){
-      return $(".doc-description-content").text();
-    }
-
-    return "Divide specifically, Build well-formedly";
-  }
-
-  function getTitleImageUrl(){
-    let mediaWidth = 0;
-    let mediaFileName = "http://www.wellformedit.com/wellformedit_logo_large.png";
-
-    $("img").each( function(){
-
-      if( ( $(this)[0] ).clientWidth > mediaWidth && ( $(this)[0] ).clientWidth > 480 ){
-        mediaFileName = ( $(this)[0] ).currentSrc;
-        mediaWidth = ( $(this)[0] ).clientWidth;
-      }
-    } );
-
-    return mediaFileName;
-  }
+  // let url = $(location).attr("href");
+  // let title = getTitle();
+  // let summary = getDescription();
+  // let media = getTitleImageUrl();
+  //
+  // $("meta[property='og\\:url']").attr("content", url);
+  // $("meta[property='og\\:title']").attr("content", title);
+  // $("meta[property='og\\:description']").attr("content", summary);
+  // $("meta[property='og\\:image']").attr("content", media);
+  //
+  // function getTitle(){
+  //   if( $("h1").length ){
+  //     return $("h1").text();
+  //   }
+  //   if( $("h2").length ){
+  //
+  //     if( ( $("h2").text() ).split( $("h2 small").text() )[0] == "" ){
+  //       return $("h2 small").text();
+  //     }
+  //
+  //     return ( $("h2").text() ).split( $("h2 small").text() )[0];
+  //   }
+  //   if( $(".doc-description").length ){
+  //     return "Well Formed IT 's " + $(".doc-description h3").text();
+  //   }
+  //
+  //   return "Well Formed IT";
+  // }
+  //
+  // function getDescription(){
+  //   if( $("h2 small").length ){
+  //     return $("h2 small").text();
+  //   }
+  //   if( $(".doc-description-content").length ){
+  //     return $(".doc-description-content").text();
+  //   }
+  //
+  //   return "Divide specifically, Build well-formedly";
+  // }
+  //
+  // function getTitleImageUrl(){
+  //   let mediaWidth = 0;
+  //   let mediaFileName = "http://www.wellformedit.com/wellformedit_logo_large.png";
+  //
+  //   $("img").each( function(){
+  //
+  //     if( ( $(this)[0] ).clientWidth > mediaWidth && ( $(this)[0] ).clientWidth > 480 ){
+  //       mediaFileName = ( $(this)[0] ).currentSrc;
+  //       mediaWidth = ( $(this)[0] ).clientWidth;
+  //     }
+  //   } );
+  //
+  //   return mediaFileName;
+  // }
   // meta tag setting - end
 
 

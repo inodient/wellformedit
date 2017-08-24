@@ -4,8 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<% include partials/opengraph.ejs %>
+<!-- opengraph meta - start -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@wellformedit" />
+<meta name="twitter:creator" content="@wellformedit" />
 
+<meta property="fb:app_id" content="1910794212495192" />
+
+<meta property="og:url"                content="http://www.wellformedit.com" />
+<meta property="og:type"               content="blog" />
+<meta property="og:title"              content="Well Formed IT" />
+<meta property="og:description"        content="Divide as specific as possible, Build as well-formed as possible" />
+<meta property="og:image"              content="http://www.wellformedit.com/wellformedit_logo_og.png" />
+<!-- opengraph meta - end -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -21,6 +32,17 @@
 
 <script>
   $(document).ready( function(){
+    // ------ mobile H3, H4 text center - start
+    if( $(window).width() < 767 ){
+      let fullWidth = $(".navbar-header").width();
+      let leftWidth = $(".mobile-nav-brand").outerWidth();
+      let leftPadding = ( $(".mobile-nav-brand").css( "padding-right" ) ).split( "px" )[0];
+      let rightWidth = $(".navbar-toggle").outerWidth();
+
+      $(".mobile-nav-text").css( "width", fullWidth-leftWidth-leftPadding-rightWidth-5 );
+    }
+    // ------ mobile H3, H4 text center - end
+
     $('#mailSend').on('click', function (event) {
       event.preventDefault();
 
@@ -182,8 +204,8 @@
           <%- systemTitle %>
         </div>
         <div class="collapse navbar-collapse navbar-content" id="menu">
+          <%- searchBar %>
           <ul class="nav navbar-nav top-nav">
-            <p class="navbar-text">[ Well Formed IT ]</p>
             <%- menuList %>
           </ul>
           <ul class="nav navbar-nav navbar-right top-nav">
@@ -214,30 +236,33 @@
   </div>
 
   <!-- Keyword Map -->
-  <div class="index_content container-fluid">
-    <h2>Keyword Map</h2>
+  <div class="container-fluid">
+    <div class="index_content row">
+      <hr class="mobile-show">
+      <h2>Keyword Map</h2>
 
-    <button class="btn btn-important" onclick="javascript:gotoKeywordMap();">View Keyword Map Specifics</button>
+      <button class="mobile-hidden btn btn-important" onclick="javascript:gotoKeywordMap();">View Keyword Map Specifics</button>
 
-    <p>
-      <b>Well-formed IT</b>'s basic concept is a structured approach.<br>
-      All IT technologies and environments can be divided into several layers and levels,
-      using their abstract and simultaneous characteristics.
-    </p>
-    <p>
-      And these puzzles must be combined according to the hierarchy. <br>
-      A keyword map is a simplified map for doing this. <br>
-      This includes computer architecture, analytical methodology, network concepts <br> and new technologies in IT, etc. <br>
-    </p>
-    <p>
-      <b>Well-formed IT</b>'s authors assign each topic to this map. <br>
-      <b>Topics will be analyzed using this map and combined using the structure of this map.</b><br>
-    </p>
+      <p>
+        <b>Well-formed IT</b>'s basic concept is a structured approach.<br>
+        All IT technologies and environments can be divided into several layers and levels,
+        using their abstract and simultaneous characteristics.
+      </p>
+      <p>
+        And these puzzles must be combined according to the hierarchy. <br>
+        A keyword map is a simplified map for doing this. <br>
+        This includes computer architecture, analytical methodology, network concepts <br> and new technologies in IT, etc. <br>
+      </p>
+      <p>
+        <b>Well-formed IT</b>'s authors assign each topic to this map. <br>
+        <b>Topics will be analyzed using this map and combined using the structure of this map.</b><br>
+      </p>
 
-    <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12" style="padding-right: 5px">
-        <img class="topic_img" style="max-width: 100%; width: 100%;" src="keywordmap_inverse.jpg"/>
+        <img class="mobile-hidden topic_img" style="max-width: 100%; width: 100%;" src="keywordmap_inverse.png"/>
       </div>
+
+      <button class="mobile-show btn btn-important" onclick="javascript:gotoKeywordMap();">View Keyword Map Specifics</button>
       <!-- <div class="col-lg-4 col-md-4 col-sm-4" style="padding-left: 5px;">
         <img class="topic_img" style="max-width: 100%; width: 100%;" src="keywordmap_inverse_second.jpg"/>
       </div> -->
@@ -279,16 +304,16 @@
 
         <button class="btn btn-important" onclick="javascript:gotoTopicList();">View Topic List</button>
       </div>
-      <div class="col-lg-5 col-md-5 col-sm-5">
-        <img class="topic_img" style="max-width: 100%; width: 100%;" src="topic_cheatsheet.png"/>
+      <div class="mobile-hidden col-lg-5 col-md-5 col-sm-5" style="margin:auto; text-align:center">
+        <img class="topic_img" style="max-width: 75%;" src="topic_cheatsheet.png"/>
       </div>
     </div>
   </div>
 
   <div class="container-fluid">
     <div class="index_content row">
-      <div class="col-lg-5 col-md-5 col-sm-5">
-        <img class="topic_img" style="max-width: 100%; width: 100%;" src="summer-mvc.png"/>
+      <div class="mobile-hidden col-lg-5 col-md-5 col-sm-5" style="margin:auto; text-align:center">
+        <img class="topic_img" style="max-width: 85%;" src="summer-mvc.png"/>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
         <h2>summer-mvc</h2>
@@ -309,7 +334,21 @@
       </div>
     </div>
 
-    <div class="index_content row" style="text-align:right">
+    <script>
+      $(document).ready( function(){
+        $(".topic_img").each( function(){
+          let siblingHeight = $(this).parent().siblings( ".col-lg-7" ).height();
+          let height = $(this).height();
+
+          let margin = ( siblingHeight - height ) / 2;
+
+          $(this).css( "margin-top", margin );
+          $(this).css( "margin-bottom", margin );
+        } );
+      } );
+    </script>
+
+    <div class="mobile-hidden index_content row" style="text-align:left">
       <% include partials/sns.ejs %>
     </div>
 

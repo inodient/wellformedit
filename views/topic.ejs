@@ -24,6 +24,17 @@
     $(window).on( "load", function(){
       $(document).ready( function(){
 
+        // ------ mobile H3, H4 text center - start
+        if( $(window).width() < 767 ){
+          let fullWidth = $(".navbar-header").width();
+          let leftWidth = $(".mobile-nav-brand").outerWidth();
+          let leftPadding = ( $(".mobile-nav-brand").css( "padding-right" ) ).split( "px" )[0];
+          let rightWidth = $(".navbar-toggle").outerWidth();
+
+          $(".mobile-nav-text").css( "width", fullWidth-leftWidth-leftPadding-rightWidth-5 );
+        }
+        // ------ mobile H3, H4 text center - end
+
         wordWrap();
 
         // ------ Specific Content's Title Visibility - Start
@@ -244,11 +255,11 @@
         for( let i=1; i<wordWrapArray.length; i++ ){
           $(this).text( $(this).text() + " " + wordWrapArray[i] );
 
-          if( $(this).height() > height * 2 ){
+          if( $(this).height() > height * 3 ){
             height = $(this).height();
 
             textBuffer = textBuffer.substring( 0, textBuffer.lastIndexOf( wordWrapArray[i-1] ) );
-            textBuffer += " ...";
+            textBuffer += "...";
 
             $(this).text( textBuffer );
             break;
@@ -274,6 +285,7 @@
           <%- systemTitle %>
         </div>
         <div class="collapse navbar-collapse navbar-content" id="menu">
+          <%- searchBar %>
           <ul class="nav navbar-nav top-nav">
             <p class="navbar-text">[ <%- title %> ]</p>
             <%- subMenuListCollapsed %>
@@ -305,21 +317,25 @@
         </ul>
 
       </div>
-      <div class="col-lg-9 col-md-9 doc-content">
+      <div class="mobile-padding-zero col-lg-9 col-md-9 doc-content">
 
         <div class="content">
 
           <div class="form-group" id="id_form_discussion">
             <h2 id="doc-title" style="dispaly:none; margin-bottom: 30px;"> <%- title %><br><small> <%- subtitle %></small> </h2>
 
-            <% include partials/sns.ejs %>
+            <div class="mobile-hidden">
+              <% include partials/sns.ejs %>
+            </div>
 
             <div class="content_specifics">
 
               <%- specifics %>
             </div>
 
-            <% include partials/sns.ejs %>
+            <div class="mobile-center">
+              <% include partials/sns.ejs %>
+            </div>
 
           </div>
 

@@ -5,6 +5,7 @@ exports.menuGenerator = function(){
       var innerMenuCodes = "";
       var innerTitleCodes = "";
       var innerRightMenuCodes = "";
+      var innerSearchBarCodes = "";
 
       // Top Menu
       if( menuList ){
@@ -21,8 +22,9 @@ exports.menuGenerator = function(){
               innerMenuCodes += `<li><a href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a></li>`;
             }
           } else if( menuList[i].level == -1 ){
-            innerTitleCodes += `<a class="mobile-show navbar-brand glyphicon glyphicon-home" href="` + redirectPath + `" id="` + id + `" name="` + name + `"></a>`;
-            innerTitleCodes += `<a class="mobile-show navbar-brand navbar-index" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
+            // innerTitleCodes += `<a class="mobile-show navbar-brand glyphicon glyphicon-home" href="` + redirectPath + `" id="` + id + `" name="` + name + `"></a>`;
+            innerTitleCodes += `<a class="mobile-nav-brand mobile-show navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `"><img style="max-height:25px; max-width:25px; margin-top: 0px;" src="/wellformedit_logo_transparent.png"></a>`;
+            innerTitleCodes += `<a class="mobile-nav-text mobile-show navbar-brand navbar-index" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
             innerTitleCodes += `<a class="mobile-hidden navbar-brand" href="` + redirectPath + `" id="` + id + `" name="` + name + `">` + displayName + `</a>`;
           } else if( menuList[i].level == -2 ){
             if( reqPath.indexOf(redirectPath) > -1 ){
@@ -35,7 +37,7 @@ exports.menuGenerator = function(){
       }
 
       innerRightMenuCodes += `
-        <form class="navbar-form navbar-left" method="GET" action="./search">
+        <form class="mobile-hidden navbar-form navbar-left" method="GET" action="./search">
           <div class="input-group">
             <input id="searchWord" name="searchWord" type="text" class="form-control" placeholder="Search">
             <div class="input-group-btn">
@@ -47,7 +49,20 @@ exports.menuGenerator = function(){
         </form>
       `;
 
-      resolve( { "innerMenuCodes" : innerMenuCodes, "innerTitleCodes" : innerTitleCodes, "innerRightMenuCodes" : innerRightMenuCodes } );
+      innerSearchBarCodes = `
+        <form style="border-top:0px; margin-top:0px" class="mobile-show navbar-form navbar-left" method="GET" action="./search">
+          <div class="input-group">
+            <input id="searchWord" name="searchWord" type="text" class="form-control" placeholder="Search">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      `
+
+      resolve( { "innerMenuCodes" : innerMenuCodes, "innerTitleCodes" : innerTitleCodes, "innerRightMenuCodes" : innerRightMenuCodes, "innerSearchBarCodes" : innerSearchBarCodes } );
     } );
   }
 
@@ -289,7 +304,7 @@ function getTopMenu( menuList, reqPath ){
     for( var i=0; i<menuList.length; i++ ){
       var redirectPath = menuList[i].redirectPath;
 
-      if( menuList[i].level == 0 ){
+      if( menuList[i].level <= 0 ){
         if( reqPath.indexOf(redirectPath) > -1 ){
           return menuList[i].displayName;
         }

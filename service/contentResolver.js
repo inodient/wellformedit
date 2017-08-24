@@ -84,8 +84,8 @@ exports.contentResolver = function(){
         oContentGenerator.setContentsNavId( argv[0], argv[1] )
         .then( oContentGenerator.setContentsModelValue.bind( null, argv[2] ) )
         .then( oContentGenerator.setContentsImageId.bind( null, argv[3] ) )
+        .then( oContentGenerator.setOpenGraphMetaTag.bind( null, argv[3] ) )
         .then( function(content){
-
           resolve( content );
         } );
 

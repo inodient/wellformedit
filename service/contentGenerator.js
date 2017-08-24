@@ -81,6 +81,54 @@ exports.contentGenerator = function(){
     } );
   }
 
+  this.setOpenGraphMetaTag = function( imageInfo, content ){
+    return new Promise( function(resolve, reject){
+
+      let baseUrl = 'http://www.wellformedit.com';
+
+      let url = baseUrl;
+      let title = 'Well Formed IT';
+      let description = 'Divide specifically, Build well-formedly';
+      let image = 'http://www.wellformedit.com/wellformedit_logo_og.png';
+
+      if( content ){
+        if( content.type == "main" ){
+          url = baseUrl + "/" + content.redirectPath;
+          title = content.title;
+          description = ( content.description ).split("<br>").join();
+        } else if( content.type == "content" ){
+          url = baseUrl + "/" + content.redirectPath + "?contentid=" + content.id;
+          title = content.title;
+          description = ( content.summary ).split("<br>").join();
+        }
+      }
+
+      if( imageInfo && imageInfo.length ){
+        image = baseUrl + "/" + imageInfo[0].savedFileName;
+      }
+
+      let metaTag = `
+        <!-- opengraph meta - start -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@wellformedit" />
+        <meta name="twitter:creator" content="@wellformedit" />
+
+        <meta property="fb:app_id" content="1910794212495192" />
+
+        <meta property="og:url"                content="` + url + `" />
+        <meta property="og:type"               content="blog" />
+        <meta property="og:title"              content="` + title + `" />
+        <meta property="og:description"        content="` + description + `" />
+        <meta property="og:image"              content="` + image + `" />
+        <!-- opengraph meta - end -->
+      `;
+
+      content.openGraph = metaTag;
+
+      resolve( content );
+    } );
+  }
+
   this.getCheatsheetCode = function( searchWordObject, cheatsheetData ){
     return new Promise( function(resolve, reject){
 

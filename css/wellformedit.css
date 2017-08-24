@@ -777,6 +777,12 @@ hr {
   opacity: 0.95;
 }
 
+@media screen and (min-width : 320px) and (max-width : 767px) {
+  .btn-important{
+    width: 100%;
+  }
+}
+
 .btn-important:hover{
   color: lightgray;
 }
@@ -952,10 +958,10 @@ hr {
 
 
 
-.topic_table {
+/*.topic_table {
   max-width : 100%;
   width : 100%;
-}
+}*/
 
 .topic_table thead tr {
   /*background-color: #505050;*/
@@ -1007,6 +1013,12 @@ hr {
   .mobile-show {
     display: block !important;
   }
+  .mobile-center {
+    text-align: center;
+  }
+  .mobile-padding-zero {
+    padding:0;
+  }
 }
 
 @media screen and (min-width : 768px) and (max-width : 991px) {
@@ -1023,6 +1035,11 @@ hr {
 
 .navbar-brand {
   /*background-image : url( "/apple-icon-76x76.png" );*/
+}
+
+.mobile-nav-text {
+  text-align : center;
+  padding-right: 0px;
 }
 
 /* Keyword Architecture - start */
@@ -1054,8 +1071,9 @@ hr {
   }
 
   .btn-important {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width : 100%;
   }
 }
 
@@ -1066,10 +1084,11 @@ hr {
 .topic_img {
   margin-top:15px;
   margin-bottom:15px;
-  min-height: 380px;
+  max-width: 75%;
+  /*min-height: 380px;
   max-height:55vh;
   height: 47vh;
-  max-width:65vw;
+  max-width:65vw;*/
 }
 
 @media screen and (min-width : 768px) and (max-width : 991px) {
@@ -1112,7 +1131,7 @@ hr {
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
-  max-height: 3.6em;
+  max-height: 5.4em;
   line-height: 1.8em;
   color: #4c4c4c;
   margin-top: 10px;

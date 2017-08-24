@@ -5,8 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <% include partials/opengraph.ejs %>
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -17,12 +15,25 @@
   <script src="common.js"></script>  <!-- Logic Script -->
   <script src="sns.js"></script>  <!-- SNS Share Script -->
 
+  <%- openGraph %>
+
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
   <script>
     $(window).on( "load", function(){
       $(document).ready( function(){
         $(".after").css( "height", $(".base").outerHeight() + $(".navbar").outerHeight() );
+
+        // ------ mobile H3, H4 text center - start
+        if( $(window).width() < 767 ){
+          let fullWidth = $(".navbar-header").width();
+          let leftWidth = $(".mobile-nav-brand").outerWidth();
+          let leftPadding = ( $(".mobile-nav-brand").css( "padding-right" ) ).split( "px" )[0];
+          let rightWidth = $(".navbar-toggle").outerWidth();
+
+          $(".mobile-nav-text").css( "width", fullWidth-leftWidth-leftPadding-rightWidth-5 );
+        }
+        // ------ mobile H3, H4 text center - end
 
         $('.clickable-row').click(function () {
           document.location.href = $(this).data("href");
@@ -89,6 +100,7 @@
           <%- systemTitle %>
         </div>
         <div class="collapse navbar-collapse navbar-content" id="menu">
+          <%- searchBar %>
           <ul class="nav navbar-nav top-nav">
             <p class="navbar-text">[ <%- title %> ]</p>
             <%- subMenuListCollapsed %>

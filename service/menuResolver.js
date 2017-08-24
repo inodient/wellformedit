@@ -41,6 +41,7 @@ exports.menuResolver = function(){
           setModel( model, "menuList", menuList.innerMenuCodes );
           setModel( model, "systemTitle", menuList.innerTitleCodes );
           setModel( model, "rightMenuList", menuList.innerRightMenuCodes );
+          setModel( model, "searchBar", menuList.innerSearchBarCodes );
           // setModel( model, "subMenuList", oMenuGenerator.createSubMenuList( argv[1], argv[2], req._parsedUrl.pathname ) );
           setModel( model, "subMenuList", subArgv[1] );
           setModel( model, "subMenuListCollapsed", subArgv[2] );

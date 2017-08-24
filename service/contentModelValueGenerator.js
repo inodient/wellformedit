@@ -933,8 +933,12 @@ exports.contentModelValueGenerator = function(){
       if( modelValueData && modelValueData.length > 0 ){
 
         let code = ``;
+        let mobileCode = ``;
+
         let keywords = '';
         let createdData = ``;
+
+        let count = 0;
 
         for( let i=0; i<modelValueData.length; i++ ){
           let contentRedirectPath = '';
@@ -958,7 +962,7 @@ exports.contentModelValueGenerator = function(){
               keywords = modelValueData[i].keywordDisplayName;
             }
 
-            code += `<div class="row topic_row">`
+            code += `<div class="mobile-hidden row topic_row">`
 
             code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
             code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
@@ -975,14 +979,68 @@ exports.contentModelValueGenerator = function(){
 
             code += `</div>`;
 
-            code += `<hr>`
+            code += `<hr class="mobile-hidden">`
+
+            count++;
+
+            mobileCode += `<div style="margin-right: 0px" class="mobile-show row topic_row">`;
+            mobileCode += `<table class="table table-condensed table-hover table-bordered">`;
+
+            mobileCode += `<tr style="color: #ddd; background-color: #222222;">`;
+            mobileCode += `<td colspan=2>Ranking : ` + count + `</td>`;
+            mobileCode += `</tr>`
+
+            mobileCode += `<tr>`;
+            mobileCode += `<td class="col-xs-3" style="background-color: #383838; color: lightgray; vertical-align:middle"><center>` + modelValueData[i].hitCount + ` hits</center></td>`;
+            mobileCode += `<td class="col-xs-9" valign="middle" style="padding-left: 15px;" valign="middle"><a href="` + contentRedirectPath + `"><h5 style="padding-top:0px; margin-top:0px">` + modelValueData[i].title  + `<br><small>` + modelValueData[i].title + `</small></h5></a></td>`;
+            mobileCode += `</tr>`
+
+            mobileCode += `<tr>`;
+            mobileCode += `<td class="col-xs-3" style="background-color: #383838; color: lightgray; vertical-align:middle"><center>Keyword</center></td>`;
+            mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">` + keywords + `</td>`;
+            mobileCode += `</tr>`
+
+            mobileCode += `<tr>`;
+            mobileCode += `<td class="col-xs-3" style="background-color: #383838; color: lightgray; vertical-align:middle"><center>Info.</center></td>`;
+            mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">`;
+            mobileCode += `<span>` + modelValueData[i].writer + ` / </span>`;
+            mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
+            mobileCode += `</td>`;
+            mobileCode += `</tr>`
+
+            mobileCode += `<tr style="border:0">`;
+            mobileCode += `<td style="border:0" colspan="2">`;
+            mobileCode += `<span style="max-height: 9.0em; color: black;" class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</span>`;
+            mobileCode += `<span style="display:none" class="topic_content_summary_hidden">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</span>`;
+            mobileCode += `</td>`;
+            mobileCode += `</tr>`;
+
+            mobileCode += `<tr style="border:0" >`
+            mobileCode += `<td style="border:0;" colspan=2>`;
+            mobileCode += `<div>`
+            mobileCode += `<img id="` + modelValueData[i].imageId + `" src="` + modelValueData[i].thumbnailWithRatioFileName + `" />`;
+            mobileCode += `</div>`
+            mobileCode += `</td>`;
+            mobileCode += `</tr>`
+
+            // mobileCode += `<tr style="border:0" >`
+            // mobileCode += `<td style="border:0" colspan=2>`;
+            // mobileCode += `<span>Keyword <b>` + keywords + `</b><span><br>`;
+            // mobileCode += `<span>` + modelValueData[i].writer + ` / </span>`;
+            // mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
+            // mobileCode += `</td>`;
+            // mobileCode += `</tr>`
+
+            mobileCode += `</table>`
+            // mobileCode += `<hr style="border-color:#9d9d9d">`;
+            mobileCode += `</div>`
 
             keywords = '';
 
           }
         }
 
-        resolve( `<div id="topiclist_` + type + `">` + code + `</div>` );
+        resolve( `<div id="topiclist_` + type + `">` + code + mobileCode + `</div>` );
       } else{
         resolve( `<div></div>` );
       }
@@ -1034,10 +1092,10 @@ exports.contentModelValueGenerator = function(){
           <table id="topictable_` + type + `" class="topic_table table table-condensed table-hover table-bordered" style="display:none">
             <thead>
               <tr>
-                <th class="col-lg-2 col-md-2 col-sm-2">Keyword</th>
-                <th class="col-lg-3 col-md-3 col-sm-3">Title</th>
+                <th class="col-lg-2 col-md-2 col-sm-2 col-xs-4">Keyword</th>
+                <th class="col-lg-3 col-md-3 col-sm-3 col-xs-6">Title</th>
                 <th class="mobile-hidden col-lg-6 col-md-6 col-sm-6">Summary</th>
-                <th class="col-lg-1 col-md-1 col-sm-1">Hit</th>
+                <th class="col-lg-1 col-md-1 col-sm-1 col-xs-2">Hit</th>
               </tr>
             </thead>`
             + subCodes +
@@ -1093,8 +1151,8 @@ exports.contentModelValueGenerator = function(){
   this.functionArray[ "viewmodetoggle_recent" ] = function(){
     return new Promise( function(resolve, reject){
       let code = `
-        <button type="button" class="btn btn-important" onclick="javascript:toggleTopicViewModeRecent(this);">` + "Table View" + `</button>
-        <button type="button" class="btn btn-important" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:toggleTopicViewModeRecent(this);">` + "Table View" + `</button>
+        <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
       `;
       resolve( code );
     } );
@@ -1103,8 +1161,8 @@ exports.contentModelValueGenerator = function(){
   this.functionArray[ "viewmodetoggle_popular" ] = function(){
     return new Promise( function(resolve, reject){
       let code = `
-        <button type="button" class="btn btn-important" onclick="javascript:toggleTopicViewModePopular(this);">` + "Table View" + `</button>
-        <button type="button" class="btn btn-important" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:toggleTopicViewModePopular(this);">` + "Table View" + `</button>
+        <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
       `;
       resolve( code );
     } );
@@ -1504,7 +1562,7 @@ exports.contentModelValueGenerator = function(){
   this.functionArray[ "topicconceptsketch" ] = function(){
     return new Promise( function(resolve, reject){
       let code = `
-        <img class="topic_img" src="keywordmap_inverse.jpg"/>
+        <img class="topic_img" src="keywordMap_inverse.png"/>
         <div class="row">
           <div class="col-lg-4 col-md-4 col-sm-4">
             <b>Well-formed IT</b>'s basic concept is a structured approach.

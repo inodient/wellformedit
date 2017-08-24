@@ -94,8 +94,11 @@ exports.queryManager = function(){
   this.getDefaultContent = function( connection, contentId ){
     return new Promise( function(resolve, reject){
       let queryString = "";
-
-      queryString = `select * from wellformedit.TB_CONTENT where type = 'main' and parentMenu = (select id from wellformedit.TB_MENU where redirectPath = '` + contentId + `');`;
+      queryString = `
+        select A.id, A.type, A.parentMenu, A.title, A.subtitle, A.summary, A.specifics, A.writer, A.createdDate, A.updatedDate, A.hitCount, B.redirectPath, B.description
+        from wellformedit.TB_CONTENT A, wellformedit.TB_MENU B
+        where A.type = 'main' and A.parentMenu = (select id from wellformedit.TB_MENU where redirectPath = '` + contentId + `') and A.parentMenu = B.id
+      `;
 
       connection.query( queryString, function(err, results, fields){
         resolve( results[0] );
@@ -107,7 +110,11 @@ exports.queryManager = function(){
   this.getSpecificContent = function( connection, contentId ){
     return new Promise( function(resolve, reject){
       let queryString = "";
-      queryString = `select * from wellformedit.TB_CONTENT where id = '` + contentId + `';`;
+      queryString = `
+        select A.id, A.type, A.parentMenu, A.title, A.subtitle, A.summary, A.specifics, A.writer, A.createdDate, A.updatedDate, A.hitCount, B.redirectPath, B.description
+        from wellformedit.TB_CONTENT A, wellformedit.TB_MENU B
+        where A.id = '` + contentId + `' and A.parentMenu = B.id
+      `;
 
       connection.query( queryString, function(err, results, fields){
         resolve( results[0] );
@@ -313,7 +320,8 @@ exports.queryManager = function(){
         select
         id, content_id, title, subtitle, description, savedDate, originalFileName, savedFileName, thumbnailWithRatioFileName, thumbnailRectangleFileName, ratio, savedPath, encoding, mimetype, hitCount
         from wellformedit.TB_CONTENT_IMAGE
-        where content_id = '` + contentId + `';
+        where content_id = '` + contentId + `'
+        order by hitCount;
       `;
 
       connection.query( queryString, function(err, results, fields){
@@ -1370,7 +1378,7 @@ exports.queryManager = function(){
     return new Promise( function(resolve, reject){
       let queryString = `
         select
-          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, E.thumbnailWithRatioFileName as thumbnailWithRatioFileName
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
         order by createdDate desc limit 10;
@@ -1386,7 +1394,7 @@ exports.queryManager = function(){
     return new Promise( function(resolve, reject){
       let queryString = `
         select
-          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, E.thumbnailWithRatioFileName as thumbnailWithRatioFileName
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
         order by hitCount desc limit 10;

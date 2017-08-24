@@ -19,6 +19,17 @@
     $(window).on( "load", function(){
       $(document).ready( function(){
 
+        // ------ mobile H3, H4 text center - start
+        if( $(window).width() < 767 ){
+          let fullWidth = $(".navbar-header").width();
+          let leftWidth = $(".mobile-nav-brand").outerWidth();
+          let leftPadding = ( $(".mobile-nav-brand").css( "padding-right" ) ).split( "px" )[0];
+          let rightWidth = $(".navbar-toggle").outerWidth();
+
+          $(".mobile-nav-text").css( "width", fullWidth-leftWidth-leftPadding-rightWidth-5 );
+        }
+        // ------ mobile H3, H4 text center - end
+
         wordWrap();
 
         <% if( searchWord ){ %>
@@ -253,10 +264,10 @@
           <%- systemTitle %>
         </div>
         <div class="collapse navbar-collapse navbar-content" id="menu">
-          <ul class="nav navbar-nav top-nav">
-            <%- subMenuListCollapsed %>
-          </ul>
-
+          <%- searchBar %>
+          <% if( subMenuListCollapsed && subMenuListCollapsed.length > 0 ) { %>
+            <hr class="nav-divider">
+          <% } %>
           <ul class="nav navbar-nav top-nav">
             <%- menuList %>
           </ul>

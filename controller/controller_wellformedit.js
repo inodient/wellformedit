@@ -30,8 +30,6 @@ exports.control = function( req, res ){
           .then( function(){
             connection.release();
 
-            console.log( model );
-
             resolve( model );
           } );
         } );

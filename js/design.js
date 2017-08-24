@@ -149,7 +149,6 @@ $(document).ready( function(){
         }
       } );
     }
-
     // Mobile H3 affix - end
   } );
 
