@@ -1378,7 +1378,7 @@ exports.queryManager = function(){
     return new Promise( function(resolve, reject){
       let queryString = `
         select
-          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, E.thumbnailWithRatioFileName as thumbnailWithRatioFileName
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, E.thumbnailWithRatioFileName as thumbnailWithRatioFileName, E.title as imgTitle, E.description as imgDescription
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
         order by createdDate desc limit 10;
@@ -1394,7 +1394,7 @@ exports.queryManager = function(){
     return new Promise( function(resolve, reject){
       let queryString = `
         select
-          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, E.thumbnailWithRatioFileName as thumbnailWithRatioFileName
+          B.id as content_id, B.title, B.subtitle, B.summary, B.writer, B.createdDate, B.hitCount, C.displayName as keywordDisplayName, B.type as content_type, D.redirectPath as topRedirect, E.id as imageId, E.thumbnailRectangleFileName as thumbnailRectangleFileName, E.thumbnailWithRatioFileName as thumbnailWithRatioFileName, E.title as imgTitle, E.description as imgDescription
         from wellformedit.TB_CONTENT_KEYWORD A, wellformedit.TB_CONTENT B, wellformedit.TB_KEYWORD C, wellformedit.TB_MENU D, wellformedit.TB_CONTENT_IMAGE E
         where A.content_id = B.id and A.keyword_id = C.id and D.id = B.parentMenu and B.id = E.content_id
         order by hitCount desc limit 10;

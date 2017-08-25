@@ -68,12 +68,17 @@ exports.contentModelValueGenerator = function(){
     } );
   }
 
-  this.functionArray[ "divider" ] = function(){
+  this.functionArray[ "divider_mobile_hidden" ] = function(){
     return new Promise( function(resolve, reject){
       resolve( `<hr class="mobile-hidden">` );
     } );
   }
 
+  this.functionArray[ "divider" ] = function(){
+    return new Promise( function(resolve, reject){
+      resolve( `<hr>` );
+    } );
+  }
 
 
 
@@ -984,6 +989,7 @@ exports.contentModelValueGenerator = function(){
             count++;
 
             mobileCode += `<div style="margin-right: 0px;" class="mobile-show row topic_row">`;
+            mobileCode += `<p style="padding-top:30px">` + type + ` ranking : ` + count + `</p>`;
             mobileCode += `<table style="box-shadow: 0px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
 
             // mobileCode += `<tr style="color: #ddd; background-color: #383838;">`;
@@ -992,7 +998,10 @@ exports.contentModelValueGenerator = function(){
 
             mobileCode += `<tr>`;
             mobileCode += `<td class="col-xs-3" style="background-color: #F7F8F8; vertical-align:middle; border-right: 0px;"><center>` + modelValueData[i].hitCount + ` hitted</center></td>`;
-            mobileCode += `<td class="col-xs-9" valign="middle" style="padding-left: 15px; border-left: 0;" valign="middle"><a style="color: #294586; font-size:120%;" href="` + contentRedirectPath + `"><b>` + modelValueData[i].title  + `</b><br><small>` + modelValueData[i].title + `</small></a></td>`;
+            mobileCode += `<td class="col-xs-9" valign="middle" style="padding-left: 15px; border-left: 0;" valign="middle">`
+            mobileCode += `<p><a style="color: #294586; font-size:120%;" href="` + contentRedirectPath + `"><b>` + modelValueData[i].title  + `</b><br><small>` + modelValueData[i].subtitle + `</small></a></p>`
+            mobileCode += `<p><span style="padding-left: 10px; padding-right:10px; padding-top:5px; padding-bottom:5px; background-color:#e1ecf4; font-size:10px; color:#39739d;">` + keywords + `</span></p>`
+            mobileCode += `</td>`;
             mobileCode += `</tr>`
 
             mobileCode += `<tr style="border:0">`;
@@ -1025,7 +1034,7 @@ exports.contentModelValueGenerator = function(){
 
             mobileCode += `<tr style="border:0" >`
             mobileCode += `<td style="border:0; font-size: 11px; color:#9fa6ad" colspan=2>`;
-            mobileCode += `<span>Keyword : ` + keywords + `<span>`;
+            mobileCode += `<span>Cheatsheet : ` + modelValueData[i].imgTitle + `<span>`;
             mobileCode += `</td>`;
             mobileCode += `</tr>`
 
@@ -1265,16 +1274,19 @@ exports.contentModelValueGenerator = function(){
 
 
 
-  function getCheatsheetListCode( modelValueData ){
+  function getCheatsheetListCode( modelValueData, type ){
     return new Promise( function(resolve, reject){
       var codes = ``;
+      var mobileCode = ``;
+
+      let count = 0;
 
       if( modelValueData && modelValueData.length > 0 ){
 
         for( var i=0; i<modelValueData.length; i++ ){
           if( i % 3 == 0 ){
             codes += `
-              <div class="row search-result-row">`;
+              <div class="mobile-hidden row search-result-row">`;
           }
 
           let ranking = i+1;
@@ -1321,12 +1333,62 @@ exports.contentModelValueGenerator = function(){
           if( i % 3 == 2 || i == 8 ){
             codes += `</div>`;
           }
+
+          count++;
+
+          mobileCode += `<div style="margin-right: 0px;" class="mobile-show row topic_row">`;
+          mobileCode += `<p style="padding-top:30px">` + type + ` ranking : ` + count + `</p>`;
+          mobileCode += `<table style="box-shadow: 0px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
+
+          mobileCode += `<tr style="border:0" >`
+          mobileCode += `<td style="border:0;">`;
+          mobileCode += `<div>`
+          mobileCode += `<a style="text-decoration:none;" href="` + cheatsheetRedirectPath + `"><img id="` + modelValueData[i].id + `" ratio="" src="` + modelValueData[i].thumbnailWithRatioFileName + `" /></a>`
+          mobileCode += `</div>`
+          mobileCode += `</td>`;
+          mobileCode += `</tr>`
+
+          // mobileCode += `<tr>`;
+          // mobileCode += `<td class="col-xs-3" style="background-color: #F7F8F8; vertical-align:middle"><center>Keyword</center></td>`;
+          // mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">` + keywords + `</td>`;
+          // mobileCode += `</tr>`
+          //
+          // mobileCode += `<tr>`;
+          // mobileCode += `<td class="col-xs-3" style="background-color: #F7F8F8; vertical-align:middle"><center>Info.</center></td>`;
+          // mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">`;
+          // mobileCode += `<span>` + modelValueData[i].writer + ` / </span>`;
+          // mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
+          // mobileCode += `</td>`;
+          // mobileCode += `</tr>`
+
+          mobileCode += `<tr style="border:0" >`
+          mobileCode += `<td style="border:0;">`;
+          mobileCode += `<span>` + modelValueData[i].title + `<span>`;
+          mobileCode += `</td>`;
+          mobileCode += `</tr>`
+
+          mobileCode += `<tr style="border:0" >`
+          mobileCode += `<td style="border:0; font-size: 11px; color:#9fa6ad">`;
+          mobileCode += `<span>` + modelValueData[i].description + `<span>`;
+          mobileCode += `</td>`;
+          mobileCode += `</tr>`
+
+          mobileCode += `<tr style="border:0" >`
+          mobileCode += `<td style="border:0; font-size: 11px; background-color:#F7F8F8">`;
+          mobileCode += `<span>` + modelValueData[i].writer + `</span><br>`;
+          mobileCode += `<span>` + modelValueData[i].savedDate.toISOString().split("T")[0] + `</span>`;
+          mobileCode += `</td>`;
+          mobileCode += `</tr>`
+
+          mobileCode += `</table>`
+          // mobileCode += `<hr style="border-color:#9d9d9d">`;
+          mobileCode += `</div>`
         }
       } else{
         codes = `<div></div>`;
       }
 
-      resolve( '<div>' + codes + '</div>' );
+      resolve( '<div>' + codes + '</div>' + `<div>` + mobileCode + `</div>` );
     } );
   }
 
@@ -1398,7 +1460,7 @@ exports.contentModelValueGenerator = function(){
 
       let promises = [];
 
-      promises.push( getCheatsheetListCode( modelValueData ) );
+      promises.push( getCheatsheetListCode( modelValueData, "recent" ) );
       promises.push( getCheatsheetModalCode( modelValueData ) );
 
       Promise.all( promises )
@@ -1418,7 +1480,7 @@ exports.contentModelValueGenerator = function(){
 
       let promises = [];
 
-      promises.push( getCheatsheetListCode( modelValueData ) );
+      promises.push( getCheatsheetListCode( modelValueData, "popular"  ) );
       promises.push( getCheatsheetModalCode( modelValueData ) );
 
       Promise.all( promises )
