@@ -39,6 +39,8 @@ var sendFile = function( file, editor, welEditable, editor_id ){
   data = new FormData();
   data.append( "file", file );
 
+  console.log( "sendFile.." );
+
   $.ajax( {
     data: data,
     type: "POST",
