@@ -877,7 +877,6 @@ hr {
   margin-bottom: 15px;
 }
 
-
 /* Custom, iPhone Retina ==> iPhone */
 @media screen and (min-width : 320px) and (max-width : 767px) {
   /*.search-result .row{
@@ -1038,6 +1037,7 @@ hr {
   }
   .mobile-center {
     text-align: center;
+    margin-top: 60px;
   }
   .mobile-padding-zero {
     padding:0;
@@ -1189,3 +1189,10 @@ hr {
   }
 }
 /* Topic list - end */
+
+.content-divider {
+  height: 50px;
+  /*background-color: #aaaaaa;*/
+  background-image: url(/img_bg_pattern.png);
+  box-shadow: inset 0px 11px 8px -10px #383838, inset 0px -11px 8px -10px #383838;
+}

@@ -93,11 +93,11 @@ exports.contentGenerator = function(){
 
       if( content ){
         if( content.type == "main" ){
-          url = baseUrl + "/" + content.redirectPath;
+          url = baseUrl + content.redirectPath;
           title = content.title;
           description = ( content.description ).split("<br>").join();
         } else if( content.type == "content" ){
-          url = baseUrl + "/" + content.redirectPath + "?contentid=" + content.id;
+          url = baseUrl + content.redirectPath + "?contentid=" + content.id;
           title = content.title;
           description = ( content.summary ).split("<br>").join();
         }

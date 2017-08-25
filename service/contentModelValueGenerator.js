@@ -171,7 +171,7 @@ exports.contentModelValueGenerator = function(){
           subCodes += `<tr class="clickable-row" data-href="./topic?contentid=` + modelValueData[i].content_id + `">`
           // subCodes += `<td>` + modelValueData[i].content_id + `</td>`;
           subCodes += `<td class="title_td" id="` + modelValueData[i].content_id + `">` + `<span>` + modelValueData[i].title + `</span>` + `<br>` + modelValueData[i].subtitle + `</td>`;
-          subCodes += `<td>` + modelValueData[i].summary + `</td>`;
+          subCodes += `<td class="mobile-hidden">` + modelValueData[i].summary + `</td>`;
           // subCodes += `<td>` + modelValueData[i].writer + `<br>` + modelValueData[i].createdDate + `</td>`;
           subCodes += `<td>` + modelValueData[i].hitCount + `</td>`
           subCodes += `</tr>`;
@@ -181,9 +181,9 @@ exports.contentModelValueGenerator = function(){
           <table class="discussion_table table table table-condensed table-bordered table-hover">
             <thead>
               <tr>
-                <th class="col-lg-4 col-md-4">Title</th>
-                <th class="col-lg-7 col-md-7">Summary</th>
-                <th class="col-lg-1 col-md-1">Hit</th>
+                <th class="col-lg-4 col-md-4 col-sm-4 col-xs-10">Title</th>
+                <th class="col-lg-7 col-md-7 col-sm-7 mobile-hidden">Summary</th>
+                <th class="col-lg-1 col-md-1 col-sm-2 col-xs-2">Hit</th>
               </tr>
             </thead>`
             + subCodes +
@@ -1054,7 +1054,7 @@ exports.contentModelValueGenerator = function(){
           }
         }
 
-        resolve( `<div style="border-bottom: 8px solid #cccccc; padding-bottom: 50px;" id="topiclist_` + type + `">` + code + mobileCode + `</div>` );
+        resolve( `<div id="topiclist_` + type + `">` + code + mobileCode + `</div>` );
       } else{
         resolve( `<div></div>` );
       }
@@ -1166,7 +1166,7 @@ exports.contentModelValueGenerator = function(){
     return new Promise( function(resolve, reject){
       let code = `
         <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:toggleTopicViewModeRecent(this);">` + "Table View" + `</button>
-        <button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <button type="button" class="mobile-hidden btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
         <div class="mobile-show" style="padding-left:10px;"><button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button></div>
       `;
       resolve( code );
@@ -1177,7 +1177,7 @@ exports.contentModelValueGenerator = function(){
     return new Promise( function(resolve, reject){
       let code = `
         <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:toggleTopicViewModePopular(this);">` + "Table View" + `</button>
-        <button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <button type="button" class="mobile-hidden btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
         <div class="mobile-show" style="padding-left:10px"><button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button></div>
       `;
       resolve( code );
@@ -1394,7 +1394,7 @@ exports.contentModelValueGenerator = function(){
       }
 
       if( type == "popular" ){
-        resolve( '<div>' + codes + '</div>' + `<div style="border-bottom: 8px solid #cccccc; padding: 10px;">` + mobileCode + `</div>` );
+        resolve( '<div>' + codes + '</div>' + `<div id="cheatsheetlist_popular">` + mobileCode + `</div>` );
       }
 
       resolve( '<div>' + codes + '</div>' + `<div>` + mobileCode + `</div>` );

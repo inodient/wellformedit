@@ -37,8 +37,12 @@
 
         // ------ mobile H3, H4 paddingTop : 50px - start
         if( $(window).width() < 767 ){
-          $("h3").css( "padding-top", "146px" );
-          $("h4").css( "padding-top", "120px" );
+          $("h3").each( function(i){
+            if( i != 1 ){
+              $(this).css( "padding-top", "146px" );
+            }
+          } );
+          $("h4").css( "padding-top", "110px" );
         }
         // ------ mobile H3, H4 paddingTop - end
 

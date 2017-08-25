@@ -35,7 +35,28 @@
         }
         // ------ mobile H3, H4 text center - end
 
-        $(".header").css( "padding-left", "10px" );
+        // ------ mobile Divider - start
+        if( $(window).width() < 767 ){
+          // $("#topiclist_popular").css( "border-bottom", "30px solid #cccccc" );
+          // $("#topiclist_popular").css( "padding-bottom", "50px" );
+          // $("#topiclist_popular").css( "box-shadow", "0 0 10px #cccccc" );
+          //
+          // $("#topiclist_recent").css( "border-bottom", "30px solid #cccccc" );
+          // $("#topiclist_recent").css( "padding-bottom", "50px" );
+          //
+          // $("#cheatsheetlist_popular").css( "border-bottom", "30px solid #cccccc" );
+          // $("#cheatsheetlist_popular").css( "padding-bottom", "50px" );
+
+          $("#topiclist_popular").append( "<div class='content-divider'></div>");
+          $("#topiclist_recent").append( "<div class='content-divider'></div>");
+          $("#cheatsheetlist_popular").append( "<div class='content-divider'></div>");
+
+        }
+        // ------ mobile Divider - end
+        <% if( docType == "main" ) { %>
+          $(".header, H1, H2").css( "padding-left", "10px" );
+          $("H2").css( "padding-top", "96px" );
+        <% } %>
 
         wordWrap();
 
@@ -319,16 +340,27 @@
         </ul>
 
       </div>
-      <div class="mobile-padding-zero col-lg-9 col-md-9 doc-content">
+
+      <% if( docType == "main" ) { %>
+        <div class="mobile-padding-zero col-lg-9 col-md-9 doc-content">
+      <% } %>
+
+      <% if( docType == "specific" ) { %>
+        <div class="col-lg-9 col-md-9 doc-content">
+      <% } %>
 
         <div class="content">
 
           <div class="form-group" id="id_form_discussion">
-            <h2 id="doc-title" style="dispaly:none; margin-bottom: 30px;"> <%- title %><br><small> <%- subtitle %></small> </h2>
+            <% if( docType == "specific" ) { %>
+              <h2 id="doc-title" style="margin-bottom: 30px;"> <%- title %><br><small> <%- subtitle %></small> </h2>
 
-            <div class="mobile-hidden">
+              <blockquote style="border-color: #383838">
+                <%- summary %>
+              </blockquote>
+
               <% include partials/sns.ejs %>
-            </div>
+            <% } %>
 
             <div class="content_specifics">
               <%- specifics %>

@@ -35,6 +35,12 @@ exports.control = function( req, res ){
           setModelWithObject( model, argv[1] );
           model.searchWord = "";
           model.cheatsheet = "";
+
+          if( req.query.contentid ){
+            model.docType = "specific";
+          } else{
+            model.docType = "main";
+          }
         } )
         .then( function(){
           connection.release();

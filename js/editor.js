@@ -47,6 +47,8 @@ var sendFile = function( file, editor, welEditable, editor_id ){
     contentType: false,
     processData: false,
     success: function(){
+      console.log( "sendFile Success" );
+
       $( "#" + editor_id).summernote( "insertImage", arguments[0].savedFileName, arguments[0].savedFileName );
 
       var results = arguments[0]
