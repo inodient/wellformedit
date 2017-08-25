@@ -983,29 +983,16 @@ exports.contentModelValueGenerator = function(){
 
             count++;
 
-            mobileCode += `<div style="margin-right: 0px" class="mobile-show row topic_row">`;
-            mobileCode += `<table class="table table-condensed table-hover table-bordered">`;
+            mobileCode += `<div style="margin-right: 0px;" class="mobile-show row topic_row">`;
+            mobileCode += `<table style="box-shadow: 1px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
 
-            mobileCode += `<tr style="color: #ddd; background-color: #222222;">`;
-            mobileCode += `<td colspan=2>Ranking : ` + count + `</td>`;
-            mobileCode += `</tr>`
-
-            mobileCode += `<tr>`;
-            mobileCode += `<td class="col-xs-3" style="background-color: #383838; color: lightgray; vertical-align:middle"><center>` + modelValueData[i].hitCount + ` hits</center></td>`;
-            mobileCode += `<td class="col-xs-9" valign="middle" style="padding-left: 15px;" valign="middle"><a href="` + contentRedirectPath + `"><h5 style="padding-top:0px; margin-top:0px">` + modelValueData[i].title  + `<br><small>` + modelValueData[i].title + `</small></h5></a></td>`;
-            mobileCode += `</tr>`
+            // mobileCode += `<tr style="color: #ddd; background-color: #383838;">`;
+            // mobileCode += `<td colspan=2>Ranking : ` + count + `</td>`;
+            // mobileCode += `</tr>`
 
             mobileCode += `<tr>`;
-            mobileCode += `<td class="col-xs-3" style="background-color: #383838; color: lightgray; vertical-align:middle"><center>Keyword</center></td>`;
-            mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">` + keywords + `</td>`;
-            mobileCode += `</tr>`
-
-            mobileCode += `<tr>`;
-            mobileCode += `<td class="col-xs-3" style="background-color: #383838; color: lightgray; vertical-align:middle"><center>Info.</center></td>`;
-            mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">`;
-            mobileCode += `<span>` + modelValueData[i].writer + ` / </span>`;
-            mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
-            mobileCode += `</td>`;
+            mobileCode += `<td class="col-xs-3" style="background-color: #F7F8F8; vertical-align:middle; border-right: 0px;"><center>` + modelValueData[i].hitCount + ` hitted</center></td>`;
+            mobileCode += `<td class="col-xs-9" valign="middle" style="padding-left: 15px; border-left: 0;" valign="middle"><a style="color: #294586; font-size:120%;" href="` + contentRedirectPath + `"><b>` + modelValueData[i].title  + `</b><br><small>` + modelValueData[i].title + `</small></a></td>`;
             mobileCode += `</tr>`
 
             mobileCode += `<tr style="border:0">`;
@@ -1023,13 +1010,31 @@ exports.contentModelValueGenerator = function(){
             mobileCode += `</td>`;
             mobileCode += `</tr>`
 
-            // mobileCode += `<tr style="border:0" >`
-            // mobileCode += `<td style="border:0" colspan=2>`;
-            // mobileCode += `<span>Keyword <b>` + keywords + `</b><span><br>`;
+            // mobileCode += `<tr>`;
+            // mobileCode += `<td class="col-xs-3" style="background-color: #F7F8F8; vertical-align:middle"><center>Keyword</center></td>`;
+            // mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">` + keywords + `</td>`;
+            // mobileCode += `</tr>`
+            //
+            // mobileCode += `<tr>`;
+            // mobileCode += `<td class="col-xs-3" style="background-color: #F7F8F8; vertical-align:middle"><center>Info.</center></td>`;
+            // mobileCode += `<td class="col-xs-9" style="padding-left: 15px; vertical-align:middle">`;
             // mobileCode += `<span>` + modelValueData[i].writer + ` / </span>`;
             // mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
             // mobileCode += `</td>`;
             // mobileCode += `</tr>`
+
+            mobileCode += `<tr style="border:0" >`
+            mobileCode += `<td style="border:0; font-size: 11px; color:#9fa6ad" colspan=2>`;
+            mobileCode += `<span>Keyword : ` + keywords + `<span>`;
+            mobileCode += `</td>`;
+            mobileCode += `</tr>`
+
+            mobileCode += `<tr style="border:0" >`
+            mobileCode += `<td style="border:0; font-size: 11px; text-align:right; background-color:#F7F8F8" colspan=2>`;
+            mobileCode += `<span>` + modelValueData[i].writer + `</span><br>`;
+            mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
+            mobileCode += `</td>`;
+            mobileCode += `</tr>`
 
             mobileCode += `</table>`
             // mobileCode += `<hr style="border-color:#9d9d9d">`;
