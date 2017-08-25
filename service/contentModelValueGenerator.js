@@ -988,7 +988,7 @@ exports.contentModelValueGenerator = function(){
 
             count++;
 
-            mobileCode += `<div style="margin-right: 0px;" class="mobile-show row topic_row">`;
+            mobileCode += `<div style="margin-right: 0px; padding:10px;" class="mobile-show row topic_row">`;
             mobileCode += `<p style="padding-top:30px">` + type + ` ranking : ` + count + `</p>`;
             mobileCode += `<table style="box-shadow: 0px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
 
@@ -1054,7 +1054,7 @@ exports.contentModelValueGenerator = function(){
           }
         }
 
-        resolve( `<div id="topiclist_` + type + `">` + code + mobileCode + `</div>` );
+        resolve( `<div style="border-bottom: 8px solid #cccccc; padding-bottom: 50px;" id="topiclist_` + type + `">` + code + mobileCode + `</div>` );
       } else{
         resolve( `<div></div>` );
       }
@@ -1336,7 +1336,7 @@ exports.contentModelValueGenerator = function(){
 
           count++;
 
-          mobileCode += `<div style="margin-right: 0px;" class="mobile-show row topic_row">`;
+          mobileCode += `<div style="margin-right: 0px; padding:10px;" class="mobile-show row topic_row">`;
           mobileCode += `<p style="padding-top:30px">` + type + ` ranking : ` + count + `</p>`;
           mobileCode += `<table style="box-shadow: 0px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
 
@@ -1386,6 +1386,10 @@ exports.contentModelValueGenerator = function(){
         }
       } else{
         codes = `<div></div>`;
+      }
+
+      if( type == "popular" ){
+        resolve( '<div>' + codes + '</div>' + `<div style="border-bottom: 8px solid #cccccc; padding: 10px;">` + mobileCode + `</div>` );
       }
 
       resolve( '<div>' + codes + '</div>' + `<div>` + mobileCode + `</div>` );
