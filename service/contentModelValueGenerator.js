@@ -1166,7 +1166,8 @@ exports.contentModelValueGenerator = function(){
     return new Promise( function(resolve, reject){
       let code = `
         <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:toggleTopicViewModeRecent(this);">` + "Table View" + `</button>
-        <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <div class="mobile-show" style="padding-left:10px;"><button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button></div>
       `;
       resolve( code );
     } );
@@ -1176,7 +1177,8 @@ exports.contentModelValueGenerator = function(){
     return new Promise( function(resolve, reject){
       let code = `
         <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:toggleTopicViewModePopular(this);">` + "Table View" + `</button>
-        <button type="button" class="mobile-hidden btn btn-important" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button>
+        <div class="mobile-show" style="padding-left:10px"><button type="button" class="btn btn-important btn-important-small" onclick="javascript:openWholeTopicView();">View Whole Topics</button></div>
       `;
       resolve( code );
     } );
@@ -1219,10 +1221,12 @@ exports.contentModelValueGenerator = function(){
             code += `<div class="row topic_row">`
 
             code += `<div class="col-lg-9 col-md-9 col-sm-9 topic_content">`;
-            code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><small>` + modelValueData[i].title + `</small></h4>`
+            code += `<h4>` + modelValueData[i].title  + `<span style="display:inline-block; width:15px"></span><br class="mobile-show"><small>` + modelValueData[i].title + `</small></h4>`
+            code += `<hr class="mobile-show" style="margin-bottom: 20px;">`
             code += `<a href="` + contentRedirectPath + `">` + contentRedirectPath + `</a>`;
-            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<p class="topic_content_summary">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p></code>`;
             code += `<p style="display:none;" class="topic_content_summary_hidden">` + modelValueData[i].summary.replace( /<br>/gi, "" ) + `</p>`;
+            code += `<hr class="mobile-show" style="margin-bottom: 20px;">`
             code += `<p>Keyword <b>` + keywords + `</b><p>`;
             code += `<p>Hit Count <b>` + modelValueData[i].hitCount + `</b> / ` + modelValueData[i].writer + ` / ` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</p>`;
             code += `</div>`;
@@ -1232,7 +1236,8 @@ exports.contentModelValueGenerator = function(){
             code += `</div>`;
 
             code += `</div>`;
-            code += `<hr>`
+            code += `<hr class="mobile-hidden">`;
+            code += `<span class="mobile-show" style="padding-bottom: 50px"></span>`
 
             keywords = '';
           }
@@ -1531,8 +1536,8 @@ exports.contentModelValueGenerator = function(){
         <div class="row keywordarchitecture_row">
 
           <div class="col-lg-7 col-md-7 col-sm-7 keywordarchitecture_description_col">
-            <br class="mobile-show tablet-show">
-            <br class="mobile-show tablet-show">
+            <!-- <br class="mobile-show tablet-show"> -->
+            <!-- <br class="mobile-show tablet-show"> -->
             <p>  ` + modelValueData.keywordsInfo[0].description + ` </p>
             <br>
             <p><span><b>Sub Keywords</b></span>

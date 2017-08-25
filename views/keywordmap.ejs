@@ -35,9 +35,22 @@
         }
         // ------ mobile H3, H4 text center - end
 
+        // ------ mobile H3, H4 paddingTop : 50px - start
+        if( $(window).width() < 767 ){
+          $("h3").css( "padding-top", "146px" );
+          $("h4").css( "padding-top", "120px" );
+        }
+        // ------ mobile H3, H4 paddingTop - end
+
+        // ------ Add H4 Indicator glyphicon - Start
+        $("H4").each( function(){
+          $(this).prepend( "<span style='font-size: 0.9em; padding-right:5px;' class='glyphicon glyphicon-triangle-right'></span>" );
+        } );
+
         $('.clickable-row').click(function () {
           document.location.href = $(this).data("href");
         } );
+        // ------ Add H4 Indicator glyphicon - End
 
 
         // Attach Img Redirect Hash ID
@@ -136,16 +149,18 @@
 
         <div class="content">
 
-          <% include partials/sns.ejs %>
-
+          <div class="mobile-hidden">
+            <% include partials/sns.ejs %>
+          </div>
           <div class="form-group" id="id_form_discussion">
             <div class="content_specifics">
               <%- specifics %>
             </div>
           </div>
 
-          <% include partials/sns.ejs %>
-
+          <div class="mobile-center">
+            <% include partials/sns.ejs %>
+          </div>
         </div>
 
         <% include partials/footer.ejs %>

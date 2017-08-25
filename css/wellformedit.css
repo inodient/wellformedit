@@ -778,8 +778,29 @@ hr {
 }
 
 @media screen and (min-width : 320px) and (max-width : 767px) {
-  .btn-important{
-    width: 100%;
+  .btn-important-small{
+    width: initial !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #222222 !important;
+    border : 0px;
+    font-size: 15px;
+    font-weight: normal;
+    color: #ffffff;
+  }
+
+  .btn-important-small:hover{
+    color: #cccccc;
+  }
+
+  .btn-important-small:focus{
+    color: #cccccc;
+  }
+
+  .btn-important-small:active{
+    color: #cccccc;
   }
 }
 
@@ -1009,6 +1030,8 @@ hr {
 @media screen and (min-width : 320px) and (max-width : 767px) {
   .mobile-hidden {
     display: none !important;
+    margin: 0px;
+    padding: 0px;
   }
   .mobile-show {
     display: block !important;

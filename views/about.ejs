@@ -161,14 +161,16 @@
           <div class="form-group" id="id_form_discussion">
             <h2 id="doc-title" style="dispaly:none; margin-bottom: 30px;"> <%- title %><br><small> <%- subtitle %></small> </h2>
 
-            <% include partials/sns.ejs %>
-
+            <div class="mobile-hidden">
+              <% include partials/sns.ejs %>
+            </div>
             <div class="content_specifics">
               <%- specifics %>
             </div>
 
-            <% include partials/sns.ejs %>
-
+            <div class="mobile-center">
+              <% include partials/sns.ejs %>
+            </div>
           </div>
 
         </div>
