@@ -984,7 +984,7 @@ exports.contentModelValueGenerator = function(){
             count++;
 
             mobileCode += `<div style="margin-right: 0px;" class="mobile-show row topic_row">`;
-            mobileCode += `<table style="box-shadow: 1px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
+            mobileCode += `<table style="box-shadow: 0px 1px 1px #aaaaaa;" class="table table-condensed table-hover table-bordered">`;
 
             // mobileCode += `<tr style="color: #ddd; background-color: #383838;">`;
             // mobileCode += `<td colspan=2>Ranking : ` + count + `</td>`;
@@ -1030,7 +1030,7 @@ exports.contentModelValueGenerator = function(){
             mobileCode += `</tr>`
 
             mobileCode += `<tr style="border:0" >`
-            mobileCode += `<td style="border:0; font-size: 11px; text-align:right; background-color:#F7F8F8" colspan=2>`;
+            mobileCode += `<td style="border:0; font-size: 11px; background-color:#F7F8F8" colspan=2>`;
             mobileCode += `<span>` + modelValueData[i].writer + `</span><br>`;
             mobileCode += `<span>` + modelValueData[i].createdDate.toISOString().split("T")[0] + `</span>`;
             mobileCode += `</td>`;
