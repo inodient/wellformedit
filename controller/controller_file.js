@@ -84,6 +84,8 @@ function makeThumbnailMaintainRatio( fileInfo ){
     //   if( err ) console.log( err );
     // } );
 
+    console.log( "makeThumbnailMailtainRatio" );
+
     var fs = require("fs"), gm = require("gm").subClass({imageMagick:true});
 
     gm(require("path").join(process.cwd(), 'upload', fileInfo.savedFileName ))
