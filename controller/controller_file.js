@@ -116,6 +116,8 @@ function makeThumbnailMaintainRatio( fileInfo ){
           } );
         }
 
+      } else{
+        console.log( err );
       }
     });
   } );
