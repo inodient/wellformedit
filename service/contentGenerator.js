@@ -90,6 +90,9 @@ exports.contentGenerator = function(){
       let title = 'Well Formed IT';
       let description = 'Divide specifically, Build well-formedly';
       let image = 'http://www.wellformedit.com/wellformedit_logo_og.png';
+      let imageType = "";
+      let imageWidth = "";
+      let imageHeight = "";
 
       if( content ){
         if( content.type == "main" ){
@@ -105,6 +108,17 @@ exports.contentGenerator = function(){
 
       if( imageInfo && imageInfo.length ){
         image = baseUrl + "/" + imageInfo[0].savedFileName;
+        imageType = imageInfo[0].mimetype;
+
+        let imageRatio = parseFloat( imageInfo[0].ratio );
+
+        if( imageRatio > 1 ){
+          imageWidth = "600";
+          imageHeight = 600 * imageRatio;
+        } else{
+          imageWidth = 600 * imageRatio;
+          imageHeight = "600";
+        }
       }
 
       let metaTag = `
@@ -120,6 +134,11 @@ exports.contentGenerator = function(){
         <meta property="og:title"              content="` + title + `" />
         <meta property="og:description"        content="` + description + `" />
         <meta property="og:image"              content="` + image + `" />
+
+        <meta property="og:image:type"              content="` + imageType + `" />
+        <meta property="og:image:width"              content="` + imageWidth + `" />
+        <meta property="og:image:height"              content="` + imageHeight + `" />
+
         <!-- opengraph meta - end -->
       `;
 
