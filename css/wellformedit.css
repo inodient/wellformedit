@@ -1205,5 +1205,5 @@ hr {
   height: 50px;
   /*background-color: #aaaaaa;*/
   background-image: url(/img_bg_pattern.png);
-  box-shadow: inset 0px 11px 8px -10px #383838, inset 0px -11px 8px -10px #383838;
+  box-shadow: inset 0px 15px 8px -10px #bbbbbb, inset 0px -15px 8px -10px #bbbbbb;
 }
