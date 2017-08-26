@@ -971,10 +971,21 @@ hr {
   font-weight: bold;
 }
 
+.sns_button {
+  color:black;
+}
+
 .sns_button:hover {
   color:gray;
 }
 
+.sns_button_inverse {
+  color:white;
+}
+
+.sns_button_inverse:hover {
+  color:gray;
+}
 
 
 

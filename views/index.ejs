@@ -130,7 +130,7 @@
   .index_title {
     margin : auto;
     padding: 200px 25px;
-    background : url( "/wellformedit_background__.jpg" ) no-repeat center center;
+    background : url( "/welcome_background_test_03.jpg" ) no-repeat center center;
 
     -webkit-background-size : cover;
     -moz-background-size : cover;
@@ -139,6 +139,12 @@
 
     height: 100vh;
     width: 100vw;
+  }
+
+  @media screen and (min-width : 320px) and (max-width : 767px) {
+    .index_title {
+      padding: 150px 25px;
+    }
   }
 
   .index_title h1 {
@@ -219,8 +225,8 @@
   <!-- Introduce -->
   <div class="index_title container-fluid">
     <div class="index_content row">
-      <h1>Well <br class="mobile-show">Formed <br class="mobile-show">IT</h1>
-      <p>Divide as specific as possible, <br class="mobile-show">Build as well-formed as possible</p>
+      <h1 style="color:lightgray; text-shadow: index 2px 2px 6px #565656">Well <br class="mobile-show">Formed <br class="mobile-show">IT</h1>
+      <p style="color:lightgray; >Divide as specific as possible, <br class="mobile-show">Build as well-formed as possible</p>
       <div class="searchbar" style="max-width: 600px;">
         <div class="input-group" style="max-width: 600px;">
           <input id="search-word" type="text" class="form-control" placeholder="<%- popularSearchWord.word %>" required>
@@ -230,7 +236,7 @@
         </div>
       </div>
 
-      <% include partials/sns.ejs %>
+      <% include partials/sns_inverse.ejs %>
 
     </div>
   </div>
