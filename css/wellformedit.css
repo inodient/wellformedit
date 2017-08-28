@@ -1118,7 +1118,7 @@ hr {
 .topic_img {
   margin-top:15px;
   margin-bottom:15px;
-  max-width: 75%;
+  max-width: 100%;
   /*min-height: 380px;
   max-height:55vh;
   height: 47vh;
